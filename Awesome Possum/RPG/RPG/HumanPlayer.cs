@@ -5,7 +5,7 @@ using System.Text;
 
 namespace RPG
 {
-    class HumanPlayer : CharacterBase
+    public class HumanPlayer : CharacterBase
     {
         private const int MIN_EXPERIENCE = 0;
         private const int MAX_EXPERIENCE = 100;

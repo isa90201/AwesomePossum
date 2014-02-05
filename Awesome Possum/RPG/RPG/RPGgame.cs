@@ -17,12 +17,24 @@ namespace RPG
     public class RPGgame : Microsoft.Xna.Framework.Game
     {
         GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        private Controller myController; //remove private
+        KeyboardState oldState;
+        Color backColor;
+        Color upColor = Color.Orange,  //ADDED
+            downColor = Color.LightCoral,
+            leftColor = Color.Blue,
+            rightColor = Color.LightCyan,
+            attackColor = Color.Violet,
+            pauseColor = Color.Gray,
+            confirmColor = Color.Green,
+            cancelColor = Color.Red;
+        /*GraphicsDeviceManager graphics;  // ORIGINAL
+        SpriteBatch spriteBatch;*/
 
         public RPGgame()
         {
             graphics = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";
+            //Content.RootDirectory = "Content";  //ORIGINAL
 
         }
 
@@ -37,6 +49,8 @@ namespace RPG
             // TODO: Add your initialization logic here
 
             base.Initialize();
+            myController = new Controller(); // ADDED
+            oldState = Keyboard.GetState(); //REMOVE
         }
 
         /// <summary>
@@ -45,10 +59,13 @@ namespace RPG
         /// </summary>
         protected override void LoadContent()
         {
+            /*
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+             */
+            //ORIGINAL
         }
 
         /// <summary>
@@ -68,12 +85,66 @@ namespace RPG
         protected override void Update(GameTime gameTime)
         {
             // Allows the game to exit
+            if (myController.CurrentState.IsKeyDown(Keys.Escape))
+                this.Exit();
+
+            UpdateInput();
+
+            base.Update(gameTime);
+            /* //ORIGINAL
+            // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
             // TODO: Add your update logic here
 
             base.Update(gameTime);
+             * */
+        }
+
+        private void UpdateInput()  //REMOVE METHOD; Key testing
+        {
+            myController.GetInput();
+
+            // Is the SPACE key down?
+            if (myController.UpIsPressed())
+            {
+                backColor = upColor;
+            }
+            else if (myController.DownIsPressed())
+            {
+                backColor = downColor;
+            }
+            else if (myController.LeftIsPressed())
+            {
+                backColor = leftColor;
+            }
+            else if (myController.RightIsPressed())
+            {
+                backColor = rightColor;
+            }
+            else if (myController.AttackIsPressed())
+            {
+                backColor = attackColor;
+            }
+            else if (myController.DownIsPressed())
+            {
+                backColor = downColor;
+            }
+            else if (myController.PauseIsPressed())
+            {
+                backColor = pauseColor;
+            }
+            else if (myController.ConfirmIsPressed())
+            {
+                backColor = confirmColor;
+            }
+            else if (myController.CancelIsPressed())
+            {
+                backColor = cancelColor;
+            }
+            //oldState = myController.CurrentState;
+
         }
 
         /// <summary>
@@ -82,11 +153,15 @@ namespace RPG
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
+            graphics.GraphicsDevice.Clear(backColor);
+            base.Draw(gameTime);
+            /*
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
 
             base.Draw(gameTime);
+             * */
         }
     }
 }

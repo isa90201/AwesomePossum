@@ -109,6 +109,8 @@
   <ItemGroup>
     <Compile Include="CharacterBase.cs" />
     <Compile Include="Armor.cs" />
+    <Compile Include="Controller.cs" />
+    <Compile Include="EnemyAI.cs" />
     <Compile Include="Party.cs" />
     <Compile Include="HumanPlayer.cs" />
     <Compile Include="Inventory.cs" />

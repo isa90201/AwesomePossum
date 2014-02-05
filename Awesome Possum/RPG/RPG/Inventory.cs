@@ -5,7 +5,7 @@ using System.Text;
 
 namespace RPG
 {
-    class Inventory
+    public class Inventory
     {
         private const int INVENTORY_SIZE = 2;
 

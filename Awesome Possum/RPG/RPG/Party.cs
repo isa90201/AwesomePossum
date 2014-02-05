@@ -5,7 +5,7 @@ using System.Text;
 
 namespace RPG
 {
-    class Party
+    public class Party
     {
         private HumanPlayer _HumanPlayer;
         public HumanPlayer HumanPlayer
