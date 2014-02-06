@@ -48,11 +48,11 @@ namespace RPGTest
         {
             var a = new Armor("Shoes", 10);
 
-            a.DefenseUp(-99);
+            a.Defense -= 99;
             Assert.AreEqual(1, a.Defense, "Defense was not set to minimum");
-            a.DefenseUp(75);
+            a.Defense += 75;
             Assert.AreEqual(76, a.Defense, "Defense was not set properly");
-            a.DefenseUp(999);
+            a.Defense += 999;
             Assert.AreEqual(100, a.Defense, "Defense was not set to max");
         }
     }

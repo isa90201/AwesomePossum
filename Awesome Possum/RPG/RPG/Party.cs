@@ -7,35 +7,12 @@ namespace RPG
 {
     public class Party
     {
-        private HumanPlayer _HumanPlayer;
-        public HumanPlayer HumanPlayer
-        {
-            get
-            {
-                return _HumanPlayer;
-            }
-            set
-            {
-                _HumanPlayer = value;
-            }
-        }
+        public Character Character { get; set; }
+        public Inventory Inventory { get; set; }
 
-        private Inventory _Inventory;
-        public Inventory Inventory
+        public Party(Character character, Inventory inventory)
         {
-            get
-            {
-                return _Inventory;
-            }
-            set
-            {
-                _Inventory = value;
-            }
-        }
-
-        public Party(HumanPlayer humanPlayer, Inventory inventory)
-        {
-            HumanPlayer = humanPlayer;
+            Character = character;
             Inventory = inventory;
         }
     }

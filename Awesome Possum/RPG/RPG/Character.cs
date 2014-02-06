@@ -6,7 +6,7 @@ using System.Text;
 namespace RPG
 {
     //Create an ENEMY using this class
-    public class CharacterBase
+    public class Character
     {
         private const int MIN_HP = 1;
         private const int MAX_HP = 100;
@@ -14,6 +14,52 @@ namespace RPG
         private const int MAX_ATTACK = 100;
         private const int MIN_DEFENSE = 0;
         private const int MAX_DEFENSE = 100;
+        private const int MIN_EXPERIENCE = 0;
+        private const int MAX_EXPERIENCE = 100;
+        private const int MIN_LEVEL = 1;
+        private const int MAX_LEVEL = 100;
+
+        public Weapon Weapon { get; set; }
+        public Armor Armor { get; set; }
+
+        private int _Experience;
+        public int Experience
+        {
+            get
+            {
+                return _Experience;
+            }
+            set
+            {
+                if (value < MIN_EXPERIENCE)
+                    _Experience = MIN_EXPERIENCE;
+                else if (value >= MAX_EXPERIENCE)
+                {
+                    LevelUp();
+                    Experience = value - MAX_EXPERIENCE;
+                }
+                else
+                    _Experience = value;
+            }
+        }
+
+        private int _Level;
+        public int Level
+        {
+            get
+            {
+                return _Level;
+            }
+            private set
+            {
+                if (value < MIN_LEVEL)
+                    _Level = MIN_LEVEL;
+                else if (value > MAX_LEVEL)
+                    _Level = MAX_LEVEL;
+                else
+                    _Level = value;
+            }
+        }
 
         private string _Name;
         public string Name
@@ -72,6 +118,8 @@ namespace RPG
         {
             get
             {
+                if (Weapon != null)
+                    return _Attack + Weapon.Attack;
                 return _Attack;
             }
             set
@@ -90,6 +138,8 @@ namespace RPG
         {
             get
             {
+                if (Armor != null)
+                    return _Defense + Armor.Defense;
                 return _Defense;
             }
             set
@@ -111,18 +161,24 @@ namespace RPG
             }
         }
 
-        public CharacterBase(string name, int totalHP, int attack, int defense)
+        public Character(string name, int totalHP, int attack, int defense)
         {
             Name = name;
             TotalHP = totalHP;
             CurrentHP = TotalHP;
             Attack = attack;
             Defense = defense;
+            Experience = MIN_EXPERIENCE;
+            Level = MIN_LEVEL;
         }
 
-        public void Damage(int amount)  // Use negative amount for HP Recovery.
+        private void LevelUp()
         {
-            CurrentHP -= amount;
+            Level++;
+            Attack++;
+            Defense++;
+            TotalHP++;
+            CurrentHP = TotalHP;
         }
     }
 }

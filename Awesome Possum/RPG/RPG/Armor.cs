@@ -49,10 +49,5 @@ namespace RPG
             Name = name;
             Defense = defense;
         }
-
-        public void DefenseUp(int amount)
-        {
-            Defense += amount;
-        }
     }
 }

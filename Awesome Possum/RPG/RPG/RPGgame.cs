@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using System.Threading;
 
 namespace RPG
 {
@@ -18,7 +19,9 @@ namespace RPG
     {
         GraphicsDeviceManager graphics;
         private Controller myController; //remove private
+        private EnemyAI enemyAI; // remove private
         KeyboardState oldState;
+        int prevMove; // ADDED
         Color backColor;
         Color upColor = Color.Orange,  //ADDED
             downColor = Color.LightCoral,
@@ -51,6 +54,8 @@ namespace RPG
             base.Initialize();
             myController = new Controller(); // ADDED
             oldState = Keyboard.GetState(); //REMOVE
+            enemyAI = new EnemyAI(1); //ADDED
+            prevMove = 0;
         }
 
         /// <summary>
@@ -102,11 +107,47 @@ namespace RPG
              * */
         }
 
+        private int Move()
+        {
+            Random r = new Random();
+            int i = r.Next(1, 5);
+
+            if (enemyAI.IsMoving())
+            {
+                return i;
+            }
+            return 0;
+        }
+
         private void UpdateInput()  //REMOVE METHOD; Key testing
         {
-            myController.GetInput();
+            int move = Move();
 
-            // Is the SPACE key down?
+            if (move != 0)
+            {
+                if (move == 1)
+                {
+                    backColor = upColor;
+                }
+                else if (move == 2)
+                {
+                    backColor = downColor;
+                }
+                else if (move == 3)
+                {
+                    backColor = leftColor;
+                }
+                else if (move == 4)
+                {
+                    backColor = rightColor;
+                }
+            }
+            else
+                prevMove = move;
+
+            //myController.GetInput();
+
+            /*
             if (myController.UpIsPressed())
             {
                 backColor = upColor;
@@ -142,10 +183,9 @@ namespace RPG
             else if (myController.CancelIsPressed())
             {
                 backColor = cancelColor;
-            }
-            //oldState = myController.CurrentState;
-
+            } */
         }
+        //oldState = myController.CurrentState;
 
         /// <summary>
         /// This is called when the game should draw itself.
@@ -155,6 +195,7 @@ namespace RPG
         {
             graphics.GraphicsDevice.Clear(backColor);
             base.Draw(gameTime);
+            Thread.Sleep(100);
             /*
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
