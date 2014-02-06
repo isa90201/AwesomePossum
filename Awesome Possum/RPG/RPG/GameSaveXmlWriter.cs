@@ -8,7 +8,7 @@ namespace RPG
 {
     class GameSaveXmlWriter
     {
-        private const string FILE_PATH = "C:\\GameSaveXML.txt";
+        private const string FILE_PATH = "C:\\GameSave.xml";  // CHANGE TO ANY PATH
         private const string XML_HEADER = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 
         private StringBuilder xmlString;
@@ -17,18 +17,14 @@ namespace RPG
         public GameSaveXmlWriter(GameSave g)
         {
             xmlString = new StringBuilder("");
-
-            AddCharacterXML(g.CharacterName, g.CharacterTotalHP, g.CharacterCurrentHP, g.CharacterAttack, g.CharacterDefense, g.CharacterExperience, g.CharacterLevel);
-            AddWeaponXML(g.WeaponName, g.WeaponAttack);
-            AddArmorXML(g.ArmorName, g.ArmorDefense);
-            sw.Write(xmlString.ToString());
-            //TODO: write to file
+            sw = new StreamWriter(FILE_PATH, false);
+            SaveToFile(g);
 
         }
 
         public void AddCharacterXML(string name, int totalHp, int currentHp, int attack, int defense, int experience, int level)
         {
-            xmlString.AppendLine("<Character>");
+            xmlString.AppendLine("<CHARACTER>");
             xmlString.AppendLine("<NAME>" + name + "</NAME>");
             xmlString.AppendLine("<TOTALHP>" + totalHp + "</TOTALHP>");
             xmlString.AppendLine("<CURRENTHP>" + currentHp + "</CURRENTHP>");
@@ -36,23 +32,63 @@ namespace RPG
             xmlString.AppendLine("<DEFENSE>" + defense + "</DEFENSE>");
             xmlString.AppendLine("<EXPERIENCE>" + experience + "</EXPERIENCE>");
             xmlString.AppendLine("<LEVEL>" + level + "</LEVEL>");
-            xmlString.AppendLine("</Character>");
+            xmlString.AppendLine("</CHARACTER>");
         }
 
         public void AddWeaponXML(string name, int attack)
         {
-            xmlString.AppendLine("<WEAPON>");
-            xmlString.AppendLine("<NAME>" + name + "</NAME>");
-            xmlString.AppendLine("<ATTACK>" + attack + "</ATTACK>");
-            xmlString.AppendLine("</WEAPON>");
+            if (name == null)
+                AddNoWeaponXML();
+            else
+            {
+                xmlString.AppendLine("<WEAPON>");
+                xmlString.AppendLine("<NAME>" + name + "</NAME>");
+                xmlString.AppendLine("<ATTACK>" + attack + "</ATTACK>");
+                xmlString.AppendLine("</WEAPON>");
+            }
+        }
+
+        private void AddNoWeaponXML()
+        {
+            xmlString.AppendLine("<WEAPON></WEAPON>");
         }
 
         public void AddArmorXML(string name, int defense)
         {
-            xmlString.AppendLine("<ARMOR>");
+            if (name == null)
+                AddNoArmorXML();
+            else
+            {
+                xmlString.AppendLine("<ARMOR>");
+                xmlString.AppendLine("<NAME>" + name + "</NAME>");
+                xmlString.AppendLine("<DEFENSE>" + defense + "</DEFENSE>");
+                xmlString.AppendLine("</ARMOR>");
+            }
+        }
+
+        private void AddNoArmorXML()
+        {
+            xmlString.AppendLine("<ARMOR></ARMOR>");
+        }
+
+        public void AddLevelXML(string name, int levelId)
+        {
+            xmlString.AppendLine("<LEVEL>");
             xmlString.AppendLine("<NAME>" + name + "</NAME>");
-            xmlString.AppendLine("<DEFENSE>" + defense + "</DEFENSE>");
-            xmlString.AppendLine("</ARMOR>");
+            xmlString.AppendLine("<LEVELID>" + levelId + "</LEVELID>");
+            xmlString.AppendLine("</LEVEL>");
+        }
+
+        public void SaveToFile(GameSave g)
+        {
+            xmlString.AppendLine(XML_HEADER);
+            AddCharacterXML(g.CharacterName, g.CharacterTotalHP, g.CharacterCurrentHP, g.CharacterAttack, g.CharacterDefense, g.CharacterExperience, g.CharacterLevel);
+            AddWeaponXML(g.WeaponName, g.WeaponAttack);
+            AddArmorXML(g.ArmorName, g.ArmorDefense);
+            AddLevelXML(g.LevelName, g.LevelId);
+            sw.Write(xmlString.ToString());
+            sw.Close();
+
         }
     }
 }

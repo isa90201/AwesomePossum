@@ -18,7 +18,7 @@ namespace RPG
     public class RPGgame : Microsoft.Xna.Framework.Game
     {
         GraphicsDeviceManager graphics;
-        private Controller myController; //remove private
+        private HumanController myController; //remove private
         private EnemyAI enemyAI; // remove private
         KeyboardState oldState;
         int prevMove; // ADDED
@@ -31,6 +31,10 @@ namespace RPG
             pauseColor = Color.Gray,
             confirmColor = Color.Green,
             cancelColor = Color.Red;
+        Party testParty;
+        Level testLevel;
+        GameSave gameSave;
+        GameSaveXmlWriter xmlWriter;
         /*GraphicsDeviceManager graphics;  // ORIGINAL
         SpriteBatch spriteBatch;*/
 
@@ -52,10 +56,23 @@ namespace RPG
             // TODO: Add your initialization logic here
 
             base.Initialize();
-            myController = new Controller(); // ADDED
+            myController = new HumanController(); // ADDED
             oldState = Keyboard.GetState(); //REMOVE
             enemyAI = new EnemyAI(1); //ADDED
             prevMove = 0;
+
+            //GameSave TEst Objects
+            testLevel = new Level();
+            testLevel.Name = "The Ghetto";
+            testLevel.LevelId = 5;
+
+            Character testCharacter = new Character("Jesus", 10, 15, 20);
+            Weapon testWeapon = new Weapon("Pimp Cane", 30);
+            Armor testArmor = new Armor("Fur Coat", 5);
+            Inventory testInventory = new Inventory();
+            testInventory.EquippedWeapon = testWeapon;
+            testInventory.EquippedArmor = testArmor;
+            testParty = new Party(testCharacter, testInventory);
         }
 
         /// <summary>
@@ -89,9 +106,14 @@ namespace RPG
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            //TEST GameSave (writing to file)
+            gameSave = new GameSave(testParty, testLevel);
             // Allows the game to exit
             if (myController.CurrentState.IsKeyDown(Keys.Escape))
+            {
+                xmlWriter = new GameSaveXmlWriter(gameSave);
                 this.Exit();
+            }
 
             UpdateInput();
 
@@ -107,7 +129,7 @@ namespace RPG
              * */
         }
 
-        private int Move()
+        /*private int Move()
         {
             Random r = new Random();
             int i = r.Next(1, 5);
@@ -117,11 +139,11 @@ namespace RPG
                 return i;
             }
             return 0;
-        }
+        }*/
 
         private void UpdateInput()  //REMOVE METHOD; Key testing
         {
-            int move = Move();
+            /*int move = Move();
 
             if (move != 0)
             {
@@ -143,11 +165,11 @@ namespace RPG
                 }
             }
             else
-                prevMove = move;
+                prevMove = move;*/
 
-            //myController.GetInput();
+            myController.GetInput();
 
-            /*
+
             if (myController.UpIsPressed())
             {
                 backColor = upColor;
@@ -183,7 +205,7 @@ namespace RPG
             else if (myController.CancelIsPressed())
             {
                 backColor = cancelColor;
-            } */
+            }
         }
         //oldState = myController.CurrentState;
 
@@ -195,7 +217,7 @@ namespace RPG
         {
             graphics.GraphicsDevice.Clear(backColor);
             base.Draw(gameTime);
-            Thread.Sleep(100);
+            //Thread.Sleep(500);
             /*
             GraphicsDevice.Clear(Color.CornflowerBlue);
 

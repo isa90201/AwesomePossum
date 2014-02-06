@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace RPG
 {
-    public class Controller
+    public class HumanController : IController
     {
         public KeyboardState CurrentState;
 
@@ -20,7 +20,7 @@ namespace RPG
             Confirm = Keys.Enter,
             Cancel = Keys.Delete;
 
-        public Controller()
+        public HumanController()
         {
 
         }
@@ -68,6 +68,31 @@ namespace RPG
         public bool CancelIsPressed()
         {
             return CurrentState.IsKeyDown(Cancel);
+        }
+
+        public bool IsMovingUp()
+        {
+            return UpIsPressed();
+        }
+
+        public bool IsMovingDown()
+        {
+            return DownIsPressed();
+        }
+
+        public bool IsMovingLeft()
+        {
+            return LeftIsPressed();
+        }
+
+        public bool IsMovingRight()
+        {
+            return RightIsPressed();
+        }
+
+        public bool IsAttacking()
+        {
+            return AttackIsPressed();
         }
     }
 }

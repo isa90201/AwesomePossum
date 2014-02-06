@@ -26,11 +26,15 @@ namespace RPG
         public int CharacterExperience;
         public int CharacterLevel;
 
-        public GameSave(Party party)
+        public string LevelName;
+        public int LevelId;
+
+        public GameSave(Party party, Level currentLevel)
         {
             CharacterSave(party);
             WeaponSave(party);
             ArmorSave(party);
+            LevelSave(currentLevel);
         }
 
         private void CharacterSave(Party party)
@@ -47,20 +51,39 @@ namespace RPG
         private void WeaponSave(Party party)
         {
             Weapon w = party.Inventory.EquippedWeapon;
-            WeaponName = w.Name;
-            WeaponAttack = w.Attack;
+
+            if (w == null)
+            {
+                WeaponName = null;
+                WeaponAttack = -1;
+            }
+            else
+            {
+                WeaponName = w.Name;
+                WeaponAttack = w.Attack;
+            }
         }
 
         private void ArmorSave(Party party)
         {
             Armor a = party.Inventory.EquippedArmor;
-            ArmorName = a.Name;
-            ArmorDefense = a.Defense;
+
+            if (a == null)
+            {
+                ArmorName = null;
+                ArmorDefense = -1;
+            }
+            else
+            {
+                ArmorName = a.Name;
+                ArmorDefense = a.Defense;
+            }
         }
 
-        private void SaveToFile()
+        private void LevelSave(Level level)
         {
-            //TODO:  save to file; read from file
+            LevelName = level.Name;
+            LevelId = level.LevelId;
         }
     }
 }

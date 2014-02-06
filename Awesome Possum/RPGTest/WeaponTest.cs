@@ -20,6 +20,7 @@ namespace RPGTest
         }
 
         [TestMethod]
+        [ExpectedException(typeof(System.ArgumentException))]
         public void TestName()
         {
             var w = new Weapon("Excaliber", 25);

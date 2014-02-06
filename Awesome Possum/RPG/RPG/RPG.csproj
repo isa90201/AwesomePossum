@@ -107,12 +107,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AIController.cs" />
     <Compile Include="Character.cs" />
     <Compile Include="Armor.cs" />
-    <Compile Include="Controller.cs" />
+    <Compile Include="HumanController.cs" />
     <Compile Include="EnemyAI.cs" />
     <Compile Include="GameSave.cs" />
     <Compile Include="GameSaveXmlWriter.cs" />
+    <Compile Include="IController.cs" />
+    <Compile Include="Level.cs" />
     <Compile Include="Party.cs" />
     <Compile Include="Inventory.cs" />
     <Compile Include="Rectangle.cs" />

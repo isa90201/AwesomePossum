@@ -19,8 +19,8 @@ namespace RPG
             }
             set
             {
-                if (value == "")
-                    _Name = "UNKNOWN";
+                if (value == "" || value == null)
+                    throw new ArgumentException("Name cannot be blank or null.");
                 else
                     _Name = value;
             }

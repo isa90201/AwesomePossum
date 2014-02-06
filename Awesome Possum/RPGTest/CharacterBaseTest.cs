@@ -61,6 +61,7 @@ namespace RPGTest
         }
 
         [TestMethod]
+        [ExpectedException(typeof(System.ArgumentException))]
         public void TestName()
         {
             var c = new Character("Jesus", 70, 60, 50);
@@ -68,7 +69,7 @@ namespace RPGTest
             Assert.AreEqual("Jesus", c.Name, "Name is not set properly");
 
             c.Name = "";
-            Assert.AreEqual("UNKNOWN", c.Name, "Name is not set to UNKNOWN");
+            Assert.AreEqual("", c.Name, "No valid name was provided.");
         }
 
         [TestMethod]

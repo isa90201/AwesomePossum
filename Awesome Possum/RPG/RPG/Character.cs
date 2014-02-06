@@ -21,6 +21,8 @@ namespace RPG
 
         public Weapon Weapon { get; set; }
         public Armor Armor { get; set; }
+        public Rectangle Hitbox { get; set; }
+        public HumanController HumanController { get; set; }
 
         private int _Experience;
         public int Experience
@@ -70,8 +72,8 @@ namespace RPG
             }
             set
             {
-                if (value == "")
-                    _Name = "UNKNOWN";
+                if (value == "" || value == null)
+                    throw new ArgumentException("Name cannot be blank or null.");
                 else
                     _Name = value;
             }

@@ -5,11 +5,8 @@ using System.Text;
 
 namespace RPG
 {
-    public class Weapon
+    public class Level
     {
-        private const int MIN_ATTACK = 1;
-        private const int MAX_ATTACK = 100;
-
         private string _Name;
         public string Name
         {
@@ -26,28 +23,19 @@ namespace RPG
             }
         }
 
-        private int _Attack;
-        public int Attack
+        private int _LevelId;
+        public int LevelId
         {
             get
             {
-                return _Attack;
+                return _LevelId;
             }
             set
             {
-                if (value < MIN_ATTACK)
-                    _Attack = MIN_ATTACK;
-                else if (value > MAX_ATTACK)
-                    _Attack = MAX_ATTACK;
-                else
-                    _Attack = value;
+                if (value < 0)
+                    throw new ArgumentException("Level ID must be 0 or greater.");
+                _LevelId = value;
             }
-        }
-
-        public Weapon(string name, int attack)
-        {
-            Name = name;
-            Attack = attack;
         }
     }
 }

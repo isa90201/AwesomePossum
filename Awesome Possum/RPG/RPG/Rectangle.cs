@@ -5,7 +5,7 @@ using System.Text;
 
 namespace RPG
 {
-    class Rectangle
+    public class Rectangle
     {
         public int X { get; set; }
         public int Y { get; set; }

@@ -20,6 +20,7 @@ namespace RPGTest
         }
 
         [TestMethod]
+        [ExpectedException(typeof(System.ArgumentException))]
         public void TestName()
         {
             var a = new Armor("Shoes", 10);
