@@ -7,83 +7,34 @@ namespace RPG
 {
     public class GameSave
     {
-        public string WeaponName;
-        public int WeaponAttack;
-        public int WeaponExperience;
+        private const string CHARACTER_FILEPATH = "C:\\Users\\Isaias\\Desktop\\Character.xml";
+        private const string LEVEL_FILEPATH = "C:\\Users\\Isaias\\Desktop\\Level.xml";
 
-        public string ArmorName;
-        public int ArmorDefense;
-        public int ArmorExperience;
-
-        public Weapon InventoryWeapon;
-        public Weapon InventoryArmor;
-
-        public string CharacterName;
-        public int CharacterTotalHP;
-        public int CharacterCurrentHP;
-        public int CharacterAttack;
-        public int CharacterDefense;
-        public int CharacterExperience;
-        public int CharacterLevel;
-
-        public string LevelName;
-        public int LevelId;
-
-        public GameSave(Party party, Level currentLevel)
+        public GameSave()
         {
-            CharacterSave(party);
-            WeaponSave(party);
-            ArmorSave(party);
-            LevelSave(currentLevel);
+
         }
 
-        private void CharacterSave(Party party)
+        public void SaveCharacter(Character c)
         {
-            CharacterName = party.Character.Name;
-            CharacterTotalHP = party.Character.TotalHP;
-            CharacterCurrentHP = party.Character.CurrentHP;
-            CharacterAttack = party.Character.Attack;
-            CharacterDefense = party.Character.Defense;
-            CharacterExperience = party.Character.Experience;
-            CharacterLevel = party.Character.Level;
+            object o = c;
+            Serializer.Serialize(CHARACTER_FILEPATH, c);
         }
 
-        private void WeaponSave(Party party)
+        public void SaveLevel(Level l)
         {
-            Weapon w = party.Inventory.EquippedWeapon;
-
-            if (w == null)
-            {
-                WeaponName = null;
-                WeaponAttack = -1;
-            }
-            else
-            {
-                WeaponName = w.Name;
-                WeaponAttack = w.Attack;
-            }
+            object o = l;
+            Serializer.Serialize(LEVEL_FILEPATH, l);
         }
 
-        private void ArmorSave(Party party)
+        public Character GetSavedCharacter()
         {
-            Armor a = party.Inventory.EquippedArmor;
-
-            if (a == null)
-            {
-                ArmorName = null;
-                ArmorDefense = -1;
-            }
-            else
-            {
-                ArmorName = a.Name;
-                ArmorDefense = a.Defense;
-            }
+            return Serializer.Deserialize(CHARACTER_FILEPATH, typeof(Character)) as Character;
         }
 
-        private void LevelSave(Level level)
+        public Level GetSavedLevel()
         {
-            LevelName = level.Name;
-            LevelId = level.LevelId;
+            return Serializer.Deserialize(LEVEL_FILEPATH, typeof(Level)) as Level;
         }
     }
 }

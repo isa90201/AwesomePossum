@@ -21,7 +21,6 @@ namespace RPG
         private HumanController myController; //remove private
         private EnemyAI enemyAI; // remove private
         KeyboardState oldState;
-        int prevMove; // ADDED
         Color backColor;
         Color upColor = Color.Orange,  //ADDED
             downColor = Color.LightCoral,
@@ -31,10 +30,9 @@ namespace RPG
             pauseColor = Color.Gray,
             confirmColor = Color.Green,
             cancelColor = Color.Red;
-        Party testParty;
         Level testLevel;
         GameSave gameSave;
-        GameSaveXmlWriter xmlWriter;
+        Character testCharacter;
         /*GraphicsDeviceManager graphics;  // ORIGINAL
         SpriteBatch spriteBatch;*/
 
@@ -59,20 +57,20 @@ namespace RPG
             myController = new HumanController(); // ADDED
             oldState = Keyboard.GetState(); //REMOVE
             enemyAI = new EnemyAI(1); //ADDED
-            prevMove = 0;
+            //prevMove = 0;
 
             //GameSave TEst Objects
-            testLevel = new Level();
-            testLevel.Name = "The Ghetto";
-            testLevel.LevelId = 5;
+            Background bg0 = new Background("Stage0", "C:\\Stage0.png");
+            Background bg1 = new Background("Stage1", "C:\\Stage1.png");
+            Background bg2 = new Background("Stage2", "C:\\Stage2.png");
+            Background[] bg_array = new Background[3];
+            bg_array[0] = bg0;
+            bg_array[1] = bg1;
+            bg_array[2] = bg2;
+            testLevel = new Level(1, "Jungle", bg_array);
+            gameSave = new GameSave();
 
-            Character testCharacter = new Character("Jesus", 10, 15, 20);
-            Weapon testWeapon = new Weapon("Pimp Cane", 30);
-            Armor testArmor = new Armor("Fur Coat", 5);
-            Inventory testInventory = new Inventory();
-            testInventory.EquippedWeapon = testWeapon;
-            testInventory.EquippedArmor = testArmor;
-            testParty = new Party(testCharacter, testInventory);
+            testCharacter = new Character("Jesus", 10, 15, 20);
         }
 
         /// <summary>
@@ -106,67 +104,24 @@ namespace RPG
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            // Add your update logic here
             //TEST GameSave (writing to file)
-            gameSave = new GameSave(testParty, testLevel);
+
             // Allows the game to exit
             if (myController.CurrentState.IsKeyDown(Keys.Escape))
             {
-                xmlWriter = new GameSaveXmlWriter(gameSave);
+                gameSave.SaveCharacter(testCharacter);
+                gameSave.SaveLevel(testLevel);
                 this.Exit();
             }
 
             UpdateInput();
-
             base.Update(gameTime);
-            /* //ORIGINAL
-            // Allows the game to exit
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
-                this.Exit();
-
-            // TODO: Add your update logic here
-
-            base.Update(gameTime);
-             * */
         }
 
-        /*private int Move()
-        {
-            Random r = new Random();
-            int i = r.Next(1, 5);
-
-            if (enemyAI.IsMoving())
-            {
-                return i;
-            }
-            return 0;
-        }*/
 
         private void UpdateInput()  //REMOVE METHOD; Key testing
         {
-            /*int move = Move();
-
-            if (move != 0)
-            {
-                if (move == 1)
-                {
-                    backColor = upColor;
-                }
-                else if (move == 2)
-                {
-                    backColor = downColor;
-                }
-                else if (move == 3)
-                {
-                    backColor = leftColor;
-                }
-                else if (move == 4)
-                {
-                    backColor = rightColor;
-                }
-            }
-            else
-                prevMove = move;*/
-
             myController.GetInput();
 
 

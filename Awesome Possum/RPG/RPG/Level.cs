@@ -37,5 +37,29 @@ namespace RPG
                 _LevelId = value;
             }
         }
+
+        private int _CurrentStageId;
+        public int CurrentStageId
+        {
+            get
+            {
+                return _CurrentStageId;
+            }
+            set
+            {
+                if (value < 0)
+                    throw new ArgumentException("Stage ID must be 0 or greater.");
+                _CurrentStageId = value;
+            }
+        }
+
+        public Background[] StageBackgrounds { get; set; }
+
+        public Level(int levelId, string name, Background[] stageBackgrounds)
+        {
+            Name = name;
+            LevelId = levelId;
+            StageBackgrounds = stageBackgrounds;
+        }
     }
 }
