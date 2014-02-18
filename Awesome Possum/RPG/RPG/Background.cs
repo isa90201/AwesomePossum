@@ -7,24 +7,8 @@ namespace RPG
 {
     public class Background
     {
-        private const int WIDTH = 1280;
-        private const int HEIGHT = 800;
-
-        private string _Name;
-        public string Name
-        {
-            get
-            {
-                return _Name;
-            }
-            set
-            {
-                if (value == "" || value == null)
-                    throw new ArgumentException("Name cannot be blank or null.");
-                else
-                    _Name = value;
-            }
-        }
+        public const int WIDTH = 1280;
+        public const int HEIGHT = 800;
 
         private string _FilePath;
         public string FilePath
@@ -41,12 +25,5 @@ namespace RPG
                     _FilePath = value;
             }
         }
-
-        public Background(string name, string filePath)
-        {
-            FilePath = filePath;
-        }
-
-        public Background() { }
     }
 }

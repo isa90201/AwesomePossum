@@ -60,14 +60,11 @@ namespace RPG
             //prevMove = 0;
 
             //GameSave TEst Objects
-            Background bg0 = new Background("Stage0", "C:\\Stage0.png");
-            Background bg1 = new Background("Stage1", "C:\\Stage1.png");
-            Background bg2 = new Background("Stage2", "C:\\Stage2.png");
             var bg_array = new List<Background>();
-            bg_array.Add(bg0);
-            bg_array.Add(bg1);
-            bg_array.Add(bg2);
-            testLevel = new Level(1, "Jungle", bg_array);
+            bg_array.Add(new Background() { FilePath = @"C:\Stage0.png" });
+            bg_array.Add(new Background() { FilePath = @"C:\Stage1.png" });
+            bg_array.Add(new Background() { FilePath = @"C:\Stage2.png" });
+            testLevel = new Level() { StageBackgrounds = bg_array };
             gameSave = new GameSave();
 
             testCharacter = new Character("Jesus", 10, 15, 20);

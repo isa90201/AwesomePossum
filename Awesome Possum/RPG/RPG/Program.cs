@@ -2,6 +2,7 @@
 
 using System;
 using System.Linq;
+using RPG.Editor;
 
 namespace RPG
 {
@@ -11,6 +12,7 @@ namespace RPG
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
+        [STAThread]
         static void Main(string[] args)
         {
             if (args.Any(a => a == "-l") || ForceEditor())
@@ -29,7 +31,9 @@ namespace RPG
 
         static void LevelEditorMain()
         {
-            // TODO Level Editor
+
+            var window = new MainEditorWindow();
+            window.ShowDialog();
         }
 
         static bool ForceEditor()
