@@ -46,5 +46,7 @@ namespace RPG
         {
             FilePath = filePath;
         }
+
+        public Background() { }
     }
 }

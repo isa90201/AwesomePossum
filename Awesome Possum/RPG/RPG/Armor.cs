@@ -49,5 +49,9 @@ namespace RPG
             Name = name;
             Defense = defense;
         }
+
+        public Armor() { }
+
+        public static Armor NULL = new Armor() { Name = "None", Defense = 0 };
     }
 }

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace RPG
 {
-    interface IController
+    public interface IController
     {
         bool IsMovingUp();
         bool IsMovingDown();

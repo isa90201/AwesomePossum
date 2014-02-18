@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml.Serialization;
 
 namespace RPG
 {
@@ -53,13 +54,16 @@ namespace RPG
             }
         }
 
-        public Background[] StageBackgrounds { get; set; }
+        [XmlElement("Background")]
+        public List<Background> StageBackgrounds { get; set; }
 
-        public Level(int levelId, string name, Background[] stageBackgrounds)
+        public Level(int levelId, string name, List<Background> stageBackgrounds)
         {
             Name = name;
             LevelId = levelId;
             StageBackgrounds = stageBackgrounds;
         }
+
+        public Level() { }
     }
 }

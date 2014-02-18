@@ -20,7 +20,7 @@ namespace RPGTest
             Assert.AreEqual(70, c.CurrentHP, "Current HP is not set to max");
             Assert.AreEqual(60, c.Attack, "Attack is not set properly");
             Assert.AreEqual(50, c.Defense, "Defense is not set properly");
-            Assert.IsTrue(c.IsAlive, "New character is dead");
+            Assert.IsTrue(c.IsAlive(), "New character is dead");
         }
 
         [TestMethod]
@@ -30,19 +30,19 @@ namespace RPGTest
 
             c.CurrentHP -= 20;  // 1st hit
             Assert.AreEqual(50, c.CurrentHP, "Damage is not applied properly");
-            Assert.IsTrue(c.IsAlive, "Character should be alive");
+            Assert.IsTrue(c.IsAlive(), "Character should be alive");
 
             c.CurrentHP -= 50; // 2nd hit
             Assert.AreEqual(0, c.CurrentHP, "Damage is not applied properly");
-            Assert.IsFalse(c.IsAlive, "Character should be dead");
+            Assert.IsFalse(c.IsAlive(), "Character should be dead");
 
             c.CurrentHP -= 50; // 3rd hit
             Assert.AreEqual(0, c.CurrentHP, "Damage is not applied properly");
-            Assert.IsFalse(c.IsAlive, "Character should be dead");
+            Assert.IsFalse(c.IsAlive(), "Character should be dead");
 
             c.CurrentHP += 25; // Recover Haalth
             Assert.AreEqual(25, c.CurrentHP, "Damage is not applied properly");
-            Assert.IsTrue(c.IsAlive, "Character should be alive");
+            Assert.IsTrue(c.IsAlive(), "Character should be alive");
         }
 
         [TestMethod]
@@ -79,15 +79,15 @@ namespace RPGTest
 
             c.TotalHP = -10; //
             Assert.AreEqual(1, c.TotalHP, "Total HP is not set to minimum");
-            Assert.IsTrue(c.IsAlive, "Character should be alive");
+            Assert.IsTrue(c.IsAlive(), "Character should be alive");
 
             c.TotalHP = 10;
             Assert.AreEqual(10, c.TotalHP, "Total HP is not set properly");
-            Assert.IsTrue(c.IsAlive, "Character should be alive");
+            Assert.IsTrue(c.IsAlive(), "Character should be alive");
 
             c.TotalHP = 101;
             Assert.AreEqual(100, c.TotalHP, "Total HP is not set to max");
-            Assert.IsTrue(c.IsAlive, "Character should be alive");
+            Assert.IsTrue(c.IsAlive(), "Character should be alive");
         }
 
         [TestMethod]

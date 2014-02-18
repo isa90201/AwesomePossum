@@ -5,7 +5,7 @@ using System.Text;
 
 namespace RPG
 {
-    class AIController : IController
+    public class AIController : IController
     {
         private enum Direction { UP, DOWN, LEFT, RIGHT };
         private Direction HorizontalDirection;

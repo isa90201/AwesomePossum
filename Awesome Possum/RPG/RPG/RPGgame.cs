@@ -63,10 +63,10 @@ namespace RPG
             Background bg0 = new Background("Stage0", "C:\\Stage0.png");
             Background bg1 = new Background("Stage1", "C:\\Stage1.png");
             Background bg2 = new Background("Stage2", "C:\\Stage2.png");
-            Background[] bg_array = new Background[3];
-            bg_array[0] = bg0;
-            bg_array[1] = bg1;
-            bg_array[2] = bg2;
+            var bg_array = new List<Background>();
+            bg_array.Add(bg0);
+            bg_array.Add(bg1);
+            bg_array.Add(bg2);
             testLevel = new Level(1, "Jungle", bg_array);
             gameSave = new GameSave();
 

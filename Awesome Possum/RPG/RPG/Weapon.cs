@@ -44,10 +44,14 @@ namespace RPG
             }
         }
 
+        public Weapon() { }
+
         public Weapon(string name, int attack)
         {
             Name = name;
             Attack = attack;
         }
+
+        public static Weapon NULL = new Weapon() { Name = "None", Attack = 0 };
     }
 }

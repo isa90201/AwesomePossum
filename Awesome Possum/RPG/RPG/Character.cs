@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml.Serialization;
 
 namespace RPG
 {
@@ -22,7 +23,9 @@ namespace RPG
         public Weapon Weapon { get; set; }
         public Armor Armor { get; set; }
         public Rectangle Hitbox { get; set; }
-        public HumanController HumanController { get; set; }
+
+        [XmlIgnore]
+        public IController Controller;
 
         private int _Experience;
         public int Experience
@@ -52,7 +55,7 @@ namespace RPG
             {
                 return _Level;
             }
-            private set
+            set
             {
                 if (value < MIN_LEVEL)
                     _Level = MIN_LEVEL;
@@ -155,12 +158,9 @@ namespace RPG
             }
         }
 
-        public bool IsAlive
+        public bool IsAlive()
         {
-            get
-            {
-                return CurrentHP >= MIN_HP;
-            }
+            return CurrentHP >= MIN_HP;
         }
 
         public Character(string name, int totalHP, int attack, int defense)
@@ -172,8 +172,21 @@ namespace RPG
             Defense = defense;
             Experience = MIN_EXPERIENCE;
             Level = MIN_LEVEL;
+
+            Init();
         }
 
+        public Character()
+        {
+            Init();
+        }
+
+        private void Init()
+        {
+            Weapon = Weapon.NULL;
+            Armor = Armor.NULL;
+            Hitbox = new Rectangle();
+        }
         private void LevelUp()
         {
             Level++;
