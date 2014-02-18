@@ -7,7 +7,7 @@ namespace RPG
 {
     public class Weapon
     {
-        private const int MIN_ATTACK = 1;
+        private const int MIN_ATTACK = 0;
         private const int MAX_ATTACK = 100;
 
         private string _Name;

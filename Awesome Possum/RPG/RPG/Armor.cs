@@ -7,7 +7,7 @@ namespace RPG
 {
     public class Armor
     {
-        private const int MIN_DEFENSE = 1;
+        private const int MIN_DEFENSE = 0;
         private const int MAX_DEFENSE = 100;
 
         private string _Name;

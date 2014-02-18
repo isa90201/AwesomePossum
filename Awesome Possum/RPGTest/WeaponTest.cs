@@ -37,7 +37,7 @@ namespace RPGTest
             var w = new Weapon("Excaliber", 25);
 
             w.Attack = -10;
-            Assert.AreEqual(1, w.Attack, "Attack not set to minimum");
+            Assert.AreEqual(0, w.Attack, "Attack not set to minimum");
             w.Attack = 10;
             Assert.AreEqual(10, w.Attack, "Attack not set properly");
             w.Attack = 101;
@@ -50,9 +50,9 @@ namespace RPGTest
             var w = new Weapon("Excaliber", 25);
 
             w.Attack -= 100;
-            Assert.AreEqual(1, w.Attack, "Attack not set to minimum");
+            Assert.AreEqual(0, w.Attack, "Attack not set to minimum");
             w.Attack += 10;
-            Assert.AreEqual(11, w.Attack, "Attack not set properly");
+            Assert.AreEqual(10, w.Attack, "Attack not set properly");
             w.Attack += 200;
             Assert.AreEqual(100, w.Attack, "Attack not set to max");
         }

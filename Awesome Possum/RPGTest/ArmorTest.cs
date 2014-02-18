@@ -37,7 +37,7 @@ namespace RPGTest
             var a = new Armor("Shoes", 10);
 
             a.Defense = -10;
-            Assert.AreEqual(1, a.Defense, "Defense was not set to minimum");
+            Assert.AreEqual(0, a.Defense, "Defense was not set to minimum");
             a.Defense = 50;
             Assert.AreEqual(50, a.Defense, "Defense was not set properly");
             a.Defense = 999;
@@ -50,9 +50,9 @@ namespace RPGTest
             var a = new Armor("Shoes", 10);
 
             a.Defense -= 99;
-            Assert.AreEqual(1, a.Defense, "Defense was not set to minimum");
+            Assert.AreEqual(0, a.Defense, "Defense was not set to minimum");
             a.Defense += 75;
-            Assert.AreEqual(76, a.Defense, "Defense was not set properly");
+            Assert.AreEqual(75, a.Defense, "Defense was not set properly");
             a.Defense += 999;
             Assert.AreEqual(100, a.Defense, "Defense was not set to max");
         }
