@@ -26,7 +26,7 @@ namespace RPG
 
         }
 
-        public void GetInput()
+        public void Update()
         {
             CurrentState = Keyboard.GetState();
         }
@@ -78,22 +78,22 @@ namespace RPG
 
         public bool IsMovingUp()
         {
-            return UpIsPressed();
+            return UpIsPressed() && !DownIsPressed();
         }
 
         public bool IsMovingDown()
         {
-            return DownIsPressed();
+            return DownIsPressed() && !UpIsPressed();
         }
 
         public bool IsMovingLeft()
         {
-            return LeftIsPressed();
+            return LeftIsPressed() && !RightIsPressed();
         }
 
         public bool IsMovingRight()
         {
-            return RightIsPressed();
+            return RightIsPressed() && !LeftIsPressed();
         }
 
         public bool IsAttacking()

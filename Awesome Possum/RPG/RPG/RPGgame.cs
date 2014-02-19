@@ -17,40 +17,23 @@ namespace RPG
     /// </summary>
     public class RPGgame : Microsoft.Xna.Framework.Game
     {
-        //MOVE units
-        const int MOVE_X = 5;
-        const int MOVE_Y = 5;
-
         //GRAPHICS stuff
         GraphicsDevice device;
         GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch_BG, spriteBatch_H, spriteBatch_AI;
-        Texture2D backgroundTexture, humanTexture, aiTexture; //for images
-        Texture2D upTexture, downTexture, leftTexture, rightTexture, attackTexture, collisonTexture;
+        SpriteBatch spriteBatch_BG, spriteBatch_H;
+        Texture2D backgroundTexture, humanTexture; //for images
         Rectangle screenRectangle;
-        Vector2 H_position, AI_position;
         int screenWidth, screenHeight;
 
         //INPUT stuff
-        KeyboardState oldState;
-        HumanController myController;
-
-        //COLORS
-        Color fillColor;
-        Color upColor = Color.LightBlue,
-            downColor = Color.Green,
-            leftColor = Color.Orange,
-            rightColor = Color.Yellow,
-            attackColor = Color.Red,
-            jumpColor = Color.Violet,
-            collisionColor = Color.Magenta,
-            idleColor = Color.White;
+        HumanController UserController;
+        List<IController> Controllers;
 
         //GAME stuff
-        EnemyAI enemyAI;
         Level testLevel;
         GameSave gameSave;
-        Character testCharacter;
+        Character UserCharacter;
+        List<Character> Characters;
 
 
         //-------------------------------------------------------------
@@ -81,10 +64,10 @@ namespace RPG
             Window.Title = "RHO";
 
             base.Initialize();
-            myController = new HumanController(); // ADDED
-            oldState = Keyboard.GetState(); //REMOVE
-            enemyAI = new EnemyAI(1); //ADDED
+            UserController = new HumanController(); // ADDED
 
+            Controllers = new List<IController>();
+            Controllers.Add(UserController);
 
             //GameSave Tsst Objects;
             var bg_array = new List<Background>();
@@ -94,9 +77,35 @@ namespace RPG
             testLevel = new Level() { StageBackgrounds = bg_array };
             gameSave = new GameSave();
 
-            testCharacter = new Character("Jesus", 10, 15, 20);
-            H_position = new Vector2(50, 400);
-            AI_position = new Vector2(1000, 400);
+            Characters = new List<Character>();
+            UserCharacter = new Character("Jesus", 10, 15, 20)
+            {
+                Controller = UserController,
+                X = 400,
+                Y = 50,
+                Speed = 5
+            };
+
+            Characters.Add(UserCharacter);
+
+            for (int i = 1; i <= 5; ++i)
+            {
+                var ai = new AIController(new EnemyAI(i * 20));
+                var c = new Character("IPOO", 10 * i, 5 * i, 3 * i)
+                {
+                    Controller = ai,
+                    X = i * 200,
+                    Y = i * 50,
+                    Speed = 3
+                };
+
+                ai.Self = c;
+                ai.Enemy = UserCharacter;
+
+                Controllers.Add(ai);
+                Characters.Add(c);
+            }
+
         }
 
         //-------------------------------------------------------------
@@ -107,20 +116,15 @@ namespace RPG
         /// </summary>
         protected override void LoadContent()
         {
+            //Player textures
+            humanTexture = CreateRectangle(100, 200, Color.White);
+
+            //Image textures
             backgroundTexture = Content.Load<Texture2D>("Stage1");
-            humanTexture = CreateRectangle(100, 200, idleColor);
-            aiTexture = CreateRectangle(100, 200, idleColor);
-            upTexture = CreateRectangle(100, 200, upColor);
-            downTexture = CreateRectangle(100, 200, downColor);
-            leftTexture = CreateRectangle(100, 200, leftColor);
-            rightTexture = CreateRectangle(100, 200, rightColor);
-            attackTexture = CreateRectangle(100, 200, attackColor);
-            collisonTexture = CreateRectangle(100, 200, collisionColor);
 
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch_BG = new SpriteBatch(GraphicsDevice);
             spriteBatch_H = new SpriteBatch(GraphicsDevice);
-            spriteBatch_AI = new SpriteBatch(GraphicsDevice);
             device = graphics.GraphicsDevice;
 
             //backgroundTexture = Content.Load<Texture2D>("background");
@@ -154,72 +158,24 @@ namespace RPG
         protected override void Update(GameTime gameTime)
         {
             // ADD YOUR UPDATE LOGIC HERE
+            foreach (var c in Controllers)
+            {
+                c.Update();
+            }
 
             // Allows the game to exit
-            if (myController.CurrentState.IsKeyDown(Keys.Escape))
+            if (UserController.CurrentState.IsKeyDown(Keys.Escape))
             {
-                gameSave.SaveCharacter(testCharacter);
+                gameSave.SaveCharacter(UserCharacter);
                 gameSave.SaveLevel(testLevel);
                 this.Exit();
             }
 
-            UpdateHumanInput();
+            foreach (var c in Characters)
+            {
+                c.Move();
+            }
             base.Update(gameTime);
-        }
-
-        //-------------------------------------------------------------
-
-        private void UpdateHumanInput()  //INPUT check
-        {
-            myController.GetInput();
-
-
-            if (myController.UpIsPressed() && !myController.DownIsPressed()) // UP combos
-            {
-                fillColor = upColor;
-                MoveVertical(-MOVE_Y, H_position);
-
-                if (myController.LeftIsPressed() && !myController.RightIsPressed())
-                {
-                    MoveHorizontal(-MOVE_X, H_position);
-                }
-                else if (myController.RightIsPressed() && !myController.LeftIsPressed())
-                {
-                    MoveHorizontal(MOVE_X, H_position);
-                }
-            }
-            else if (myController.DownIsPressed() && !myController.UpIsPressed()) // DOWN combos
-            {
-                fillColor = downColor;
-                MoveVertical(MOVE_Y, H_position);
-
-                if (myController.LeftIsPressed() && !myController.RightIsPressed())
-                {
-                    MoveHorizontal(-MOVE_X, H_position);
-                }
-                else if (myController.RightIsPressed() && !myController.LeftIsPressed())
-                {
-                    MoveHorizontal(MOVE_X, H_position);
-                }
-            }
-            else if (myController.LeftIsPressed() && !myController.RightIsPressed())
-            {
-                fillColor = leftColor;
-                MoveHorizontal(-MOVE_X, H_position);
-            }
-            else if (myController.RightIsPressed() && !myController.LeftIsPressed())
-            {
-                fillColor = rightColor;
-                MoveHorizontal(MOVE_X, H_position);
-            }
-            else if (myController.AttackIsPressed())
-            {
-                fillColor = attackColor;
-            }
-            else if (myController.JumpIsPressed())
-            {
-                fillColor = jumpColor;
-            }
         }
 
         //-------------------------------------------------------------
@@ -230,11 +186,12 @@ namespace RPG
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            graphics.GraphicsDevice.Clear(idleColor); //Clear screen to color of your choice
-
             DrawScenery();
-            DrawCharacter(humanTexture, H_position, spriteBatch_H);
-            DrawCharacter(aiTexture, AI_position, spriteBatch_AI);
+
+            foreach (var c in Characters)
+            {
+                DrawCharacter(c.Hitbox, spriteBatch_H, Color.LightBlue);
+            }
 
             base.Draw(gameTime);
         }
@@ -257,7 +214,7 @@ namespace RPG
 
         //-------------------------------------------------------------
 
-        private void DrawScenery() //ADDED
+        private void DrawScenery()
         {
             spriteBatch_BG.Begin();
             spriteBatch_BG.Draw(backgroundTexture, screenRectangle, Color.White);
@@ -266,25 +223,11 @@ namespace RPG
 
         //-------------------------------------------------------------
 
-        private void DrawCharacter(Texture2D characterTexture, Vector2 position, SpriteBatch sb)
+        private void DrawCharacter(Hitbox hit, SpriteBatch sb, Color color)
         {
             sb.Begin();
-            sb.Draw(characterTexture, position, fillColor);
+            sb.Draw(humanTexture, new Vector2(hit.X, hit.Y), color);
             sb.End();
-        }
-
-        //-------------------------------------------------------------
-
-        private void MoveHorizontal(int x, Vector2 position)
-        {
-            position.X += x;
-        }
-
-        //-------------------------------------------------------------
-
-        private void MoveVertical(int y, Vector2 position)
-        {
-            position.Y += y;
         }
 
         //-------------------------------------------------------------

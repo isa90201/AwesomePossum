@@ -7,19 +7,30 @@ namespace RPG
 {
     public class AIController : IController
     {
-        private enum Direction { UP, DOWN, LEFT, RIGHT };
+        private enum Direction { NONE, UP, DOWN, LEFT, RIGHT };
         private Direction HorizontalDirection;
         private Direction VerticalDirection;
         private bool Attacking;
         private EnemyAI Eai;
+
+        public Character Self { get; set; }
+        public Character Enemy { get; set; }
 
         public AIController(EnemyAI eai)
         {
             Eai = eai;
         }
 
+        public void Update()
+        {
+            Move(Self.Hitbox, Enemy.Hitbox);
+        }
+
         public void Move(Hitbox aiPlayer, Hitbox humanPlayer)
         {
+            VerticalDirection = Direction.NONE;
+            HorizontalDirection = Direction.NONE;
+
             if (Eai.IsMoving())
             {
                 //Vertical Check

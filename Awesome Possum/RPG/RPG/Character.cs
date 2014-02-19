@@ -20,9 +20,30 @@ namespace RPG
         private const int MIN_LEVEL = 1;
         private const int MAX_LEVEL = 100;
 
+        public int X { get; set; }
+        public int Y { get; set; }
+        public int Speed { get; set; }
+
         public Weapon Weapon { get; set; }
         public Armor Armor { get; set; }
-        public Hitbox Hitbox { get; set; }
+
+        private Hitbox _Hitbox;
+        public Hitbox Hitbox
+        {
+            get
+            {
+                if (_Hitbox == null)
+                    _Hitbox = new Hitbox() { H = 200, W = 100 };
+
+                _Hitbox.X = X;
+                _Hitbox.Y = Y;
+                return _Hitbox;
+            }
+            set
+            {
+                _Hitbox = value;
+            }
+        }
 
         [XmlIgnore]
         public IController Controller;
@@ -195,6 +216,27 @@ namespace RPG
             Defense++;
             TotalHP++;
             CurrentHP = TotalHP;
+        }
+
+        public void Move()
+        {
+            if (Controller.IsMovingUp()) // UP combos
+            {
+                Y -= Speed;
+            }
+            else if (Controller.IsMovingDown()) // DOWN combos
+            {
+                Y += Speed;
+            }
+
+            if (Controller.IsMovingLeft())
+            {
+                X -= Speed;
+            }
+            else if (Controller.IsMovingRight())
+            {
+                X += Speed;
+            }
         }
     }
 }

@@ -13,5 +13,6 @@ namespace RPG
         bool IsMovingRight();
         bool IsAttacking();
         bool IsJumping();
+        void Update();
     }
 }
