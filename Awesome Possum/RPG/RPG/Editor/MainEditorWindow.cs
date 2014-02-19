@@ -70,7 +70,7 @@ namespace RPG.Editor
         {
             if (SaveDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                Serializer.Serialize(SaveDialog.FileName, CurrentWorld);
+                CurrentWorld.Save(SaveDialog.FileName);
             }
         }
 
@@ -78,8 +78,7 @@ namespace RPG.Editor
         {
             if (OpenDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                var w = Serializer.Deserialize(OpenDialog.FileName, typeof(World)) as World;
-                UpdateUI(w, 0);
+                UpdateUI(World.Load(OpenDialog.FileName), 0);
             }
         }
 

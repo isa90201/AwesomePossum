@@ -22,7 +22,7 @@ namespace RPG
 
         public Weapon Weapon { get; set; }
         public Armor Armor { get; set; }
-        public Rectangle Hitbox { get; set; }
+        public Hitbox Hitbox { get; set; }
 
         [XmlIgnore]
         public IController Controller;
@@ -185,8 +185,9 @@ namespace RPG
         {
             Weapon = Weapon.NULL;
             Armor = Armor.NULL;
-            Hitbox = new Rectangle();
+            Hitbox = new Hitbox();
         }
+
         private void LevelUp()
         {
             Level++;

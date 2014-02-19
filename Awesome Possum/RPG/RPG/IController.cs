@@ -12,5 +12,6 @@ namespace RPG
         bool IsMovingLeft();
         bool IsMovingRight();
         bool IsAttacking();
+        bool IsJumping();
     }
 }

@@ -16,6 +16,7 @@ namespace RPG
             Left = Keys.Left,
             Right = Keys.Right,
             Attack = Keys.A,
+            Jump = Keys.S,
             Pause = Keys.Space,
             Confirm = Keys.Enter,
             Cancel = Keys.Delete;
@@ -53,6 +54,11 @@ namespace RPG
         public bool AttackIsPressed()
         {
             return CurrentState.IsKeyDown(Attack);
+        }
+
+        public bool JumpIsPressed()
+        {
+            return CurrentState.IsKeyDown(Jump);
         }
 
         public bool PauseIsPressed()
@@ -93,6 +99,11 @@ namespace RPG
         public bool IsAttacking()
         {
             return AttackIsPressed();
+        }
+
+        public bool IsJumping()
+        {
+            return JumpIsPressed();
         }
     }
 }

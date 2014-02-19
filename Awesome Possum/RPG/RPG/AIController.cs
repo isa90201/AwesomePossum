@@ -18,7 +18,7 @@ namespace RPG
             Eai = eai;
         }
 
-        public void Move(Rectangle aiPlayer, Rectangle humanPlayer)
+        public void Move(Hitbox aiPlayer, Hitbox humanPlayer)
         {
             if (Eai.IsMoving())
             {
@@ -36,7 +36,7 @@ namespace RPG
             }
         }
 
-        private void Attack(Rectangle aiPlayer, Rectangle humanPlayer)
+        private void Attack(Hitbox aiPlayer, Hitbox humanPlayer)
         {
             if (Eai.IsAttacking())
             {
@@ -67,6 +67,11 @@ namespace RPG
         public bool IsAttacking()
         {
             return Attacking;
+        }
+
+        public bool IsJumping()
+        {
+            return false;
         }
     }
 }

@@ -5,14 +5,14 @@ using System.Text;
 
 namespace RPG
 {
-    public class Rectangle
+    public class Hitbox
     {
         public int X { get; set; }
         public int Y { get; set; }
         public int W { get; set; }
         public int H { get; set; }
 
-        public bool Overlap(Rectangle other)
+        public bool Overlap(Hitbox other)
         {
             return OverlapSide(X, W, other.X, other.W) && OverlapSide(Y, H, other.Y, other.H);
         }
