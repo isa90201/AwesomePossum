@@ -42,8 +42,35 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Duck.png">
-      <Name>Duck</Name>
+    <Compile Include="IPOOAttack.png">
+      <Name>IPOOAttack</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="IPOODeath.png">
+      <Name>IPOODeath</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="IPOOHurt.png">
+      <Name>IPOOHurt</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="IPOOIdle.png">
+      <Name>IPOOIdle</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="IPOOWalking.png">
+      <Name>IPOOWalking</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="MiniWarrior.png">
+      <Name>MiniWarrior</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

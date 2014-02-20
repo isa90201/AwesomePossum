@@ -20,10 +20,12 @@ namespace RPG
         //GRAPHICS stuff
         GraphicsDevice device;
         GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch_BG, spriteBatch_H;
+        SpriteBatch spriteBatch_BG, spriteBatch_H, spriteBatch_A;  //modified
         Texture2D backgroundTexture, humanTexture; //for images
         Rectangle screenRectangle;
+        AnimatedSprite animatedSprite; // ADDED sprite
         int screenWidth, screenHeight;
+
 
         //INPUT stuff
         HumanController UserController;
@@ -34,7 +36,6 @@ namespace RPG
         GameSave gameSave;
         Character UserCharacter;
         List<Character> Characters;
-
 
         //-------------------------------------------------------------
 
@@ -56,20 +57,25 @@ namespace RPG
         {
             // TODO: Add your initialization logic here
 
-            //Window Resizeability
+            //WINDOW Properties
             graphics.PreferredBackBufferWidth = 1280; //PREFERRED WIDTH
             graphics.PreferredBackBufferHeight = 800; // PREFERRED HEIGHT
             graphics.IsFullScreen = true;  //CHANGE THIS
             graphics.ApplyChanges();
             Window.Title = "RHO";
 
+            //ADDED 2 lines
+            animatedSprite = new AnimatedSprite(Content.Load<Texture2D>("MiniWarrior"), 1, 32, 48);
+            animatedSprite.Position = new Vector2(400, 300);
+
             base.Initialize();
-            UserController = new HumanController(); // ADDED
+
+            UserController = new HumanController();
 
             Controllers = new List<IController>();
             Controllers.Add(UserController);
 
-            //GameSave Tsst Objects;
+            //GAMESAVE Test Objects;
             var bg_array = new List<Background>();
             bg_array.Add(new Background() { FilePath = @"C:\Stage0.png" });
             bg_array.Add(new Background() { FilePath = @"C:\Stage1.png" });
@@ -77,6 +83,7 @@ namespace RPG
             testLevel = new Level() { StageBackgrounds = bg_array };
             gameSave = new GameSave();
 
+            //CREATE human character
             Characters = new List<Character>();
             UserCharacter = new Character("Jesus", 10, 15, 20)
             {
@@ -88,6 +95,7 @@ namespace RPG
 
             Characters.Add(UserCharacter);
 
+            //Create AI controllers and respective characters
             for (int i = 1; i <= 5; ++i)
             {
                 var ai = new AIController(new EnemyAI(i * 20));
@@ -96,7 +104,7 @@ namespace RPG
                     Controller = ai,
                     X = i * 200,
                     Y = i * 50,
-                    Speed = 3
+                    Speed = 1
                 };
 
                 ai.Self = c;
@@ -134,6 +142,13 @@ namespace RPG
             screenRectangle = new Rectangle(0, 0, screenWidth, screenHeight); //Initialize WINDOW
 
 
+
+            spriteBatch_A = new SpriteBatch(GraphicsDevice); // ADDED
+            //animatedSprite = new AnimatedSprite(Content.Load<Texture2D>("MiniWarrior"), 1, 32, 48); // ADDED
+            //animatedSprite.Position = new Vector2(400, 300); //ADDED
+
+
+
             // TODO: use this.Content to load your game content here
         }
 
@@ -158,6 +173,11 @@ namespace RPG
         protected override void Update(GameTime gameTime)
         {
             // ADD YOUR UPDATE LOGIC HERE
+
+
+            animatedSprite.HandleSpriteMovement(gameTime); //ADDED
+
+            //UPDATE controller input(s)
             foreach (var c in Controllers)
             {
                 c.Update();
@@ -171,6 +191,7 @@ namespace RPG
                 this.Exit();
             }
 
+            //UPDATE character position(s)
             foreach (var c in Characters)
             {
                 c.Move();
@@ -188,11 +209,12 @@ namespace RPG
         {
             DrawScenery();
 
-            foreach (var c in Characters)
+            foreach (var c in Characters.OrderBy(x => x.Y))
             {
                 DrawCharacter(c.Hitbox, spriteBatch_H, Color.LightBlue);
             }
 
+            DrawAnimatedSprite(animatedSprite, spriteBatch_A);
             base.Draw(gameTime);
         }
 
@@ -228,6 +250,16 @@ namespace RPG
             sb.Begin();
             sb.Draw(humanTexture, new Vector2(hit.X, hit.Y), color);
             sb.End();
+        }
+
+        //-------------------------------------------------------------
+
+        private void DrawAnimatedSprite(AnimatedSprite a_s, SpriteBatch sb)
+        {
+            sb.Begin();
+            sb.Draw(a_s.Texture, a_s.Position, a_s.SourceRect, Color.White, 0f, a_s.Origin, 1.0f, SpriteEffects.None, 0);
+            sb.End();
+
         }
 
         //-------------------------------------------------------------

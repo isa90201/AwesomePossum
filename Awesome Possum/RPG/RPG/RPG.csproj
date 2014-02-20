@@ -111,6 +111,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AIController.cs" />
+    <Compile Include="AnimatedSprite.cs" />
     <Compile Include="Background.cs" />
     <Compile Include="Character.cs" />
     <Compile Include="Armor.cs" />
