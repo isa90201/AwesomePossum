@@ -12,15 +12,16 @@ namespace RPG
     public class AnimatedSprite
     {
         Texture2D spriteTexture;
-        float timer = 0f; //Time required for sprite to move to the next frame.
+        float timer = 0f;  //Time required for sprite to move to the next frame.
         float interval = 200f; //Used to determine how often to step to next frame in the animation.
-        int currentFrame = 0; //Keep trakc of current frame.
+        int currentFrame = 0;  //Keep trakc of current frame.
         int spriteWidth = 32;
         int spriteHeight = 48;
-        int spriteSpeed = 2; //Used to set the speed the sprite actually moves across the screen.
-        Rectangle sourceRect; //Rectangle in which our sprite will be drawn.
-        Vector2 position;  //Denotes where sprite is on screen
-        Vector2 origin;    //and center of our drawn sprite.
+        int spriteSpeed = 2;  //Used to set the speed the sprite actually moves across the screen.
+        Rectangle sourceRect;
+        Vector2 position;
+        Vector2 origin;
+
         KeyboardState currentKBState;
         KeyboardState previousKBState;
 
@@ -70,7 +71,7 @@ namespace RPG
             {
                 sourceRect = value;
             }
-        }
+        } // the rectangle in which our sprite will be drawn
 
         public AnimatedSprite(Texture2D texture, int currentFrame, int spriteWidth, int spriteHeight)
         {
