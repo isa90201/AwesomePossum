@@ -21,11 +21,13 @@ namespace RPG
         GraphicsDevice device;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch_BG, spriteBatch_H, spriteBatch_A;  //modified
-        Texture2D backgroundTexture, humanTexture; //for images
+        Texture2D backgroundTexture, humanTexture, ai1Texture, ai2Texture; //for images
         Rectangle screenRectangle;
         AnimatedSprite animatedSprite; // ADDED sprite
         int screenWidth, screenHeight;
 
+        //SOUND stuff
+        Song backgroundMusic;
 
         //INPUT stuff
         HumanController UserController;
@@ -64,8 +66,8 @@ namespace RPG
             graphics.ApplyChanges();
             Window.Title = "RHO";
 
-            //ADDED 2 lines
-            animatedSprite = new AnimatedSprite(Content.Load<Texture2D>("MiniWarrior"), 1, 32, 48);
+            //SPRITE stuff
+            animatedSprite = new AnimatedSprite(Content.Load<Texture2D>("IPOOIdleLeft"), 1, 100, 200);
             animatedSprite.Position = new Vector2(400, 300);
 
             base.Initialize();
@@ -96,7 +98,7 @@ namespace RPG
             Characters.Add(UserCharacter);
 
             //Create AI controllers and respective characters
-            for (int i = 1; i <= 5; ++i)
+            for (int i = 1; i <= 2; ++i)
             {
                 var ai = new AIController(new EnemyAI(i * 20));
                 var c = new Character("IPOO", 10 * i, 5 * i, 3 * i)
@@ -126,13 +128,22 @@ namespace RPG
         {
             //Player textures
             humanTexture = CreateRectangle(100, 200, Color.White);
+            ai1Texture = CreateRectangle(100, 200, Color.White);
+            ai2Texture = CreateRectangle(100, 200, Color.White);
 
             //Image textures
             backgroundTexture = Content.Load<Texture2D>("Stage1");
 
+            //Music Player
+            backgroundMusic = Content.Load<Song>("Boss1");
+            MediaPlayer.Play(backgroundMusic);
+
+
+
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch_BG = new SpriteBatch(GraphicsDevice);
             spriteBatch_H = new SpriteBatch(GraphicsDevice);
+            spriteBatch_A = new SpriteBatch(GraphicsDevice); // ADDED
             device = graphics.GraphicsDevice;
 
             //backgroundTexture = Content.Load<Texture2D>("background");
@@ -140,14 +151,6 @@ namespace RPG
             screenWidth = device.PresentationParameters.BackBufferWidth;
             screenHeight = device.PresentationParameters.BackBufferHeight;
             screenRectangle = new Rectangle(0, 0, screenWidth, screenHeight); //Initialize WINDOW
-
-
-
-            spriteBatch_A = new SpriteBatch(GraphicsDevice); // ADDED
-            //animatedSprite = new AnimatedSprite(Content.Load<Texture2D>("MiniWarrior"), 1, 32, 48); // ADDED
-            //animatedSprite.Position = new Vector2(400, 300); //ADDED
-
-
 
             // TODO: use this.Content to load your game content here
         }
@@ -211,10 +214,11 @@ namespace RPG
 
             foreach (var c in Characters.OrderBy(x => x.Y))
             {
-                DrawCharacter(c.Hitbox, spriteBatch_H, Color.LightBlue);
+                //DrawCharacter(c.Hitbox, spriteBatch_H, Color.LightBlue); //RESTORE
+                DrawAnimatedSprite(c.Hitbox, animatedSprite, spriteBatch_A); //REMOVE
             }
 
-            DrawAnimatedSprite(animatedSprite, spriteBatch_A);
+            //DrawAnimatedSprite(hitbox hit, animatedSprite, spriteBatch_A);
             base.Draw(gameTime);
         }
 
@@ -254,12 +258,11 @@ namespace RPG
 
         //-------------------------------------------------------------
 
-        private void DrawAnimatedSprite(AnimatedSprite a_s, SpriteBatch sb)
+        private void DrawAnimatedSprite(Hitbox hit, AnimatedSprite a_s, SpriteBatch sb)
         {
             sb.Begin();
-            sb.Draw(a_s.Texture, a_s.Position, a_s.SourceRect, Color.White, 0f, a_s.Origin, 1.0f, SpriteEffects.None, 0);
+            sb.Draw(a_s.Texture, new Vector2(hit.X, hit.Y), a_s.SourceRect, Color.White, 0f, a_s.Origin, 1.0f, SpriteEffects.None, 0); //Replace new Vector with a_s.Position... remove Hitbox hit from args
             sb.End();
-
         }
 
         //-------------------------------------------------------------

@@ -14,9 +14,9 @@ namespace RPG
         Texture2D spriteTexture;
         float timer = 0f;  //Time required for sprite to move to the next frame.
         float interval = 200f; //Used to determine how often to step to next frame in the animation.
-        int currentFrame = 0;  //Keep trakc of current frame.
-        int spriteWidth = 32;
-        int spriteHeight = 48;
+        int currentFrame = 0;  //Keep track of current frame.
+        int spriteWidth = 100; //= 32; MODIFIED
+        int spriteHeight = 200; //= 48; MODIFIED
         int spriteSpeed = 2;  //Used to set the speed the sprite actually moves across the screen.
         Rectangle sourceRect;
         Vector2 position;
