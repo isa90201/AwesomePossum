@@ -16,6 +16,8 @@ namespace RPG
         [XmlElement("Music")]
         public List<MusicItem> Music { get; set; }
 
+        public int NumberOfBadGuys { get; set; }
+
         public Level()
         {
             StageBackgrounds = new List<Background>();

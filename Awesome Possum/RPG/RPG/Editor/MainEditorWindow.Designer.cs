@@ -43,9 +43,12 @@
             this.NextLevelMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.PrevLevelMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.DeleteLevelMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.BadGuyCounter = new System.Windows.Forms.NumericUpDown();
+            this.label1 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.BackgroundGroup.SuspendLayout();
             this.MusicGroup.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.BadGuyCounter)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -177,12 +180,32 @@
             this.DeleteLevelMenu.Text = "Delete Level";
             this.DeleteLevelMenu.Click += new System.EventHandler(this.DeleteLevelMenu_Click);
             // 
+            // BadGuyCounter
+            // 
+            this.BadGuyCounter.Enabled = false;
+            this.BadGuyCounter.Location = new System.Drawing.Point(420, 52);
+            this.BadGuyCounter.Name = "BadGuyCounter";
+            this.BadGuyCounter.Size = new System.Drawing.Size(120, 20);
+            this.BadGuyCounter.TabIndex = 6;
+            this.BadGuyCounter.ValueChanged += new System.EventHandler(this.BadGuyCounter_ValueChanged);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(417, 33);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(105, 13);
+            this.label1.TabIndex = 7;
+            this.label1.Text = "Number of Bad Guys";
+            // 
             // MainEditorWindow
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(669, 415);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.BadGuyCounter);
             this.Controls.Add(this.MusicGroup);
             this.Controls.Add(this.BackgroundGroup);
             this.Controls.Add(this.menuStrip1);
@@ -195,6 +218,7 @@
             this.menuStrip1.PerformLayout();
             this.BackgroundGroup.ResumeLayout(false);
             this.MusicGroup.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.BadGuyCounter)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -217,5 +241,7 @@
         private System.Windows.Forms.ToolStripMenuItem PrevLevelMenu;
         private System.Windows.Forms.ToolStripMenuItem NextLevelMenu;
         private System.Windows.Forms.ToolStripMenuItem DeleteLevelMenu;
+        private System.Windows.Forms.NumericUpDown BadGuyCounter;
+        private System.Windows.Forms.Label label1;
     }
 }

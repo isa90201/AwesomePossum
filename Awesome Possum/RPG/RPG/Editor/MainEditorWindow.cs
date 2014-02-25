@@ -76,6 +76,9 @@ namespace RPG.Editor
                 }
 
                 DeleteLevelMenu.Enabled = w.Levels.Count > 1;
+
+                BadGuyCounter.Enabled = true;
+                BadGuyCounter.Value = CurrentLevel.NumberOfBadGuys;
             }
         }
 
@@ -192,6 +195,12 @@ namespace RPG.Editor
                 CurrentWorld.Levels.Remove(CurrentLevel);
                 UpdateUI(CurrentWorld, CurrentWorld.Levels[0]);
             }
+        }
+
+        private void BadGuyCounter_ValueChanged(object sender, EventArgs e)
+        {
+            CurrentLevel.NumberOfBadGuys = Convert.ToInt32(BadGuyCounter.Value);
+            UpdateUI(CurrentWorld, CurrentLevel);
         }
     }
 }
