@@ -9,6 +9,12 @@ namespace RPG
     //Create an ENEMY using this class
     public class Character
     {
+        public enum Directions
+        {
+            Left,
+            Right
+        }
+
         private const int MIN_HP = 1;
         private const int MAX_HP = 100;
         private const int MIN_ATTACK = 1;
@@ -232,10 +238,21 @@ namespace RPG
             if (Controller.IsMovingLeft())
             {
                 X -= Speed;
+                _LastDir = Directions.Left;
             }
             else if (Controller.IsMovingRight())
             {
                 X += Speed;
+                _LastDir = Directions.Right;
+            }
+        }
+
+        private Directions _LastDir = Directions.Right;
+        public Directions Direction
+        {
+            get
+            {
+                return _LastDir;
             }
         }
     }

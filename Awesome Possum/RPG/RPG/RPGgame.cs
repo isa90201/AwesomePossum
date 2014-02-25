@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using System.Threading;
+using System.IO;
 
 namespace RPG
 {
@@ -23,7 +24,8 @@ namespace RPG
         SpriteBatch spriteBatch_BG, spriteBatch_H, spriteBatch_A;  //modified
         Texture2D backgroundTexture, humanTexture, ai1Texture, ai2Texture; //for images
         Rectangle screenRectangle;
-        AnimatedSprite animatedSprite; // ADDED sprite
+        AnimatedSprite leftAnimatedSprite;
+        AnimatedSprite rightAnimatedSprite;
         int screenWidth, screenHeight;
 
         //SOUND stuff
@@ -67,8 +69,8 @@ namespace RPG
             Window.Title = "RHO";
 
             //SPRITE stuff
-            animatedSprite = new AnimatedSprite(Content.Load<Texture2D>("IPOOIdleLeft"), 1, 100, 200);
-            animatedSprite.Position = new Vector2(400, 300);
+            leftAnimatedSprite = new AnimatedSprite(Content.Load<Texture2D>("IPOOWalkingLeft"), 1, 100, 200);
+            rightAnimatedSprite = new AnimatedSprite(Content.Load<Texture2D>("IPOOWalkingRight"), 1, 100, 200);
 
             base.Initialize();
 
@@ -98,7 +100,7 @@ namespace RPG
             Characters.Add(UserCharacter);
 
             //Create AI controllers and respective characters
-            for (int i = 1; i <= 2; ++i)
+            for (int i = 1; i <= 5; ++i)
             {
                 var ai = new AIController(new EnemyAI(i * 20));
                 var c = new Character("IPOO", 10 * i, 5 * i, 3 * i)
@@ -134,11 +136,11 @@ namespace RPG
             //Image textures
             backgroundTexture = Content.Load<Texture2D>("Stage1");
 
+            //backgroundTexture = Texture2D.FromStream(GraphicsDevice, File.OpenRead(@"C:\Users\Isaias\Desktop\Res1\Stage1.png"));
+
             //Music Player
-            backgroundMusic = Content.Load<Song>("Boss1");
+            backgroundMusic = Content.Load<Song>("Boss3");
             MediaPlayer.Play(backgroundMusic);
-
-
 
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch_BG = new SpriteBatch(GraphicsDevice);
@@ -178,7 +180,8 @@ namespace RPG
             // ADD YOUR UPDATE LOGIC HERE
 
 
-            animatedSprite.HandleSpriteMovement(gameTime); //ADDED
+            leftAnimatedSprite.HandleSpriteMovement(gameTime);
+            rightAnimatedSprite.HandleSpriteMovement(gameTime);
 
             //UPDATE controller input(s)
             foreach (var c in Controllers)
@@ -198,6 +201,16 @@ namespace RPG
             foreach (var c in Characters)
             {
                 c.Move();
+
+                if (c.X > screenWidth)
+                    c.X = screenWidth;
+                if (c.X < 0)
+                    c.X = 0;
+
+                if (c.Y > screenHeight)
+                    c.Y = screenHeight;
+                if (c.Y < screenHeight / 2)
+                    c.Y = screenHeight / 2;
             }
             base.Update(gameTime);
         }
@@ -214,8 +227,12 @@ namespace RPG
 
             foreach (var c in Characters.OrderBy(x => x.Y))
             {
+                if (c.Direction == Character.Directions.Left)
+                    DrawAnimatedSprite(c.Hitbox, leftAnimatedSprite, spriteBatch_A); //REMOVE
+                else
+                    DrawAnimatedSprite(c.Hitbox, rightAnimatedSprite, spriteBatch_A); //REMOVE
+
                 //DrawCharacter(c.Hitbox, spriteBatch_H, Color.LightBlue); //RESTORE
-                DrawAnimatedSprite(c.Hitbox, animatedSprite, spriteBatch_A); //REMOVE
             }
 
             //DrawAnimatedSprite(hitbox hit, animatedSprite, spriteBatch_A);
@@ -266,5 +283,6 @@ namespace RPG
         }
 
         //-------------------------------------------------------------
+
     }
 }
