@@ -121,7 +121,9 @@
     <Compile Include="Editor\MainEditorWindow.Designer.cs">
       <DependentUpon>MainEditorWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="Editor\World.cs" />
+    <Compile Include="MusicItem.cs" />
+    <Compile Include="StringExtender.cs" />
+    <Compile Include="World.cs" />
     <Compile Include="HumanController.cs" />
     <Compile Include="EnemyAI.cs" />
     <Compile Include="GameSave.cs" />

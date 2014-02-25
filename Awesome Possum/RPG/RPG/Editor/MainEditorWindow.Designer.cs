@@ -33,16 +33,16 @@
             this.NewMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.OpenMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.SaveMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.LevelMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.AddLevelMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.BackgroundList = new System.Windows.Forms.ListBox();
             this.BackgroundGroup = new System.Windows.Forms.GroupBox();
-            this.DeleteBackground = new System.Windows.Forms.Button();
             this.MusicGroup = new System.Windows.Forms.GroupBox();
-            this.DeleteMusic = new System.Windows.Forms.Button();
             this.MusicList = new System.Windows.Forms.ListBox();
-            this.AddLevelMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.OpenDialog = new System.Windows.Forms.OpenFileDialog();
             this.SaveDialog = new System.Windows.Forms.SaveFileDialog();
+            this.NextLevelMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.PrevLevelMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.DeleteLevelMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.BackgroundGroup.SuspendLayout();
             this.MusicGroup.SuspendLayout();
@@ -53,7 +53,9 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.WorldMenu,
             this.AddLevelMenu,
-            this.LevelMenu});
+            this.PrevLevelMenu,
+            this.NextLevelMenu,
+            this.DeleteLevelMenu});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(669, 24);
@@ -92,12 +94,13 @@
             this.SaveMenu.Text = "Save";
             this.SaveMenu.Click += new System.EventHandler(this.SaveMenu_Click);
             // 
-            // LevelMenu
+            // AddLevelMenu
             // 
-            this.LevelMenu.Enabled = false;
-            this.LevelMenu.Name = "LevelMenu";
-            this.LevelMenu.Size = new System.Drawing.Size(51, 20);
-            this.LevelMenu.Text = "Levels";
+            this.AddLevelMenu.Enabled = false;
+            this.AddLevelMenu.Name = "AddLevelMenu";
+            this.AddLevelMenu.Size = new System.Drawing.Size(71, 20);
+            this.AddLevelMenu.Text = "Add Level";
+            this.AddLevelMenu.Click += new System.EventHandler(this.AddLevelMenu_Click);
             // 
             // BackgroundList
             // 
@@ -106,48 +109,29 @@
             this.BackgroundList.Name = "BackgroundList";
             this.BackgroundList.Size = new System.Drawing.Size(180, 95);
             this.BackgroundList.TabIndex = 1;
+            this.BackgroundList.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.BackgroundList_MouseDoubleClick);
             // 
             // BackgroundGroup
             // 
-            this.BackgroundGroup.Controls.Add(this.DeleteBackground);
             this.BackgroundGroup.Controls.Add(this.BackgroundList);
             this.BackgroundGroup.Enabled = false;
             this.BackgroundGroup.Location = new System.Drawing.Point(12, 33);
             this.BackgroundGroup.Name = "BackgroundGroup";
-            this.BackgroundGroup.Size = new System.Drawing.Size(192, 150);
+            this.BackgroundGroup.Size = new System.Drawing.Size(192, 123);
             this.BackgroundGroup.TabIndex = 4;
             this.BackgroundGroup.TabStop = false;
             this.BackgroundGroup.Text = "Backgrounds";
             // 
-            // DeleteBackground
-            // 
-            this.DeleteBackground.Location = new System.Drawing.Point(6, 120);
-            this.DeleteBackground.Name = "DeleteBackground";
-            this.DeleteBackground.Size = new System.Drawing.Size(180, 23);
-            this.DeleteBackground.TabIndex = 2;
-            this.DeleteBackground.Text = "Delete";
-            this.DeleteBackground.UseVisualStyleBackColor = true;
-            // 
             // MusicGroup
             // 
-            this.MusicGroup.Controls.Add(this.DeleteMusic);
             this.MusicGroup.Controls.Add(this.MusicList);
             this.MusicGroup.Enabled = false;
             this.MusicGroup.Location = new System.Drawing.Point(210, 33);
             this.MusicGroup.Name = "MusicGroup";
-            this.MusicGroup.Size = new System.Drawing.Size(192, 150);
+            this.MusicGroup.Size = new System.Drawing.Size(192, 123);
             this.MusicGroup.TabIndex = 5;
             this.MusicGroup.TabStop = false;
             this.MusicGroup.Text = "Music";
-            // 
-            // DeleteMusic
-            // 
-            this.DeleteMusic.Location = new System.Drawing.Point(6, 120);
-            this.DeleteMusic.Name = "DeleteMusic";
-            this.DeleteMusic.Size = new System.Drawing.Size(180, 23);
-            this.DeleteMusic.TabIndex = 2;
-            this.DeleteMusic.Text = "Delete";
-            this.DeleteMusic.UseVisualStyleBackColor = true;
             // 
             // MusicList
             // 
@@ -156,13 +140,7 @@
             this.MusicList.Name = "MusicList";
             this.MusicList.Size = new System.Drawing.Size(180, 95);
             this.MusicList.TabIndex = 1;
-            // 
-            // AddLevelMenu
-            // 
-            this.AddLevelMenu.Enabled = false;
-            this.AddLevelMenu.Name = "AddLevelMenu";
-            this.AddLevelMenu.Size = new System.Drawing.Size(71, 20);
-            this.AddLevelMenu.Text = "Add Level";
+            this.MusicList.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.MusicList_MouseDoubleClick);
             // 
             // OpenDialog
             // 
@@ -175,6 +153,30 @@
             this.SaveDialog.DefaultExt = "xml";
             this.SaveDialog.Filter = "XML Files|*.xml";
             // 
+            // NextLevelMenu
+            // 
+            this.NextLevelMenu.Enabled = false;
+            this.NextLevelMenu.Name = "NextLevelMenu";
+            this.NextLevelMenu.Size = new System.Drawing.Size(73, 20);
+            this.NextLevelMenu.Text = "Next Level";
+            this.NextLevelMenu.Click += new System.EventHandler(this.NextLevelMenu_Click);
+            // 
+            // PrevLevelMenu
+            // 
+            this.PrevLevelMenu.Enabled = false;
+            this.PrevLevelMenu.Name = "PrevLevelMenu";
+            this.PrevLevelMenu.Size = new System.Drawing.Size(72, 20);
+            this.PrevLevelMenu.Text = "Prev Level";
+            this.PrevLevelMenu.Click += new System.EventHandler(this.PrevLevelMenu_Click);
+            // 
+            // DeleteLevelMenu
+            // 
+            this.DeleteLevelMenu.Enabled = false;
+            this.DeleteLevelMenu.Name = "DeleteLevelMenu";
+            this.DeleteLevelMenu.Size = new System.Drawing.Size(82, 20);
+            this.DeleteLevelMenu.Text = "Delete Level";
+            this.DeleteLevelMenu.Click += new System.EventHandler(this.DeleteLevelMenu_Click);
+            // 
             // MainEditorWindow
             // 
             this.AllowDrop = true;
@@ -186,7 +188,7 @@
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainEditorWindow";
-            this.Text = "MainEditorWindow";
+            this.Text = "No World Loaded";
             this.DragDrop += new System.Windows.Forms.DragEventHandler(this.MainEditorWindow_DragDrop);
             this.DragEnter += new System.Windows.Forms.DragEventHandler(this.MainEditorWindow_DragEnter);
             this.menuStrip1.ResumeLayout(false);
@@ -205,15 +207,15 @@
         private System.Windows.Forms.ToolStripMenuItem NewMenu;
         private System.Windows.Forms.ToolStripMenuItem OpenMenu;
         private System.Windows.Forms.ToolStripMenuItem SaveMenu;
-        private System.Windows.Forms.ToolStripMenuItem LevelMenu;
         private System.Windows.Forms.ListBox BackgroundList;
         private System.Windows.Forms.GroupBox BackgroundGroup;
-        private System.Windows.Forms.Button DeleteBackground;
         private System.Windows.Forms.GroupBox MusicGroup;
-        private System.Windows.Forms.Button DeleteMusic;
         private System.Windows.Forms.ListBox MusicList;
         private System.Windows.Forms.ToolStripMenuItem AddLevelMenu;
         private System.Windows.Forms.OpenFileDialog OpenDialog;
         private System.Windows.Forms.SaveFileDialog SaveDialog;
+        private System.Windows.Forms.ToolStripMenuItem PrevLevelMenu;
+        private System.Windows.Forms.ToolStripMenuItem NextLevelMenu;
+        private System.Windows.Forms.ToolStripMenuItem DeleteLevelMenu;
     }
 }

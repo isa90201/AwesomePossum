@@ -8,16 +8,18 @@ namespace RPG
 {
     public class Level
     {
+        public int Id { get; set; }
+
         [XmlElement("Background")]
         public List<Background> StageBackgrounds { get; set; }
 
         [XmlElement("Music")]
-        public List<string> Music { get; set; }
+        public List<MusicItem> Music { get; set; }
 
         public Level()
         {
             StageBackgrounds = new List<Background>();
-            Music = new List<string>();
+            Music = new List<MusicItem>();
         }
     }
 }

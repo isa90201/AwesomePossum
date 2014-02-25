@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 
 namespace RPG
 {
@@ -23,6 +24,14 @@ namespace RPG
                     throw new ArgumentException("File path cannot be blank or null.");
                 else
                     _FilePath = value;
+            }
+        }
+
+        public string FileName
+        {
+            get
+            {
+                return Path.GetFileName(FilePath);
             }
         }
     }

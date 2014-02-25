@@ -6,12 +6,16 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.IO;
 
 namespace RPG.Editor
 {
     public partial class MainEditorWindow : Form
     {
         private World CurrentWorld;
+
+        private Level NextLevel;
+        private Level PrevLevel;
         private Level CurrentLevel;
 
         public MainEditorWindow()
@@ -19,14 +23,14 @@ namespace RPG.Editor
             InitializeComponent();
         }
 
-        public void UpdateUI(World w, int? level)
+        public void UpdateUI(World w, Level level)
         {
             if (w != null)
             {
                 CurrentWorld = w;
 
-                if (level.HasValue)
-                    CurrentLevel = w.Levels[level.Value];
+                if (level != null)
+                    CurrentLevel = level;
 
                 BackgroundGroup.Enabled = true;
                 MusicGroup.Enabled = true;
@@ -40,22 +44,38 @@ namespace RPG.Editor
                 MusicList.Items.Clear();
                 foreach (var song in CurrentLevel.Music)
                 {
-                    MusicList.Items.Add(song.Split('\\').Last());
+                    MusicList.Items.Add(song.FileName);
                 }
 
                 AddLevelMenu.Enabled = true;
-                LevelMenu.Enabled = true;
                 SaveMenu.Enabled = true;
-
-                LevelMenu.DropDownItems.Clear();
+                NextLevelMenu.Enabled = false;
+                PrevLevelMenu.Enabled = false;
 
                 int i = 0;
                 foreach (var l in w.Levels)
                 {
-                    LevelMenu.DropDownItems.Add(string.Format("{0}{1}", i + 1, i == level ? "*" : ""));
+                    if (l == CurrentLevel)
+                    {
+                        Text = string.Format("Level {0} / {1}", i + 1, w.Levels.Count);
+                        if (i > 0)
+                        {
+                            PrevLevelMenu.Enabled = true;
+                            PrevLevel = w.Levels[i - 1];
+                        }
+
+                        if (i < w.Levels.Count - 1)
+                        {
+                            NextLevelMenu.Enabled = true;
+                            NextLevel = w.Levels[i + 1];
+                        }
+
+                        break;
+                    }
                     ++i;
                 }
 
+                DeleteLevelMenu.Enabled = w.Levels.Count > 1;
             }
         }
 
@@ -63,7 +83,7 @@ namespace RPG.Editor
         {
             var w = new World();
             w.Levels.Add(new Level());
-            UpdateUI(w, 0);
+            UpdateUI(w, w.Levels[0]);
         }
 
         private void SaveMenu_Click(object sender, EventArgs e)
@@ -78,7 +98,8 @@ namespace RPG.Editor
         {
             if (OpenDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                UpdateUI(World.Load(OpenDialog.FileName), 0);
+                var w = World.Load(OpenDialog.FileName);
+                UpdateUI(w, w.Levels[0]);
             }
         }
 
@@ -93,12 +114,16 @@ namespace RPG.Editor
 
                 foreach (var mp3 in mp3s)
                 {
-                    CurrentLevel.Music.Add(mp3);
+                    var name = Path.GetFileName(mp3);
+                    if (!CurrentLevel.Music.Any(m => m.FileName == name))
+                        CurrentLevel.Music.Add(new MusicItem() { FilePath = mp3 });
                 }
 
                 foreach (var png in pngs)
                 {
-                    CurrentLevel.StageBackgrounds.Add(new Background() { FilePath = png });
+                    var name = Path.GetFileName(png);
+                    if (!CurrentLevel.StageBackgrounds.Any(bg => bg.FileName == name))
+                        CurrentLevel.StageBackgrounds.Add(new Background() { FilePath = png });
                 }
 
                 UpdateUI(CurrentWorld, null);
@@ -122,6 +147,51 @@ namespace RPG.Editor
             }
 
             e.Effect = DragDropEffects.None;
+        }
+
+        private void AddLevelMenu_Click(object sender, EventArgs e)
+        {
+            CurrentWorld.Levels.Add(new Level());
+            CurrentLevel = CurrentWorld.Levels.Last();
+            UpdateUI(CurrentWorld, null);
+        }
+
+        private void BackgroundList_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (BackgroundList.Items.Count > 0)
+            {
+                CurrentLevel.StageBackgrounds.Remove(CurrentLevel.StageBackgrounds[BackgroundList.SelectedIndex]);
+                UpdateUI(CurrentWorld, null);
+            }
+        }
+
+        private void MusicList_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (MusicList.Items.Count > 0)
+            {
+                CurrentLevel.Music.Remove(CurrentLevel.Music[MusicList.SelectedIndex]);
+                UpdateUI(CurrentWorld, null);
+            }
+        }
+
+        private void PrevLevelMenu_Click(object sender, EventArgs e)
+        {
+            UpdateUI(CurrentWorld, PrevLevel);
+        }
+
+        private void NextLevelMenu_Click(object sender, EventArgs e)
+        {
+            UpdateUI(CurrentWorld, NextLevel);
+        }
+
+        private void DeleteLevelMenu_Click(object sender, EventArgs e)
+        {
+            var confirmResult = MessageBox.Show("Delete?", "Delete Level?", MessageBoxButtons.YesNo);
+            if (confirmResult == DialogResult.Yes)
+            {
+                CurrentWorld.Levels.Remove(CurrentLevel);
+                UpdateUI(CurrentWorld, CurrentWorld.Levels[0]);
+            }
         }
     }
 }
