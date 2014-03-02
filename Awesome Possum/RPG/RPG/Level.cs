@@ -10,18 +10,22 @@ namespace RPG
     {
         public int Id { get; set; }
 
-        [XmlElement("Background")]
-        public List<Background> StageBackgrounds { get; set; }
+        public Background BackgroundImage { get; set; }
 
-        [XmlElement("Music")]
-        public List<MusicItem> Music { get; set; }
+        public MusicItem Music { get; set; }
 
-        public int NumberOfBadGuys { get; set; }
+        public int TotalNumberOfBadGuys { get; set; }
+        public int BadGuysOnScreen { get; set; }
 
         public Level()
         {
-            StageBackgrounds = new List<Background>();
-            Music = new List<MusicItem>();
+            BackgroundImage = new Background();
+            Music = new MusicItem();
+        }
+
+        internal bool IsValid()
+        {
+            return !string.IsNullOrEmpty(BackgroundImage.FilePath) && !string.IsNullOrEmpty(Music.FilePath);
         }
     }
 }

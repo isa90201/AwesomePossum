@@ -15,8 +15,8 @@ namespace RPG
         float timer = 0f;  //Time required for sprite to move to the next frame.
         float interval = 50f; //Used to determine how often to step to next frame in the animation.
         int currentFrame = 0;  //Keep track of current frame.
-        int spriteWidth = 100; //= 32; MODIFIED
-        int spriteHeight = 200; //= 48; MODIFIED
+        public int spriteWidth = 100; //= 32; MODIFIED   //remove public
+        public int spriteHeight = 200; //= 48; MODIFIED  //remove public
 
         Rectangle sourceRect;
         Vector2 position;

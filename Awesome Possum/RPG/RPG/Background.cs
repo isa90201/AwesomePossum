@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace RPG
 {
     public class Background
     {
-        public const int WIDTH = 1280;
-        public const int HEIGHT = 800;
+        public int Width { get; set; }
+        public int Height { get; set; }
 
         private string _FilePath;
         public string FilePath
@@ -33,6 +34,11 @@ namespace RPG
             {
                 return Path.GetFileName(FilePath);
             }
+        }
+
+        public Texture2D GetTexture2D(GraphicsDevice g)
+        {
+            return Texture2D.FromStream(g, File.OpenRead(FilePath));
         }
     }
 }

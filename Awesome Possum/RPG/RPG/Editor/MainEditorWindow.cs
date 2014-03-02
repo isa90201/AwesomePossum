@@ -32,20 +32,19 @@ namespace RPG.Editor
                 if (level != null)
                     CurrentLevel = level;
 
-                BackgroundGroup.Enabled = true;
-                MusicGroup.Enabled = true;
+                TotalBadGuyCounter.Enabled = CurrentLevel != null;
+                BadGuysOnScreenCounter.Enabled = CurrentLevel != null;
 
-                BackgroundList.Items.Clear();
-                foreach (var bg in CurrentLevel.StageBackgrounds)
-                {
-                    BackgroundList.Items.Add(bg.FilePath.Split('\\').Last());
-                }
+                if (string.IsNullOrEmpty(CurrentLevel.BackgroundImage.FileName))
+                    BG_Label.Text = "NO BACKGROUND SELECTED.";
+                else
+                    BG_Label.Text = CurrentLevel.BackgroundImage.FileName;
 
-                MusicList.Items.Clear();
-                foreach (var song in CurrentLevel.Music)
-                {
-                    MusicList.Items.Add(song.FileName);
-                }
+                if (string.IsNullOrEmpty(CurrentLevel.Music.FileName))
+                    MP3_Label.Text = "NO MP3 SELECTED.";
+                else
+                    MP3_Label.Text = CurrentLevel.Music.FileName;
+
 
                 AddLevelMenu.Enabled = true;
                 SaveMenu.Enabled = true;
@@ -77,8 +76,8 @@ namespace RPG.Editor
 
                 DeleteLevelMenu.Enabled = w.Levels.Count > 1;
 
-                BadGuyCounter.Enabled = true;
-                BadGuyCounter.Value = CurrentLevel.NumberOfBadGuys;
+                TotalBadGuyCounter.Enabled = true;
+                TotalBadGuyCounter.Value = CurrentLevel.TotalNumberOfBadGuys;
             }
         }
 
@@ -91,9 +90,16 @@ namespace RPG.Editor
 
         private void SaveMenu_Click(object sender, EventArgs e)
         {
-            if (SaveDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            if (CurrentWorld.IsValid())
             {
-                CurrentWorld.Save(SaveDialog.FileName);
+                if (SaveDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    CurrentWorld.Save(SaveDialog.FileName);
+                }
+            }
+            else
+            {
+                MessageBox.Show("A background and MP3 are required for ALL levels.", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
         }
 
@@ -117,16 +123,16 @@ namespace RPG.Editor
 
                 foreach (var mp3 in mp3s)
                 {
-                    var name = Path.GetFileName(mp3);
-                    if (!CurrentLevel.Music.Any(m => m.FileName == name))
-                        CurrentLevel.Music.Add(new MusicItem() { FilePath = mp3 });
+                    CurrentLevel.Music.FilePath = mp3;
                 }
 
                 foreach (var png in pngs)
                 {
-                    var name = Path.GetFileName(png);
-                    if (!CurrentLevel.StageBackgrounds.Any(bg => bg.FileName == name))
-                        CurrentLevel.StageBackgrounds.Add(new Background() { FilePath = png });
+                    CurrentLevel.BackgroundImage.FilePath = png;
+                    var img = Image.FromFile(png);
+                    CurrentLevel.BackgroundImage.Width = img.Width;
+                    CurrentLevel.BackgroundImage.Height = img.Height;
+                    img.Dispose();
                 }
 
                 UpdateUI(CurrentWorld, null);
@@ -159,24 +165,6 @@ namespace RPG.Editor
             UpdateUI(CurrentWorld, null);
         }
 
-        private void BackgroundList_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            if (BackgroundList.Items.Count > 0)
-            {
-                CurrentLevel.StageBackgrounds.Remove(CurrentLevel.StageBackgrounds[BackgroundList.SelectedIndex]);
-                UpdateUI(CurrentWorld, null);
-            }
-        }
-
-        private void MusicList_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            if (MusicList.Items.Count > 0)
-            {
-                CurrentLevel.Music.Remove(CurrentLevel.Music[MusicList.SelectedIndex]);
-                UpdateUI(CurrentWorld, null);
-            }
-        }
-
         private void PrevLevelMenu_Click(object sender, EventArgs e)
         {
             UpdateUI(CurrentWorld, PrevLevel);
@@ -197,9 +185,15 @@ namespace RPG.Editor
             }
         }
 
-        private void BadGuyCounter_ValueChanged(object sender, EventArgs e)
+        private void TotalNumberOfBadGuys_ValueChanged(object sender, EventArgs e)
         {
-            CurrentLevel.NumberOfBadGuys = Convert.ToInt32(BadGuyCounter.Value);
+            CurrentLevel.TotalNumberOfBadGuys = Convert.ToInt32(TotalBadGuyCounter.Value);
+            UpdateUI(CurrentWorld, CurrentLevel);
+        }
+
+        private void BadGuysOnScreenCounter_ValueChanged(object sender, EventArgs e)
+        {
+            CurrentLevel.BadGuysOnScreen = Convert.ToInt32(BadGuysOnScreenCounter.Value);
             UpdateUI(CurrentWorld, CurrentLevel);
         }
     }

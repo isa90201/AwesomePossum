@@ -19,15 +19,9 @@ namespace RPG
         {
             foreach (var level in Levels)
             {
-                foreach (var song in level.Music)
-                {
-                    song.FilePath = song.FilePath.MakeAbsolute(folder, level.Id);
-                }
+                    level.Music.FilePath = level.Music.FilePath.MakeAbsolute(folder, level.Id);
+                    level.BackgroundImage.FilePath = level.BackgroundImage.FilePath.MakeAbsolute(folder, level.Id);
 
-                foreach (var bg in level.StageBackgrounds)
-                {
-                    bg.FilePath = bg.FilePath.MakeAbsolute(folder, level.Id);
-                }
             }
         }
 
@@ -39,15 +33,8 @@ namespace RPG
             {
                 level.Id = i++;
 
-                foreach (var song in level.Music)
-                {
-                    song.FilePath = song.FilePath.MakeRelative(folder, "Music", level.Id);
-                }
-
-                foreach (var bg in level.StageBackgrounds)
-                {
-                    bg.FilePath = bg.FilePath.MakeRelative(folder, "Background", level.Id);
-                }
+                level.Music.FilePath = level.Music.FilePath.MakeRelative(folder, "Music", level.Id);
+                level.BackgroundImage.FilePath = level.BackgroundImage.FilePath.MakeRelative(folder, "Background", level.Id);
             }
         }
 
@@ -73,6 +60,11 @@ namespace RPG
         private static string SavePath(string filePath)
         {
             return Path.Combine(Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath));
+        }
+
+        internal bool IsValid()
+        {
+            return Levels.All(l => l.IsValid());
         }
     }
 }
