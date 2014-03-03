@@ -10,7 +10,7 @@ using System.IO;
 
 namespace RPG.Editor
 {
-    public partial class MainEditorWindow : Form
+    public partial class LevelEditorWindow : Form
     {
         private World CurrentWorld;
 
@@ -18,7 +18,7 @@ namespace RPG.Editor
         private Level PrevLevel;
         private Level CurrentLevel;
 
-        public MainEditorWindow()
+        public LevelEditorWindow()
         {
             InitializeComponent();
         }

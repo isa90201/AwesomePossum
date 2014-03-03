@@ -19,9 +19,8 @@ namespace RPG
         {
             foreach (var level in Levels)
             {
-                    level.Music.FilePath = level.Music.FilePath.MakeAbsolute(folder, level.Id);
-                    level.BackgroundImage.FilePath = level.BackgroundImage.FilePath.MakeAbsolute(folder, level.Id);
-
+                level.Music.FilePath = level.Music.FilePath.MakeAbsolute(folder, level.Id);
+                level.BackgroundImage.FilePath = level.BackgroundImage.FilePath.MakeAbsolute(folder, level.Id);
             }
         }
 

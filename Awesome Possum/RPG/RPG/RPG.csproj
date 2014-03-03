@@ -115,13 +115,21 @@
     <Compile Include="Background.cs" />
     <Compile Include="Character.cs" />
     <Compile Include="Armor.cs" />
-    <Compile Include="Editor\MainEditorWindow.cs">
+    <Compile Include="Editor\CharacterEditorWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Editor\MainEditorWindow.Designer.cs">
-      <DependentUpon>MainEditorWindow.cs</DependentUpon>
+    <Compile Include="Editor\CharacterEditorWindow.Designer.cs">
+      <DependentUpon>CharacterEditorWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="Editor\LevelEditorWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Editor\LevelEditorWindow.Designer.cs">
+      <DependentUpon>LevelEditorWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Editor\SpriteCollection.cs" />
     <Compile Include="MusicItem.cs" />
+    <Compile Include="SpriteAction.cs" />
     <Compile Include="StringExtender.cs" />
     <Compile Include="World.cs" />
     <Compile Include="HumanController.cs" />
@@ -168,8 +176,11 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Editor\MainEditorWindow.resx">
-      <DependentUpon>MainEditorWindow.cs</DependentUpon>
+    <EmbeddedResource Include="Editor\CharacterEditorWindow.resx">
+      <DependentUpon>CharacterEditorWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Editor\LevelEditorWindow.resx">
+      <DependentUpon>LevelEditorWindow.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

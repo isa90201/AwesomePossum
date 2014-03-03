@@ -1,4 +1,5 @@
-//#define EDITOR //uncomment to test the Level Editor
+//#define LEVEL_EDITOR //uncomment to test the Level Editor
+//#define CHARACTER_EDITOR //uncomment to test the Character Editor
 
 using System;
 using System.Linq;
@@ -15,10 +16,18 @@ namespace RPG
         [STAThread]
         static void Main(string[] args)
         {
-            if (args.Any(a => a == "-l") || ForceEditor())
+            if (args.Any(a => a == "-l") || ForceLevelEditor())
                 LevelEditorMain();
+            else if (args.Any(a => a == "-c") || ForceCharacterEditor())
+                CharacterEditorMain();
             else
                 GameMain();
+        }
+
+        private static void CharacterEditorMain()
+        {
+            var window = new CharacterEditorWindow();
+            window.ShowDialog();
         }
 
         static void GameMain()
@@ -31,14 +40,22 @@ namespace RPG
 
         static void LevelEditorMain()
         {
-
-            var window = new MainEditorWindow();
+            var window = new LevelEditorWindow();
             window.ShowDialog();
         }
 
-        static bool ForceEditor()
+        static bool ForceLevelEditor()
         {
-#if EDITOR
+#if LEVEL_EDITOR
+            return true;
+#else
+            return false;
+#endif
+        }
+
+        static bool ForceCharacterEditor()
+        {
+#if CHARACTER_EDITOR
             return true;
 #else
             return false;

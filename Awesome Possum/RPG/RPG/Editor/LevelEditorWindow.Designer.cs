@@ -1,6 +1,6 @@
 ﻿namespace RPG.Editor
 {
-    partial class MainEditorWindow
+    partial class LevelEditorWindow
     {
         /// <summary>
         /// Required designer variable.
