@@ -127,7 +127,7 @@
     <Compile Include="Editor\LevelEditorWindow.Designer.cs">
       <DependentUpon>LevelEditorWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="Editor\SpriteCollection.cs" />
+    <Compile Include="SpriteCollection.cs" />
     <Compile Include="HeartItem.cs" />
     <Compile Include="IItem.cs" />
     <Compile Include="MusicItem.cs" />

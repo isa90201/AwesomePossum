@@ -51,10 +51,28 @@ namespace RPG.Editor
 
                 var pngs = files.Where(f => f.EndsWith(".png", StringComparison.OrdinalIgnoreCase));
 
-
                 foreach (var png in pngs)
                 {
                     CurrentAction.FilePath = png;
+                    var img = Image.FromFile(png);
+
+                    CurrentAction.ImgLDx = img.Width / CurrentAction.NumFrames / 2;
+                    CurrentAction.ImgLDy = img.Height / 4;
+                    CurrentAction.ImgRDx = CurrentAction.ImgLDx;
+                    CurrentAction.ImgRDy = CurrentAction.ImgLDy;
+
+                    CurrentAction.HitLDx = CurrentAction.ImgLDx;
+                    CurrentAction.HitLDy = CurrentAction.ImgLDy;
+                    CurrentAction.HitRDx = CurrentAction.ImgRDx;
+                    CurrentAction.HitRDy = CurrentAction.ImgRDy;
+
+                    CurrentAction.AtkLDx = CurrentAction.ImgLDx;
+                    CurrentAction.AtkLDy = CurrentAction.ImgLDy;
+                    CurrentAction.AtkRDx = CurrentAction.ImgRDx;
+                    CurrentAction.AtkRDy = CurrentAction.ImgRDy;
+
+                    CurrentAction.HitWidth = img.Width / CurrentAction.NumFrames;
+                    CurrentAction.HitHeight = img.Height / 2;
                 }
             }
 
@@ -106,8 +124,12 @@ namespace RPG.Editor
 
                 CurrentAction.NumFrames = Set(FramesNumber, CurrentAction.NumFrames, 1);
                 CurrentAction.FrameDelay = Set(FrameTimeNumber, CurrentAction.FrameDelay, 50);
-                CurrentAction.HitHeight = Set(HitHeightNumber, CurrentAction.HitHeight);
-                CurrentAction.HitWidth = Set(HitWidthNumber, CurrentAction.HitWidth);
+
+                CurrentAction.HitHeight = Set(HitHeightNumber, CurrentAction.HitHeight, 0);
+                CurrentAction.HitWidth = Set(HitWidthNumber, CurrentAction.HitWidth, 0);
+
+                CurrentAction.AtkHeight = Set(AtkHeightNumber, CurrentAction.AtkHeight, 0);
+                CurrentAction.AtkWidth = Set(AtkWidthNumber, CurrentAction.AtkWidth, 0);
 
                 CurrentAction.ImgRDx = Set(RImgDXNumber, CurrentAction.ImgRDx);
                 CurrentAction.ImgRDy = Set(RImgDYNumber, CurrentAction.ImgRDy);
@@ -118,6 +140,11 @@ namespace RPG.Editor
                 CurrentAction.HitRDy = Set(RHitDYNumber, CurrentAction.HitRDy);
                 CurrentAction.HitLDx = Set(LHitDXNumber, CurrentAction.HitLDx);
                 CurrentAction.HitLDy = Set(LHitDYNumber, CurrentAction.HitLDy);
+
+                CurrentAction.AtkRDx = Set(RAtkDXNumber, CurrentAction.AtkRDx);
+                CurrentAction.AtkRDy = Set(RAtkDYNumber, CurrentAction.AtkRDy);
+                CurrentAction.AtkLDx = Set(LAtkDXNumber, CurrentAction.AtkLDx);
+                CurrentAction.AtkLDy = Set(LAtkDYNumber, CurrentAction.AtkLDy);
 
                 actionsToolStripMenuItem.DropDownItems.Clear();
                 foreach (var action in CharacterActions.Actions)
@@ -140,7 +167,7 @@ namespace RPG.Editor
             UpdateUI();
         }
 
-        private int Set(NumericUpDown numEdit, int value, int min = -255, int max = 255)
+        private int Set(NumericUpDown numEdit, int value, int min = -512, int max = 512)
         {
             if (value > max)
                 value = max;
@@ -177,6 +204,18 @@ namespace RPG.Editor
         private void HitHeightNumber_ValueChanged(object sender, EventArgs e)
         {
             CurrentAction.HitHeight = Convert.ToInt32(HitHeightNumber.Value);
+            UpdateUI();
+        }
+
+        private void AtkWidthNumber_ValueChanged(object sender, EventArgs e)
+        {
+            CurrentAction.AtkWidth = Convert.ToInt32(AtkWidthNumber.Value);
+            UpdateUI();
+        }
+
+        private void AtkHeightNumber_ValueChanged(object sender, EventArgs e)
+        {
+            CurrentAction.AtkHeight = Convert.ToInt32(AtkHeightNumber.Value);
             UpdateUI();
         }
 
@@ -227,6 +266,30 @@ namespace RPG.Editor
             CurrentAction.HitLDy = Convert.ToInt32(LHitDYNumber.Value);
             UpdateUI();
         }
+
+        private void RAtkDXNumber_ValueChanged(object sender, EventArgs e)
+        {
+            CurrentAction.AtkRDx = Convert.ToInt32(RAtkDXNumber.Value);
+            UpdateUI();
+        }
+
+        private void RAtkDYNumber_ValueChanged(object sender, EventArgs e)
+        {
+            CurrentAction.AtkRDy = Convert.ToInt32(RAtkDYNumber.Value);
+            UpdateUI();
+        }
+
+        private void LAtkDXNumber_ValueChanged(object sender, EventArgs e)
+        {
+            CurrentAction.AtkLDx = Convert.ToInt32(LAtkDXNumber.Value);
+            UpdateUI();
+        }
+
+        private void LAtkDYNumber_ValueChanged(object sender, EventArgs e)
+        {
+            CurrentAction.AtkLDy = Convert.ToInt32(LAtkDYNumber.Value);
+            UpdateUI();
+        }
         #endregion
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
@@ -266,29 +329,68 @@ namespace RPG.Editor
         {
             if (CurImage != null)
             {
-                int w = CurImage.Width / CurrentAction.NumFrames,
-                    h = CurImage.Height / 2,
-                    x = w * ImagePos,
-                    y = h * Direction;
+                int imgW = CurImage.Width / CurrentAction.NumFrames,
+                    imgH = CurImage.Height / 2,
+                    imgX = imgW * ImagePos,
+                    imgY = imgH * Direction,
+                    imgDx,
+                    imgDy,
+                    hitDX,
+                    hitDY,
+                    hitW = CurrentAction.HitWidth,
+                    hitH = CurrentAction.HitHeight,
+                    atkDX,
+                    atkDY,
+                    atkW = CurrentAction.AtkWidth,
+                    atkH = CurrentAction.AtkHeight,
+                    canW = SpritePictureBox.Width,
+                    canH = SpritePictureBox.Height,
+                    canCX = canW / 2,
+                    canCY = canH / 2;
 
-                SpritePictureBox.Image = CropImage(CurImage, x, y, w, h);
+                if (Direction == 0)
+                {
+                    imgDx = CurrentAction.ImgRDx;
+                    imgDy = CurrentAction.ImgRDy;
+                    hitDX = CurrentAction.HitRDx;
+                    hitDY = CurrentAction.HitRDy;
+                    atkDX = CurrentAction.AtkRDx;
+                    atkDY = CurrentAction.AtkRDy;
+                }
+                else
+                {
+                    imgDx = CurrentAction.ImgLDx;
+                    imgDy = CurrentAction.ImgLDy;
+                    hitDX = CurrentAction.HitLDx;
+                    hitDY = CurrentAction.HitLDy;
+                    atkDX = CurrentAction.AtkLDx;
+                    atkDY = CurrentAction.AtkLDy;
+                }
+
+                Rectangle cropRect = new Rectangle(imgX, imgY, imgW, imgH);
+                Bitmap target = new Bitmap(canW, canH);
+
+                using (Graphics g = Graphics.FromImage(target))
+                {
+                    // sprite
+                    g.DrawImage(CurImage, new Rectangle(canCX - imgDx, canCY - imgDy, imgW, imgH), cropRect, GraphicsUnit.Pixel);
+
+                    // hitbox
+                    if (hitW > 0 && hitH > 0)
+                        g.DrawRectangle(Pens.Blue, new Rectangle(canCX - hitDX, canCY - hitDY, hitW, hitH));
+
+                    // atkbox
+                    if (atkW > 0 && atkH > 0)
+                        g.DrawRectangle(Pens.Red, new Rectangle(canCX - atkDX, canCY - atkDY, atkW, atkH));
+
+                    // crosshairs
+                    g.DrawLine(Pens.Gray, new Point(canCX, 0), new Point(canCX, target.Height));
+                    g.DrawLine(Pens.Gray, new Point(0, canCY), new Point(target.Width, canCY));
+
+                    SpritePictureBox.Image = target;
+                }
 
                 ImagePos = (ImagePos + 1) % CurrentAction.NumFrames;
-            }
-        }
-
-        Image CropImage(Image src, int x, int y, int width, int height)
-        {
-            Rectangle cropRect = new Rectangle(x, y, width, height);
-            Bitmap target = new Bitmap(cropRect.Width, cropRect.Height);
-
-            using (Graphics g = Graphics.FromImage(target))
-            {
-                g.DrawImage(src, new Rectangle(0, 0, target.Width, target.Height),
-                                 cropRect,
-                                 GraphicsUnit.Pixel);
-
-                return target;
             }
         }
 
