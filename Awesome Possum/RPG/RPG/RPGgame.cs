@@ -21,15 +21,16 @@ namespace RPG
         //GRAPHICS stuff
         GraphicsDevice device;
         GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch_BG, spriteBatch_H, spriteBatch_A, spriteBacth_SBG;  //modified
-        Texture2D backgroundTexture, humanTexture; //for images
-        Rectangle screenRectangle;
+        SpriteBatch spriteBatch_BG, spriteBatch_H, spriteBatch_A, spriteBacth_SBG;
+        Texture2D backgroundTexture, groundTexture, humanTexture; //for images
+        Rectangle screenRectangle, sourceRectangle;
         AnimatedSprite leftAnimatedSprite;
         AnimatedSprite rightAnimatedSprite;
         AnimatedSprite rhoRunningSprite;
         AnimatedSprite InvincibilitySprite, HeartSprite, LevelUpSprite; //ITEM sprites
-        int screenWidth, screenHeight;
-        int scrollX;
+        int screenWidth, screenHeight, sourceWidth, sourceHeight;
+        int Bx;
+        int MaxBx, MaxCx, WalkToleranceG;
 
         //SOUND stuff
         Song backgroundMusic;
@@ -73,7 +74,6 @@ namespace RPG
             graphics.IsFullScreen = true;  //CHANGE THIS
             graphics.ApplyChanges();
             Window.Title = "RHO";
-            scrollX = 0;
 
             //SPRITE stuff
             leftAnimatedSprite = new AnimatedSprite(Content.Load<Texture2D>("IPOOWalkingLeft"), 1, 100, 200);
@@ -110,6 +110,7 @@ namespace RPG
                 Y = 50,
                 Speed = 5
             };
+            MaxCx = CurrentLevel.BackgroundImage.Width - UserCharacter.Hitbox.W; //
 
             Characters.Add(UserCharacter);
 
@@ -147,23 +148,29 @@ namespace RPG
 
             //backgroundTexture = Texture2D.FromStream(GraphicsDevice, File.OpenRead(@"C:\Users\Isaias\Desktop\Res1\Stage1.png"));
 
-            // Create a new SpriteBatch, which can be used to draw textures.
+            //Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch_BG = new SpriteBatch(GraphicsDevice);
             spriteBatch_H = new SpriteBatch(GraphicsDevice);
             spriteBatch_A = new SpriteBatch(GraphicsDevice); // ADDED
             spriteBacth_SBG = new SpriteBatch(GraphicsDevice);
             device = graphics.GraphicsDevice;
 
-            //backgroundTexture = Content.Load<Texture2D>("background");
-            //foregroundTexture = Content.Load<Texture2D>("foreground");
+            //Background Image and Screen Properties
             screenWidth = graphics.PreferredBackBufferWidth = 1280;
             screenHeight = graphics.PreferredBackBufferHeight = 800;
-            screenRectangle = new Rectangle(0, 0, screenWidth, screenHeight); //Initialize WINDOW
+            sourceWidth = 6400;
+            sourceHeight = 800;
+            screenRectangle = new Rectangle(0, 0, screenWidth, screenHeight); //Screen Dimensions
+            sourceRectangle = new Rectangle(0, 0, sourceWidth, sourceHeight); //BG dimesnions
 
             //Image textures
             CurrentWorld = World.Load(@"C:\Users\Isaias\Desktop\TestFolder1\TwerkCity.xml");
             CurrentLevel = CurrentWorld.Levels.First();
             backgroundTexture = CurrentLevel.BackgroundImage.GetTexture2D(device);
+
+            MaxBx = CurrentLevel.BackgroundImage.Width - screenRectangle.Width;
+
+            WalkToleranceG = screenRectangle.Width / 4;
 
             //Music Player
             backgroundMusic = CurrentLevel.Music.GetSong();
@@ -193,8 +200,6 @@ namespace RPG
         protected override void Update(GameTime gameTime)
         {
             // ADD YOUR UPDATE LOGIC HERE
-
-
             leftAnimatedSprite.HandleSpriteMovement(gameTime);
             rightAnimatedSprite.HandleSpriteMovement(gameTime);
             rhoRunningSprite.HandleSpriteMovement(gameTime);
@@ -221,16 +226,31 @@ namespace RPG
             {
                 c.Move();
 
-                if (c.X > screenWidth)
-                    c.X = screenWidth;
+                if (c.X > CurrentLevel.BackgroundImage.Width)
+                    c.X = CurrentLevel.BackgroundImage.Width;
                 if (c.X < 0)
                     c.X = 0;
 
-                if (c.Y > screenHeight)
-                    c.Y = screenHeight;
-                if (c.Y < screenHeight / 2)
-                    c.Y = screenHeight / 2;
+                if (c.Y > CurrentLevel.BackgroundImage.Height)
+                    c.Y = CurrentLevel.BackgroundImage.Height;
+                if (c.Y < CurrentLevel.BackgroundImage.Height / 2)
+                    c.Y = CurrentLevel.BackgroundImage.Height / 2;
             }
+
+            //UPDATE Scrolling stuff
+
+            //Character movement
+            if (UserCharacter.X < (Bx + WalkToleranceG))
+                Bx = UserCharacter.X - WalkToleranceG;
+            else if (UserCharacter.X > (Bx + 3 * WalkToleranceG))
+                Bx = UserCharacter.X - (3 * WalkToleranceG);
+
+            //Background Bounds
+            if (Bx < 0)
+                Bx = 0;
+            else if (Bx > CurrentLevel.BackgroundImage.Width - screenRectangle.Width)
+                Bx = CurrentLevel.BackgroundImage.Width - screenRectangle.Width;
+
             base.Update(gameTime);
         }
 
@@ -242,18 +262,18 @@ namespace RPG
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            screenRectangle.X = -100;
-            DrawScenery();
-            DrawAnimatedSprite(new Hitbox() { H = 80, W = 80, X = 700, Y = 200 }, InvincibilitySprite, spriteBatch_H);
-            DrawAnimatedSprite(new Hitbox() { H = 80, W = 80, X = 400, Y = 200 }, HeartSprite, spriteBatch_H);
-            DrawAnimatedSprite(new Hitbox() { H = 80, W = 80, X = 780, Y = 200 }, LevelUpSprite, spriteBatch_H);
+            //DrawScenery();
+            DrawScrollingBackground();
+            DrawAnimatedSprite(700, 200, InvincibilitySprite, spriteBatch_H);
+            DrawAnimatedSprite(400, 200, HeartSprite, spriteBatch_H);
+            DrawAnimatedSprite(780, 200, LevelUpSprite, spriteBatch_H);
 
             foreach (var c in Characters.OrderBy(x => x.Y))
             {
                 if (c.Direction == Character.Directions.Left)
-                    DrawAnimatedSprite(c.Hitbox, rhoRunningSprite, spriteBatch_A); //Change rhoRunningSprite to leftAnimatedSprite
+                    DrawAnimatedSprite(c.X, c.Y, rhoRunningSprite, spriteBatch_A); //Change rhoRunningSprite to leftAnimatedSprite
                 else
-                    DrawAnimatedSprite(c.Hitbox, rhoRunningSprite, spriteBatch_A); //Change rhoRunningSprite to rightAnimatedSprite
+                    DrawAnimatedSprite(c.X, c.Y, rhoRunningSprite, spriteBatch_A); //Change rhoRunningSprite to rightAnimatedSprite
 
                 //DrawCharacter(c.Hitbox, spriteBatch_H, Color.LightBlue); //RESTORE
             }
@@ -289,30 +309,31 @@ namespace RPG
 
         //-------------------------------------------------------------
 
+        private void DrawScrollingBackground()
+        {
+            spriteBatch_BG.Begin();
+            spriteBatch_BG.Draw(backgroundTexture, new Rectangle(sourceRectangle.X - Bx, sourceRectangle.Y, sourceWidth, sourceHeight), Color.White);
+            spriteBatch_BG.End();
+        }
+
+        //-------------------------------------------------------------
+
         private void DrawCharacter(Hitbox hit, SpriteBatch sb, Color color)
         {
             sb.Begin();
-            sb.Draw(humanTexture, new Vector2(hit.X, hit.Y), color);
+            sb.Draw(humanTexture, new Vector2(hit.X - Bx, hit.Y), color);
             sb.End();
         }
 
         //-------------------------------------------------------------
 
-        private void DrawAnimatedSprite(Hitbox hit, AnimatedSprite a_s, SpriteBatch sb)
+        private void DrawAnimatedSprite(int x, int y, AnimatedSprite a_s, SpriteBatch sb)
         {
             sb.Begin();
-            sb.Draw(a_s.Texture, new Vector2(hit.X, hit.Y), a_s.SourceRect, Color.White, 0f, a_s.Origin, 1.0f, SpriteEffects.None, 0); //Replace new Vector with a_s.Position... remove Hitbox hit from args
+            sb.Draw(a_s.Texture, new Vector2(x - Bx, y), a_s.SourceRect, Color.White, 0f, a_s.Origin, 1.0f, SpriteEffects.None, 0); //Replace new Vector with a_s.Position... remove Hitbox hit from args
             sb.End();
         }
 
         //-------------------------------------------------------------
-
-        private void DrawScrollingBackground()
-        {
-            spriteBacth_SBG.Begin();
-            spriteBacth_SBG.Draw(backgroundTexture, new Rectangle(-scrollX, 0, screenWidth, screenHeight), Color.White);
-            spriteBacth_SBG.End();
-        }
-
     }
 }

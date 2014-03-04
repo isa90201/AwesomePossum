@@ -128,8 +128,11 @@
       <DependentUpon>LevelEditorWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="Editor\SpriteCollection.cs" />
+    <Compile Include="HeartItem.cs" />
+    <Compile Include="IItem.cs" />
     <Compile Include="MusicItem.cs" />
     <Compile Include="SpriteAction.cs" />
+    <Compile Include="StarItem.cs" />
     <Compile Include="StringExtender.cs" />
     <Compile Include="World.cs" />
     <Compile Include="HumanController.cs" />
