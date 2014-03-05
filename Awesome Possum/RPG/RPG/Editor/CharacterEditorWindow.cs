@@ -116,7 +116,7 @@ namespace RPG.Editor
                         CurImage = Image.FromFile(ImagePath);
                 }
 
-                ActionLabel.Text = CurrentAction.Name;
+                ActionLabel.Text = CurrentAction.Name.ToString();
 
                 ImageNameBox.Text = Path.GetFileNameWithoutExtension(CurrentAction.FilePath);
                 if (string.IsNullOrEmpty(ImageNameBox.Text))
@@ -151,7 +151,7 @@ namespace RPG.Editor
                 {
                     var item = actionsToolStripMenuItem.DropDownItems.Add(string.Format("{0}{1}", action.Name, action == CurrentAction ? " *" : ""));
 
-                    item.Name = action.Name;
+                    item.Name = action.Name.ToString();
                     item.Click += new EventHandler(item_Click);
                 }
             }
@@ -161,7 +161,7 @@ namespace RPG.Editor
         {
             var item = sender as ToolStripItem;
 
-            CurrentAction = CharacterActions.Actions.FirstOrDefault(i => i.Name == item.Name);
+            CurrentAction = CharacterActions.Actions.FirstOrDefault(i => i.Name.ToString() == item.Name);
 
             ImagePos = 0;
             UpdateUI();

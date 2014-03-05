@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
+using System.Linq;
 
 namespace RPG
 {
     //Create an ENEMY using this class
-    public class Character
+    public class Character : IDrawable
     {
         public enum Directions
         {
@@ -50,6 +53,29 @@ namespace RPG
                 _Hitbox = value;
             }
         }
+
+        private Hitbox _Attackbox;
+        public Hitbox AttackBox
+        {
+            get
+            {
+                if (_Attackbox == null)
+                    _Attackbox = new Hitbox() { H = 200, W = 100 };
+
+                _Attackbox.X = X;
+                _Attackbox.Y = Y;
+                return _Attackbox;
+            }
+            set
+            {
+                _Attackbox = value;
+            }
+        }
+
+        public SpriteCollection Sprites { get; set; }
+
+        public SpriteAction.States State { get; set; }
+        public SpriteAction.States PrevState { get; set; }
 
         [XmlIgnore]
         public IController Controller;
@@ -213,6 +239,7 @@ namespace RPG
             Weapon = Weapon.NULL;
             Armor = Armor.NULL;
             Hitbox = new Hitbox();
+            State = SpriteAction.States.IDLE;
         }
 
         private void LevelUp()
@@ -226,34 +253,60 @@ namespace RPG
 
         public void Move()
         {
-            if (Controller.IsMovingUp()) // UP combos
+            State = SpriteAction.States.IDLE;
+
+            if (Controller.IsMovingUp())
             {
                 Y -= Speed;
+                State = SpriteAction.States.WALKING;
             }
-            else if (Controller.IsMovingDown()) // DOWN combos
+            else if (Controller.IsMovingDown())
             {
                 Y += Speed;
+                State = SpriteAction.States.WALKING;
             }
 
             if (Controller.IsMovingLeft())
             {
                 X -= Speed;
-                _LastDir = Directions.Left;
+                Direction = Directions.Left;
+                State = SpriteAction.States.WALKING;
             }
             else if (Controller.IsMovingRight())
             {
                 X += Speed;
-                _LastDir = Directions.Right;
+                Direction = Directions.Right;
+                State = SpriteAction.States.WALKING;
             }
         }
 
-        private Directions _LastDir = Directions.Right;
-        public Directions Direction
+
+        public Directions Direction { get; set; }
+        private Directions PrevDirection;
+
+        private AnimatedSprite CurrentSprite;
+        public AnimatedSprite GetAnimatedSprite()
         {
-            get
+            var sprite = Sprites.Actions.FirstOrDefault(s => s.Name == State);
+
+            if (sprite != null)
             {
-                return _LastDir;
+                var temp = sprite.GetAnimatedSprite(Direction, X, Y);
+
+                if (CurrentSprite == null || PrevState != State || PrevDirection != Direction)
+                    CurrentSprite = temp;
+                else
+                    CurrentSprite.Position = temp.Position;
+
+                PrevDirection = Direction;
+                PrevState = State;
             }
+            return CurrentSprite;
+        }
+
+        public Vector2 GetVector2D()
+        {
+            return new Vector2(X, Y);
         }
     }
 }

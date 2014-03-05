@@ -22,15 +22,11 @@ namespace RPG
         GraphicsDevice device;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch_BG, spriteBatch_H, spriteBatch_A, spriteBacth_SBG;
-        Texture2D backgroundTexture, groundTexture, humanTexture; //for images
+        Texture2D backgroundTexture; //for images
         Rectangle screenRectangle, sourceRectangle;
-        AnimatedSprite leftAnimatedSprite;
-        AnimatedSprite rightAnimatedSprite;
-        AnimatedSprite rhoRunningSprite;
-        AnimatedSprite InvincibilitySprite, HeartSprite, LevelUpSprite; //ITEM sprites
         int screenWidth, screenHeight, sourceWidth, sourceHeight;
-        int Bx;
-        int MaxBx, MaxCx, WalkToleranceG;
+        int WorldOffsetX;
+        int MaxWorldOffsetX, MaxCx, WalkToleranceG;
 
         //SOUND stuff
         Song backgroundMusic;
@@ -75,24 +71,6 @@ namespace RPG
             graphics.ApplyChanges();
             Window.Title = "RHO";
 
-            //SPRITE stuff
-            leftAnimatedSprite = new AnimatedSprite(Content.Load<Texture2D>("IPOOWalkingLeft"), 1, 100, 200);
-            rightAnimatedSprite = new AnimatedSprite(Content.Load<Texture2D>("IPOOWalkingRight"), 1, 100, 200);
-            rhoRunningSprite = new AnimatedSprite(Content.Load<Texture2D>("RHOrun"), 1, 200, 200);
-
-            //TESTING Item sprites
-            InvincibilitySprite = new AnimatedSprite(Content.Load<Texture2D>("InvincibilityItem"), 1, 100, 200);
-            InvincibilitySprite.spriteHeight = 80; // added
-            InvincibilitySprite.spriteWidth = 80; //added
-
-            HeartSprite = new AnimatedSprite(Content.Load<Texture2D>("HeartItem"), 1, 100, 200);
-            HeartSprite.spriteHeight = 80; // added
-            HeartSprite.spriteWidth = 80; //added
-
-            LevelUpSprite = new AnimatedSprite(Content.Load<Texture2D>("LevelUpSprite"), 1, 100, 200);
-            LevelUpSprite.spriteHeight = 80; // added
-            LevelUpSprite.spriteWidth = 80; //added
-
             UserController = new HumanController();
 
             Controllers = new List<IController>();
@@ -132,6 +110,8 @@ namespace RPG
                 Controllers.Add(ai);
                 Characters.Add(c);
             }
+            foreach (var c in Characters)
+                c.Sprites = CharacterSpriteSheet;
 
         }
 
@@ -143,17 +123,17 @@ namespace RPG
         /// </summary>
         protected override void LoadContent()
         {
-            //Player textures
-            humanTexture = CreateRectangle(100, 200, Color.White);
-
-            //backgroundTexture = Texture2D.FromStream(GraphicsDevice, File.OpenRead(@"C:\Users\Isaias\Desktop\Res1\Stage1.png"));
-
             //Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch_BG = new SpriteBatch(GraphicsDevice);
             spriteBatch_H = new SpriteBatch(GraphicsDevice);
             spriteBatch_A = new SpriteBatch(GraphicsDevice); // ADDED
             spriteBacth_SBG = new SpriteBatch(GraphicsDevice);
             device = graphics.GraphicsDevice;
+
+            CharacterSpriteSheet = SpriteCollection.Load(@"C:\Res\Rho.xml");
+
+            foreach (var ss in CharacterSpriteSheet.Actions)
+                ss.Load(device);
 
             //Background Image and Screen Properties
             screenWidth = graphics.PreferredBackBufferWidth = 1280;
@@ -168,7 +148,7 @@ namespace RPG
             CurrentLevel = CurrentWorld.Levels.First();
             backgroundTexture = CurrentLevel.BackgroundImage.GetTexture2D(device);
 
-            MaxBx = CurrentLevel.BackgroundImage.Width - screenRectangle.Width;
+            MaxWorldOffsetX = CurrentLevel.BackgroundImage.Width - screenRectangle.Width;
 
             WalkToleranceG = screenRectangle.Width / 4;
 
@@ -199,14 +179,6 @@ namespace RPG
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            // ADD YOUR UPDATE LOGIC HERE
-            leftAnimatedSprite.HandleSpriteMovement(gameTime);
-            rightAnimatedSprite.HandleSpriteMovement(gameTime);
-            rhoRunningSprite.HandleSpriteMovement(gameTime);
-            InvincibilitySprite.HandleSpriteMovement(gameTime);
-            HeartSprite.HandleSpriteMovement(gameTime);
-            LevelUpSprite.HandleSpriteMovement(gameTime);
-
             //UPDATE controller input(s)
             foreach (var c in Controllers)
             {
@@ -235,21 +207,25 @@ namespace RPG
                     c.Y = CurrentLevel.BackgroundImage.Height;
                 if (c.Y < CurrentLevel.BackgroundImage.Height / 2)
                     c.Y = CurrentLevel.BackgroundImage.Height / 2;
+
+                var sprite = c.GetAnimatedSprite();
+                if (sprite != null)
+                    sprite.HandleSpriteMovement(gameTime);
             }
 
             //UPDATE Scrolling stuff
 
             //Character movement
-            if (UserCharacter.X < (Bx + WalkToleranceG))
-                Bx = UserCharacter.X - WalkToleranceG;
-            else if (UserCharacter.X > (Bx + 3 * WalkToleranceG))
-                Bx = UserCharacter.X - (3 * WalkToleranceG);
+            if (UserCharacter.X < (WorldOffsetX + WalkToleranceG))
+                WorldOffsetX = UserCharacter.X - WalkToleranceG;
+            else if (UserCharacter.X > (WorldOffsetX + 3 * WalkToleranceG))
+                WorldOffsetX = UserCharacter.X - (3 * WalkToleranceG);
 
             //Background Bounds
-            if (Bx < 0)
-                Bx = 0;
-            else if (Bx > CurrentLevel.BackgroundImage.Width - screenRectangle.Width)
-                Bx = CurrentLevel.BackgroundImage.Width - screenRectangle.Width;
+            if (WorldOffsetX < 0)
+                WorldOffsetX = 0;
+            else if (WorldOffsetX > CurrentLevel.BackgroundImage.Width - screenRectangle.Width)
+                WorldOffsetX = CurrentLevel.BackgroundImage.Width - screenRectangle.Width;
 
             base.Update(gameTime);
         }
@@ -264,47 +240,17 @@ namespace RPG
         {
             //DrawScenery();
             DrawScrollingBackground();
-            DrawAnimatedSprite(700, 200, InvincibilitySprite, spriteBatch_H);
-            DrawAnimatedSprite(400, 200, HeartSprite, spriteBatch_H);
-            DrawAnimatedSprite(780, 200, LevelUpSprite, spriteBatch_H);
 
             foreach (var c in Characters.OrderBy(x => x.Y))
             {
-                if (c.Direction == Character.Directions.Left)
-                    DrawAnimatedSprite(c.X, c.Y, rhoRunningSprite, spriteBatch_A); //Change rhoRunningSprite to leftAnimatedSprite
-                else
-                    DrawAnimatedSprite(c.X, c.Y, rhoRunningSprite, spriteBatch_A); //Change rhoRunningSprite to rightAnimatedSprite
-
-                //DrawCharacter(c.Hitbox, spriteBatch_H, Color.LightBlue); //RESTORE
+                var sprite = c.GetAnimatedSprite();
+                if (sprite != null)
+                {
+                    sprite.Draw(spriteBatch_H, WorldOffsetX);
+                }
             }
 
-            //DrawAnimatedSprite(hitbox hit, animatedSprite, spriteBatch_A);
             base.Draw(gameTime);
-        }
-
-        //-------------------------------------------------------------
-
-        private Texture2D CreateRectangle(int width, int height, Color c)
-        {
-            Texture2D rectangleTexture = new Texture2D(GraphicsDevice, width, height, false, SurfaceFormat.Color);
-            Color[] color = new Color[width * height];
-
-            for (int i = 0; i < color.Length; ++i)
-            {
-                color[i] = new Color(c.R, c.G, c.B, 255);
-            }
-
-            rectangleTexture.SetData(color);//set the color data on the texture
-            return rectangleTexture;
-        }
-
-        //-------------------------------------------------------------
-
-        private void DrawScenery()
-        {
-            spriteBatch_BG.Begin();
-            spriteBatch_BG.Draw(backgroundTexture, screenRectangle, Color.White);
-            spriteBatch_BG.End();
         }
 
         //-------------------------------------------------------------
@@ -312,28 +258,22 @@ namespace RPG
         private void DrawScrollingBackground()
         {
             spriteBatch_BG.Begin();
-            spriteBatch_BG.Draw(backgroundTexture, new Rectangle(sourceRectangle.X - Bx, sourceRectangle.Y, sourceWidth, sourceHeight), Color.White);
+            spriteBatch_BG.Draw(backgroundTexture, new Rectangle(sourceRectangle.X - WorldOffsetX, sourceRectangle.Y, sourceWidth, sourceHeight), Color.White);
             spriteBatch_BG.End();
         }
 
         //-------------------------------------------------------------
 
-        private void DrawCharacter(Hitbox hit, SpriteBatch sb, Color color)
+        private Vector2 GetSpawnLocation()  //SPAWN logic
         {
-            sb.Begin();
-            sb.Draw(humanTexture, new Vector2(hit.X - Bx, hit.Y), color);
-            sb.End();
+            Random RandomNumber = new Random();
+            return new Vector2(RandomNumber.Next(CurrentLevel.BackgroundImage.Width) + 1, RandomNumber.Next(CurrentLevel.BackgroundImage.Height) + 1);
         }
 
         //-------------------------------------------------------------
 
-        private void DrawAnimatedSprite(int x, int y, AnimatedSprite a_s, SpriteBatch sb)
-        {
-            sb.Begin();
-            sb.Draw(a_s.Texture, new Vector2(x - Bx, y), a_s.SourceRect, Color.White, 0f, a_s.Origin, 1.0f, SpriteEffects.None, 0); //Replace new Vector with a_s.Position... remove Hitbox hit from args
-            sb.End();
-        }
 
-        //-------------------------------------------------------------
+
+        public SpriteCollection CharacterSpriteSheet { get; set; }
     }
 }

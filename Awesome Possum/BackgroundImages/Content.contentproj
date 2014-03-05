@@ -129,8 +129,22 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="RHOrun.jpg">
+    <Compile Include="RHOrun.png">
       <Name>RHOrun</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Tree.png">
+      <Name>Tree</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Flower.png">
+      <Name>Flower</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

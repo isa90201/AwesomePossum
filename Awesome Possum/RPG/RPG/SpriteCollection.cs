@@ -14,8 +14,8 @@ namespace RPG
         {
             var col = new SpriteCollection();
 
-            col.Actions.Add(new SpriteAction() { Name = "Idle" });
-            col.Actions.Add(new SpriteAction() { Name = "Walking" });
+            col.Actions.Add(new SpriteAction() { Name = SpriteAction.States.IDLE });
+            col.Actions.Add(new SpriteAction() { Name = SpriteAction.States.WALKING });
             //col.Actions.Add(new SpriteAction() { Name = "Invincible" });
 
             //col.Actions.Add(new SpriteAction() { Name = "Attack" });

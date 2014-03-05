@@ -11,92 +11,50 @@ namespace RPG
 {
     public class AnimatedSprite
     {
-        Texture2D spriteTexture;
-        float timer = 0f;  //Time required for sprite to move to the next frame.
-        float interval = 50f; //Used to determine how often to step to next frame in the animation.
-        int currentFrame = 0;  //Keep track of current frame.
-        public int spriteWidth = 100; //= 32; MODIFIED   //remove public
-        public int spriteHeight = 200; //= 48; MODIFIED  //remove public
+        float Timer = 0f;  //Time required for sprite to move to the next frame.
+        float Interval = 50f; //Used to determine how often to step to next frame in the animation.
+        int CurrentFrame = 0;  //Keep track of current frame.
+        public int SpriteWidth;
+        public int SpriteHeight;
 
-        Rectangle sourceRect;
-        Vector2 position;
-        Vector2 origin;
+        public Texture2D SpriteTexture { get; set; }
+        public Vector2 Position { get; set; }
+        public Vector2 Origin { get; set; }
+        public int Version { get; set; }
 
-        public Vector2 Position
+        public Rectangle SourceRect { get; set; }
+
+        public AnimatedSprite(Texture2D texture, int spriteWidth, int spriteHeight)
         {
-            get
-            {
-                return position;
-            }
-            set
-            {
-                position = value;
-            }
-        }
-
-        public Vector2 Origin
-        {
-            get
-            {
-                return origin;
-            }
-            set
-            {
-                origin = value;
-            }
-        }
-
-        public Texture2D Texture
-        {
-            get
-            {
-                return spriteTexture;
-            }
-            set
-            {
-                spriteTexture = value;
-            }
-        }
-
-        public Rectangle SourceRect
-        {
-            get
-            {
-                return sourceRect;
-            }
-            set
-            {
-                sourceRect = value;
-            }
-        } // the rectangle in which our sprite will be drawn
-
-        public AnimatedSprite(Texture2D texture, int currentFrame, int spriteWidth, int spriteHeight)
-        {
-            this.spriteTexture = texture;
-            this.currentFrame = currentFrame;
-            this.spriteWidth = spriteWidth;
-            this.spriteHeight = spriteHeight;
+            SpriteTexture = texture;
+            SpriteWidth = spriteWidth;
+            SpriteHeight = spriteHeight;
         }
 
         public void HandleSpriteMovement(GameTime gameTime)
         {
-            sourceRect = new Rectangle(currentFrame * spriteWidth, 0, spriteWidth, spriteHeight);
+            SourceRect = new Rectangle(CurrentFrame * SpriteWidth, Version * SpriteHeight, SpriteWidth, SpriteHeight);
+            Origin = new Vector2(SourceRect.Width / 2, SourceRect.Height / 2);
+            Timer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
 
-            origin = new Vector2(sourceRect.Width / 2, sourceRect.Height / 2);
-
-            timer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
-
-            if (timer > interval)
+            if (Timer > Interval)
             {
-                currentFrame++;
+                CurrentFrame++;
 
-                if (!(currentFrame < Texture.Width / spriteWidth))
+                if (!(CurrentFrame < SpriteTexture.Width / SpriteWidth))
                 {
-                    currentFrame = 0;
+                    CurrentFrame = 0;
                 }
-                timer = 0f;
+                Timer = 0f;
             }
 
+        }
+
+        public void Draw(SpriteBatch sb, int worldOffset)
+        {
+            sb.Begin();
+            sb.Draw(SpriteTexture, new Vector2(Position.X - worldOffset, Position.Y), SourceRect, Color.White, 0f, Origin, 1.0f, SpriteEffects.None, 0);
+            sb.End();
         }
     }
 }
