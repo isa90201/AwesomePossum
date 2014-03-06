@@ -1,3 +1,5 @@
+//#define DEBUG_GAME //Uncomment this to debug game.
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -67,7 +69,13 @@ namespace RPG
             //WINDOW Properties
             graphics.PreferredBackBufferWidth = 1280; //PREFERRED WIDTH =  1280
             graphics.PreferredBackBufferHeight = 800; // PREFERRED HEIGHT = 800
+
+#if DEBUG_GAME
+            graphics.IsFullScreen = false;  //CHANGE THIS
+#else
             graphics.IsFullScreen = true;  //CHANGE THIS
+#endif
+
             graphics.ApplyChanges();
             Window.Title = "RHO";
 
@@ -101,7 +109,7 @@ namespace RPG
                     Controller = ai,
                     X = i * 200,
                     Y = i * 50,
-                    Speed = 1
+                    Speed = 2
                 };
 
                 ai.Self = c;
@@ -144,7 +152,7 @@ namespace RPG
             sourceRectangle = new Rectangle(0, 0, sourceWidth, sourceHeight); //BG dimesnions
 
             //Image textures
-            CurrentWorld = World.Load(@"C:\Users\Isaias\Desktop\TestFolder1\TwerkCity.xml");
+            CurrentWorld = World.Load(@"C:\Res\TwerkCity.xml");
             CurrentLevel = CurrentWorld.Levels.First();
             backgroundTexture = CurrentLevel.BackgroundImage.GetTexture2D(device);
 
