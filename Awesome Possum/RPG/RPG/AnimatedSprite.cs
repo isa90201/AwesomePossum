@@ -29,6 +29,8 @@ namespace RPG
 
         public int Version { get; set; }
 
+        public bool HasLoopedOnce { get; set; }
+
         public AnimatedSprite(Texture2D texture, int spriteWidth, int spriteHeight)
         {
             Texture = texture;
@@ -47,6 +49,7 @@ namespace RPG
                 if (!(CurrentFrame < Texture.Width / Width))
                 {
                     CurrentFrame = 0;
+                    HasLoopedOnce = true;
                 }
                 Timer = 0f;
             }

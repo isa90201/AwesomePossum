@@ -278,15 +278,31 @@ namespace RPG
                 Direction = Directions.Right;
                 State = SpriteAction.States.WALKING;
             }
+
+            if (Controller.IsAttacking() && !IsPerformingAction())
+            {
+                var sprite = Sprites.Actions.FirstOrDefault(s => s.Name == SpriteAction.States.ATTACKING);
+
+                if (sprite != null)
+                    ActionSprite = sprite.GetAnimatedSprite(Direction);
+            }
         }
 
 
         public Directions Direction { get; set; }
         private Directions PrevDirection;
 
+        private AnimatedSprite ActionSprite;
         private AnimatedSprite CurrentSprite;
         public AnimatedSprite GetAnimatedSprite()
         {
+            if (IsPerformingAction())
+            {
+                ActionSprite.X = X;
+                ActionSprite.Y = Y;
+                return ActionSprite;
+            }
+
             var sprite = Sprites.Actions.FirstOrDefault(s => s.Name == State);
 
             if (sprite != null)
@@ -294,18 +310,27 @@ namespace RPG
                 if (CurrentSprite == null || PrevState != State || PrevDirection != Direction)
                     CurrentSprite = sprite.GetAnimatedSprite(Direction);
 
-                CurrentSprite.X = X;
-                CurrentSprite.Y = Y;
-
                 PrevDirection = Direction;
                 PrevState = State;
             }
+
+            if (CurrentSprite != null)
+            {
+                CurrentSprite.X = X;
+                CurrentSprite.Y = Y;
+            }
+
             return CurrentSprite;
         }
 
         public Vector2 GetVector2D()
         {
             return new Vector2(X, Y);
+        }
+
+        private bool IsPerformingAction()
+        {
+            return ActionSprite != null && !ActionSprite.HasLoopedOnce;
         }
     }
 }

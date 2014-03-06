@@ -29,6 +29,8 @@ namespace RPG
         int screenWidth, screenHeight, sourceWidth, sourceHeight;
         int WorldOffsetX;
         int MaxWorldOffsetX, MaxCx, WalkToleranceG;
+        public SpriteCollection IPOOSpriteSheet { get; set; }
+        public SpriteCollection RHOSpriteSheet { get; set; }
 
         //SOUND stuff
         Song backgroundMusic;
@@ -89,7 +91,7 @@ namespace RPG
 
             //CREATE human character
             Characters = new List<Character>();
-            UserCharacter = new Character("Jesus", 10, 15, 20)
+            UserCharacter = new Character("RHO", 10, 15, 20)
             {
                 Controller = UserController,
                 X = 400,
@@ -99,6 +101,7 @@ namespace RPG
             MaxCx = CurrentLevel.BackgroundImage.Width - UserCharacter.Hitbox.W; //
 
             Characters.Add(UserCharacter);
+            UserCharacter.Sprites = RHOSpriteSheet;
 
             //Create AI controllers and respective characters
             for (int i = 1; i <= 5; ++i)
@@ -114,13 +117,11 @@ namespace RPG
 
                 ai.Self = c;
                 ai.Enemy = UserCharacter;
+                c.Sprites = IPOOSpriteSheet;
 
                 Controllers.Add(ai);
                 Characters.Add(c);
             }
-            foreach (var c in Characters)
-                c.Sprites = CharacterSpriteSheet;
-
         }
 
         //-------------------------------------------------------------
@@ -138,9 +139,12 @@ namespace RPG
             spriteBacth_SBG = new SpriteBatch(GraphicsDevice);
             device = graphics.GraphicsDevice;
 
-            CharacterSpriteSheet = SpriteCollection.Load(@"C:\Res\Rho.xml");
+            IPOOSpriteSheet = SpriteCollection.Load(@"C:\Res\IPOO.xml");
+            RHOSpriteSheet = SpriteCollection.Load(@"C:\Res\RHO.xml");
 
-            foreach (var ss in CharacterSpriteSheet.Actions)
+            foreach (var ss in IPOOSpriteSheet.Actions)
+                ss.Load(device);
+            foreach (var ss in RHOSpriteSheet.Actions)
                 ss.Load(device);
 
             //Background Image and Screen Properties
@@ -279,9 +283,5 @@ namespace RPG
         }
 
         //-------------------------------------------------------------
-
-
-
-        public SpriteCollection CharacterSpriteSheet { get; set; }
     }
 }
