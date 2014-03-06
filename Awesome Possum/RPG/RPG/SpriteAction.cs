@@ -50,29 +50,25 @@ namespace RPG
         public int AtkRDx { get; set; }
         public int AtkRDy { get; set; }
 
-        public AnimatedSprite GetAnimatedSprite(Character.Directions direction, int x, int y)
+        public AnimatedSprite GetAnimatedSprite(Character.Directions direction)
         {
-            Vector2 offset,
-                position = new Vector2(x, y);
-
-            int version;
+            var animation = new AnimatedSprite(SpriteTexture, SpriteTexture.Width / NumFrames, SpriteTexture.Height / 2);
 
             if (direction == Character.Directions.Right)
             {
-                offset = new Vector2(ImgRDx, ImgRDy);
-                version = 0;
+                animation.XOffset = ImgRDx;
+                animation.YOffset = ImgRDy;
+                animation.Version = 0;
             }
             else
             {
-                offset = new Vector2(ImgLDx, ImgLDy);
-                version = 1;
+                animation.XOffset = ImgLDx;
+                animation.YOffset = ImgLDy;
+                animation.Version = 1;
             }
 
-            var animation = new AnimatedSprite(SpriteTexture, SpriteTexture.Width / NumFrames, SpriteTexture.Height / 2);
-            animation.Position = position;
-            animation.Origin = offset;
-            animation.Version = version;
-
+            animation.Interval = FrameDelay;
+ 
             return animation;
         }
 

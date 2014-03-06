@@ -291,12 +291,11 @@ namespace RPG
 
             if (sprite != null)
             {
-                var temp = sprite.GetAnimatedSprite(Direction, X, Y);
-
                 if (CurrentSprite == null || PrevState != State || PrevDirection != Direction)
-                    CurrentSprite = temp;
-                else
-                    CurrentSprite.Position = temp.Position;
+                    CurrentSprite = sprite.GetAnimatedSprite(Direction);
+
+                CurrentSprite.X = X;
+                CurrentSprite.Y = Y;
 
                 PrevDirection = Direction;
                 PrevState = State;
