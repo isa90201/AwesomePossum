@@ -30,6 +30,23 @@
         {
             this.components = new System.ComponentModel.Container();
             this.ActionLabel = new System.Windows.Forms.GroupBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.AtkHeightNumber = new System.Windows.Forms.NumericUpDown();
+            this.label7 = new System.Windows.Forms.Label();
+            this.AtkWidthNumber = new System.Windows.Forms.NumericUpDown();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.label17 = new System.Windows.Forms.Label();
+            this.LAtkDYNumber = new System.Windows.Forms.NumericUpDown();
+            this.label18 = new System.Windows.Forms.Label();
+            this.LAtkDXNumber = new System.Windows.Forms.NumericUpDown();
+            this.label1 = new System.Windows.Forms.Label();
+            this.LHitDYNumber = new System.Windows.Forms.NumericUpDown();
+            this.label12 = new System.Windows.Forms.Label();
+            this.LHitDXNumber = new System.Windows.Forms.NumericUpDown();
+            this.label13 = new System.Windows.Forms.Label();
+            this.LImgDYNumber = new System.Windows.Forms.NumericUpDown();
+            this.label14 = new System.Windows.Forms.Label();
+            this.LImgDXNumber = new System.Windows.Forms.NumericUpDown();
             this.label4 = new System.Windows.Forms.Label();
             this.HitHeightNumber = new System.Windows.Forms.NumericUpDown();
             this.label5 = new System.Windows.Forms.Label();
@@ -39,6 +56,10 @@
             this.label2 = new System.Windows.Forms.Label();
             this.FramesNumber = new System.Windows.Forms.NumericUpDown();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.RAtkDYNumber = new System.Windows.Forms.NumericUpDown();
+            this.label16 = new System.Windows.Forms.Label();
+            this.RAtkDXNumber = new System.Windows.Forms.NumericUpDown();
             this.label10 = new System.Windows.Forms.Label();
             this.RHitDYNumber = new System.Windows.Forms.NumericUpDown();
             this.label11 = new System.Windows.Forms.Label();
@@ -60,50 +81,31 @@
             this.OpenDialog = new System.Windows.Forms.OpenFileDialog();
             this.SaveDialog = new System.Windows.Forms.SaveFileDialog();
             this.SpriteTimer = new System.Windows.Forms.Timer(this.components);
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.LImgDXNumber = new System.Windows.Forms.NumericUpDown();
-            this.label14 = new System.Windows.Forms.Label();
-            this.LImgDYNumber = new System.Windows.Forms.NumericUpDown();
-            this.label13 = new System.Windows.Forms.Label();
-            this.LHitDXNumber = new System.Windows.Forms.NumericUpDown();
-            this.label12 = new System.Windows.Forms.Label();
-            this.LHitDYNumber = new System.Windows.Forms.NumericUpDown();
-            this.label1 = new System.Windows.Forms.Label();
-            this.LAtkDXNumber = new System.Windows.Forms.NumericUpDown();
-            this.label18 = new System.Windows.Forms.Label();
-            this.LAtkDYNumber = new System.Windows.Forms.NumericUpDown();
-            this.label17 = new System.Windows.Forms.Label();
-            this.label15 = new System.Windows.Forms.Label();
-            this.RAtkDYNumber = new System.Windows.Forms.NumericUpDown();
-            this.label16 = new System.Windows.Forms.Label();
-            this.RAtkDXNumber = new System.Windows.Forms.NumericUpDown();
-            this.label6 = new System.Windows.Forms.Label();
-            this.AtkHeightNumber = new System.Windows.Forms.NumericUpDown();
-            this.label7 = new System.Windows.Forms.Label();
-            this.AtkWidthNumber = new System.Windows.Forms.NumericUpDown();
+            this.AddMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.RemoveMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.ActionLabel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.AtkHeightNumber)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.AtkWidthNumber)).BeginInit();
+            this.groupBox4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.LAtkDYNumber)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.LAtkDXNumber)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.LHitDYNumber)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.LHitDXNumber)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.LImgDYNumber)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.LImgDXNumber)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.HitHeightNumber)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.HitWidthNumber)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.FrameTimeNumber)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.FramesNumber)).BeginInit();
             this.groupBox3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.RAtkDYNumber)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.RAtkDXNumber)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.RHitDYNumber)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.RHitDXNumber)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.RImgDYNumber)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.RImgDXNumber)).BeginInit();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SpritePictureBox)).BeginInit();
-            this.groupBox4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.LImgDXNumber)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.LImgDYNumber)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.LHitDXNumber)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.LHitDYNumber)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.LAtkDXNumber)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.LAtkDYNumber)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.RAtkDYNumber)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.RAtkDXNumber)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.AtkHeightNumber)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.AtkWidthNumber)).BeginInit();
             this.SuspendLayout();
             // 
             // ActionLabel
@@ -130,6 +132,163 @@
             this.ActionLabel.TabIndex = 0;
             this.ActionLabel.TabStop = false;
             this.ActionLabel.Text = "Action";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(156, 116);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(57, 13);
+            this.label6.TabIndex = 24;
+            this.label6.Text = "Atk Height";
+            // 
+            // AtkHeightNumber
+            // 
+            this.AtkHeightNumber.Location = new System.Drawing.Point(159, 132);
+            this.AtkHeightNumber.Name = "AtkHeightNumber";
+            this.AtkHeightNumber.Size = new System.Drawing.Size(120, 20);
+            this.AtkHeightNumber.TabIndex = 23;
+            this.AtkHeightNumber.ValueChanged += new System.EventHandler(this.AtkHeightNumber_ValueChanged);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(6, 116);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(54, 13);
+            this.label7.TabIndex = 22;
+            this.label7.Text = "Atk Width";
+            // 
+            // AtkWidthNumber
+            // 
+            this.AtkWidthNumber.Location = new System.Drawing.Point(9, 132);
+            this.AtkWidthNumber.Name = "AtkWidthNumber";
+            this.AtkWidthNumber.Size = new System.Drawing.Size(120, 20);
+            this.AtkWidthNumber.TabIndex = 21;
+            this.AtkWidthNumber.ValueChanged += new System.EventHandler(this.AtkWidthNumber_ValueChanged);
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.label17);
+            this.groupBox4.Controls.Add(this.LAtkDYNumber);
+            this.groupBox4.Controls.Add(this.label18);
+            this.groupBox4.Controls.Add(this.LAtkDXNumber);
+            this.groupBox4.Controls.Add(this.label1);
+            this.groupBox4.Controls.Add(this.LHitDYNumber);
+            this.groupBox4.Controls.Add(this.label12);
+            this.groupBox4.Controls.Add(this.LHitDXNumber);
+            this.groupBox4.Controls.Add(this.label13);
+            this.groupBox4.Controls.Add(this.LImgDYNumber);
+            this.groupBox4.Controls.Add(this.label14);
+            this.groupBox4.Controls.Add(this.LImgDXNumber);
+            this.groupBox4.Location = new System.Drawing.Point(9, 302);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(270, 138);
+            this.groupBox4.TabIndex = 20;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Left";
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(143, 94);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(41, 13);
+            this.label17.TabIndex = 22;
+            this.label17.Text = "Atk DY";
+            // 
+            // LAtkDYNumber
+            // 
+            this.LAtkDYNumber.Location = new System.Drawing.Point(146, 110);
+            this.LAtkDYNumber.Name = "LAtkDYNumber";
+            this.LAtkDYNumber.Size = new System.Drawing.Size(99, 20);
+            this.LAtkDYNumber.TabIndex = 21;
+            this.LAtkDYNumber.ValueChanged += new System.EventHandler(this.LAtkDYNumber_ValueChanged);
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(9, 94);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(41, 13);
+            this.label18.TabIndex = 20;
+            this.label18.Text = "Atk DX";
+            // 
+            // LAtkDXNumber
+            // 
+            this.LAtkDXNumber.Location = new System.Drawing.Point(12, 110);
+            this.LAtkDXNumber.Name = "LAtkDXNumber";
+            this.LAtkDXNumber.Size = new System.Drawing.Size(99, 20);
+            this.LAtkDXNumber.TabIndex = 19;
+            this.LAtkDXNumber.ValueChanged += new System.EventHandler(this.LAtkDXNumber_ValueChanged);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(143, 55);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(38, 13);
+            this.label1.TabIndex = 18;
+            this.label1.Text = "Hit DY";
+            // 
+            // LHitDYNumber
+            // 
+            this.LHitDYNumber.Location = new System.Drawing.Point(146, 71);
+            this.LHitDYNumber.Name = "LHitDYNumber";
+            this.LHitDYNumber.Size = new System.Drawing.Size(99, 20);
+            this.LHitDYNumber.TabIndex = 17;
+            this.LHitDYNumber.ValueChanged += new System.EventHandler(this.LHitDYNumber_ValueChanged);
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(9, 55);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(38, 13);
+            this.label12.TabIndex = 16;
+            this.label12.Text = "Hit DX";
+            // 
+            // LHitDXNumber
+            // 
+            this.LHitDXNumber.Location = new System.Drawing.Point(12, 71);
+            this.LHitDXNumber.Name = "LHitDXNumber";
+            this.LHitDXNumber.Size = new System.Drawing.Size(99, 20);
+            this.LHitDXNumber.TabIndex = 15;
+            this.LHitDXNumber.ValueChanged += new System.EventHandler(this.LHitDXNumber_ValueChanged);
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(143, 16);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(42, 13);
+            this.label13.TabIndex = 14;
+            this.label13.Text = "Img DY";
+            // 
+            // LImgDYNumber
+            // 
+            this.LImgDYNumber.Location = new System.Drawing.Point(146, 32);
+            this.LImgDYNumber.Name = "LImgDYNumber";
+            this.LImgDYNumber.Size = new System.Drawing.Size(99, 20);
+            this.LImgDYNumber.TabIndex = 13;
+            this.LImgDYNumber.ValueChanged += new System.EventHandler(this.LImgDYNumber_ValueChanged);
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(9, 16);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(42, 13);
+            this.label14.TabIndex = 12;
+            this.label14.Text = "Img DX";
+            // 
+            // LImgDXNumber
+            // 
+            this.LImgDXNumber.Location = new System.Drawing.Point(12, 32);
+            this.LImgDXNumber.Name = "LImgDXNumber";
+            this.LImgDXNumber.Size = new System.Drawing.Size(99, 20);
+            this.LImgDXNumber.TabIndex = 11;
+            this.LImgDXNumber.ValueChanged += new System.EventHandler(this.LImgDXNumber_ValueChanged);
             // 
             // label4
             // 
@@ -220,6 +379,40 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Right";
             // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(147, 94);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(41, 13);
+            this.label15.TabIndex = 26;
+            this.label15.Text = "Atk DY";
+            // 
+            // RAtkDYNumber
+            // 
+            this.RAtkDYNumber.Location = new System.Drawing.Point(150, 110);
+            this.RAtkDYNumber.Name = "RAtkDYNumber";
+            this.RAtkDYNumber.Size = new System.Drawing.Size(99, 20);
+            this.RAtkDYNumber.TabIndex = 25;
+            this.RAtkDYNumber.ValueChanged += new System.EventHandler(this.RAtkDYNumber_ValueChanged);
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(13, 94);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(41, 13);
+            this.label16.TabIndex = 24;
+            this.label16.Text = "Atk DX";
+            // 
+            // RAtkDXNumber
+            // 
+            this.RAtkDXNumber.Location = new System.Drawing.Point(16, 110);
+            this.RAtkDXNumber.Name = "RAtkDXNumber";
+            this.RAtkDXNumber.Size = new System.Drawing.Size(99, 20);
+            this.RAtkDXNumber.TabIndex = 23;
+            this.RAtkDXNumber.ValueChanged += new System.EventHandler(this.RAtkDXNumber_ValueChanged);
+            // 
             // label10
             // 
             this.label10.AutoSize = true;
@@ -302,6 +495,8 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.actionsToolStripMenuItem,
+            this.AddMenu,
+            this.RemoveMenu,
             this.leftToolStripMenuItem,
             this.rightToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
@@ -346,8 +541,8 @@
             // 
             this.actionsToolStripMenuItem.Enabled = false;
             this.actionsToolStripMenuItem.Name = "actionsToolStripMenuItem";
-            this.actionsToolStripMenuItem.Size = new System.Drawing.Size(59, 20);
-            this.actionsToolStripMenuItem.Text = "Actions";
+            this.actionsToolStripMenuItem.Size = new System.Drawing.Size(75, 20);
+            this.actionsToolStripMenuItem.Text = "Action List";
             // 
             // leftToolStripMenuItem
             // 
@@ -387,196 +582,19 @@
             this.SpriteTimer.Enabled = true;
             this.SpriteTimer.Tick += new System.EventHandler(this.SpriteTimer_Tick);
             // 
-            // groupBox4
+            // AddMenu
             // 
-            this.groupBox4.Controls.Add(this.label17);
-            this.groupBox4.Controls.Add(this.LAtkDYNumber);
-            this.groupBox4.Controls.Add(this.label18);
-            this.groupBox4.Controls.Add(this.LAtkDXNumber);
-            this.groupBox4.Controls.Add(this.label1);
-            this.groupBox4.Controls.Add(this.LHitDYNumber);
-            this.groupBox4.Controls.Add(this.label12);
-            this.groupBox4.Controls.Add(this.LHitDXNumber);
-            this.groupBox4.Controls.Add(this.label13);
-            this.groupBox4.Controls.Add(this.LImgDYNumber);
-            this.groupBox4.Controls.Add(this.label14);
-            this.groupBox4.Controls.Add(this.LImgDXNumber);
-            this.groupBox4.Location = new System.Drawing.Point(9, 302);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(270, 138);
-            this.groupBox4.TabIndex = 20;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Left";
+            this.AddMenu.Enabled = false;
+            this.AddMenu.Name = "AddMenu";
+            this.AddMenu.Size = new System.Drawing.Size(79, 20);
+            this.AddMenu.Text = "Add Action";
             // 
-            // LImgDXNumber
+            // RemoveMenu
             // 
-            this.LImgDXNumber.Location = new System.Drawing.Point(12, 32);
-            this.LImgDXNumber.Name = "LImgDXNumber";
-            this.LImgDXNumber.Size = new System.Drawing.Size(99, 20);
-            this.LImgDXNumber.TabIndex = 11;
-            this.LImgDXNumber.ValueChanged += new System.EventHandler(this.LImgDXNumber_ValueChanged);
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(9, 16);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(42, 13);
-            this.label14.TabIndex = 12;
-            this.label14.Text = "Img DX";
-            // 
-            // LImgDYNumber
-            // 
-            this.LImgDYNumber.Location = new System.Drawing.Point(146, 32);
-            this.LImgDYNumber.Name = "LImgDYNumber";
-            this.LImgDYNumber.Size = new System.Drawing.Size(99, 20);
-            this.LImgDYNumber.TabIndex = 13;
-            this.LImgDYNumber.ValueChanged += new System.EventHandler(this.LImgDYNumber_ValueChanged);
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(143, 16);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(42, 13);
-            this.label13.TabIndex = 14;
-            this.label13.Text = "Img DY";
-            // 
-            // LHitDXNumber
-            // 
-            this.LHitDXNumber.Location = new System.Drawing.Point(12, 71);
-            this.LHitDXNumber.Name = "LHitDXNumber";
-            this.LHitDXNumber.Size = new System.Drawing.Size(99, 20);
-            this.LHitDXNumber.TabIndex = 15;
-            this.LHitDXNumber.ValueChanged += new System.EventHandler(this.LHitDXNumber_ValueChanged);
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(9, 55);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(38, 13);
-            this.label12.TabIndex = 16;
-            this.label12.Text = "Hit DX";
-            // 
-            // LHitDYNumber
-            // 
-            this.LHitDYNumber.Location = new System.Drawing.Point(146, 71);
-            this.LHitDYNumber.Name = "LHitDYNumber";
-            this.LHitDYNumber.Size = new System.Drawing.Size(99, 20);
-            this.LHitDYNumber.TabIndex = 17;
-            this.LHitDYNumber.ValueChanged += new System.EventHandler(this.LHitDYNumber_ValueChanged);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(143, 55);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(38, 13);
-            this.label1.TabIndex = 18;
-            this.label1.Text = "Hit DY";
-            // 
-            // LAtkDXNumber
-            // 
-            this.LAtkDXNumber.Location = new System.Drawing.Point(12, 110);
-            this.LAtkDXNumber.Name = "LAtkDXNumber";
-            this.LAtkDXNumber.Size = new System.Drawing.Size(99, 20);
-            this.LAtkDXNumber.TabIndex = 19;
-            this.LAtkDXNumber.ValueChanged += new System.EventHandler(this.LAtkDXNumber_ValueChanged);
-            // 
-            // label18
-            // 
-            this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(9, 94);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(41, 13);
-            this.label18.TabIndex = 20;
-            this.label18.Text = "Atk DX";
-            // 
-            // LAtkDYNumber
-            // 
-            this.LAtkDYNumber.Location = new System.Drawing.Point(146, 110);
-            this.LAtkDYNumber.Name = "LAtkDYNumber";
-            this.LAtkDYNumber.Size = new System.Drawing.Size(99, 20);
-            this.LAtkDYNumber.TabIndex = 21;
-            this.LAtkDYNumber.ValueChanged += new System.EventHandler(this.LAtkDYNumber_ValueChanged);
-            // 
-            // label17
-            // 
-            this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(143, 94);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(38, 13);
-            this.label17.TabIndex = 22;
-            this.label17.Text = "Hit DY";
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(147, 94);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(38, 13);
-            this.label15.TabIndex = 26;
-            this.label15.Text = "Hit DY";
-            // 
-            // RAtkDYNumber
-            // 
-            this.RAtkDYNumber.Location = new System.Drawing.Point(150, 110);
-            this.RAtkDYNumber.Name = "RAtkDYNumber";
-            this.RAtkDYNumber.Size = new System.Drawing.Size(99, 20);
-            this.RAtkDYNumber.TabIndex = 25;
-            this.RAtkDYNumber.ValueChanged += new System.EventHandler(this.RAtkDYNumber_ValueChanged);
-            // 
-            // label16
-            // 
-            this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(13, 94);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(41, 13);
-            this.label16.TabIndex = 24;
-            this.label16.Text = "Atk DX";
-            // 
-            // RAtkDXNumber
-            // 
-            this.RAtkDXNumber.Location = new System.Drawing.Point(16, 110);
-            this.RAtkDXNumber.Name = "RAtkDXNumber";
-            this.RAtkDXNumber.Size = new System.Drawing.Size(99, 20);
-            this.RAtkDXNumber.TabIndex = 23;
-            this.RAtkDXNumber.ValueChanged += new System.EventHandler(this.RAtkDXNumber_ValueChanged);
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(156, 116);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(57, 13);
-            this.label6.TabIndex = 24;
-            this.label6.Text = "Atk Height";
-            // 
-            // AtkHeightNumber
-            // 
-            this.AtkHeightNumber.Location = new System.Drawing.Point(159, 132);
-            this.AtkHeightNumber.Name = "AtkHeightNumber";
-            this.AtkHeightNumber.Size = new System.Drawing.Size(120, 20);
-            this.AtkHeightNumber.TabIndex = 23;
-            this.AtkHeightNumber.ValueChanged += new System.EventHandler(this.AtkHeightNumber_ValueChanged);
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(6, 116);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(54, 13);
-            this.label7.TabIndex = 22;
-            this.label7.Text = "Atk Width";
-            // 
-            // AtkWidthNumber
-            // 
-            this.AtkWidthNumber.Location = new System.Drawing.Point(9, 132);
-            this.AtkWidthNumber.Name = "AtkWidthNumber";
-            this.AtkWidthNumber.Size = new System.Drawing.Size(120, 20);
-            this.AtkWidthNumber.TabIndex = 21;
-            this.AtkWidthNumber.ValueChanged += new System.EventHandler(this.AtkWidthNumber_ValueChanged);
+            this.RemoveMenu.Enabled = false;
+            this.RemoveMenu.Name = "RemoveMenu";
+            this.RemoveMenu.Size = new System.Drawing.Size(100, 20);
+            this.RemoveMenu.Text = "Remove Action";
             // 
             // CharacterEditorWindow
             // 
@@ -590,16 +608,29 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "CharacterEditorWindow";
             this.Text = "CharacterEditorWindow";
+            this.Load += new System.EventHandler(this.CharacterEditorWindow_Load);
             this.DragDrop += new System.Windows.Forms.DragEventHandler(this.CharacterEditorWindow_DragDrop);
             this.DragEnter += new System.Windows.Forms.DragEventHandler(this.CharacterEditorWindow_DragEnter);
             this.ActionLabel.ResumeLayout(false);
             this.ActionLabel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.AtkHeightNumber)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.AtkWidthNumber)).EndInit();
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.LAtkDYNumber)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.LAtkDXNumber)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.LHitDYNumber)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.LHitDXNumber)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.LImgDYNumber)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.LImgDXNumber)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.HitHeightNumber)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.HitWidthNumber)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.FrameTimeNumber)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.FramesNumber)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.RAtkDYNumber)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.RAtkDXNumber)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.RHitDYNumber)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.RHitDXNumber)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.RImgDYNumber)).EndInit();
@@ -607,18 +638,6 @@
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SpritePictureBox)).EndInit();
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox4.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.LImgDXNumber)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.LImgDYNumber)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.LHitDXNumber)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.LHitDYNumber)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.LAtkDXNumber)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.LAtkDYNumber)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.RAtkDYNumber)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.RAtkDXNumber)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.AtkHeightNumber)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.AtkWidthNumber)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -678,5 +697,7 @@
         private System.Windows.Forms.NumericUpDown RAtkDYNumber;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.NumericUpDown RAtkDXNumber;
+        private System.Windows.Forms.ToolStripMenuItem AddMenu;
+        private System.Windows.Forms.ToolStripMenuItem RemoveMenu;
     }
 }

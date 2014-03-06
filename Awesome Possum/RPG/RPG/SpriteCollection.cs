@@ -16,10 +16,10 @@ namespace RPG
 
             col.Actions.Add(new SpriteAction() { Name = SpriteAction.States.IDLE });
             col.Actions.Add(new SpriteAction() { Name = SpriteAction.States.WALKING });
-            //col.Actions.Add(new SpriteAction() { Name = "Invincible" });
+            col.Actions.Add(new SpriteAction() { Name = SpriteAction.States.HURT });
 
+            //col.Actions.Add(new SpriteAction() { Name = "Invincible" });
             //col.Actions.Add(new SpriteAction() { Name = "Attack" });
-            //col.Actions.Add(new SpriteAction() { Name = "Take Damage" });
             //col.Actions.Add(new SpriteAction() { Name = "Die" });
 
             return col;

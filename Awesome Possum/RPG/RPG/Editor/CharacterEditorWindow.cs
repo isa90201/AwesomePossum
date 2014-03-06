@@ -81,12 +81,16 @@ namespace RPG.Editor
 
         private void UpdateUI()
         {
+            SpritePictureBox.Image = null;
+
             if (CurrentAction == null)
             {
                 ActionLabel.Enabled = false;
                 actionsToolStripMenuItem.Enabled = false;
                 SaveMenu.Enabled = false;
                 SpriteTimer.Enabled = false;
+                AddMenu.Enabled = false;
+                RemoveMenu.Enabled = false;
 
                 ActionLabel.Text = "No Action";
             }
@@ -95,6 +99,8 @@ namespace RPG.Editor
                 ActionLabel.Enabled = true;
                 actionsToolStripMenuItem.Enabled = true;
                 SaveMenu.Enabled = true;
+                AddMenu.Enabled = true;
+                RemoveMenu.Enabled = true;
 
                 SpriteTimer.Enabled = false;
                 if (CurrentAction.FrameDelay > 0)
@@ -228,6 +234,7 @@ namespace RPG.Editor
         private void RImgDYNumber_ValueChanged(object sender, EventArgs e)
         {
             CurrentAction.ImgRDy = Convert.ToInt32(RImgDYNumber.Value);
+            CurrentAction.ImgLDy = CurrentAction.ImgRDy;
             UpdateUI();
         }
 
@@ -240,6 +247,7 @@ namespace RPG.Editor
         private void RHitDYNumber_ValueChanged(object sender, EventArgs e)
         {
             CurrentAction.HitRDy = Convert.ToInt32(RHitDYNumber.Value);
+            CurrentAction.HitLDy = CurrentAction.HitRDy;
             UpdateUI();
         }
 
@@ -252,6 +260,7 @@ namespace RPG.Editor
         private void LImgDYNumber_ValueChanged(object sender, EventArgs e)
         {
             CurrentAction.ImgLDy = Convert.ToInt32(LImgDYNumber.Value);
+            CurrentAction.ImgRDy = CurrentAction.ImgLDy;
             UpdateUI();
         }
 
@@ -264,6 +273,7 @@ namespace RPG.Editor
         private void LHitDYNumber_ValueChanged(object sender, EventArgs e)
         {
             CurrentAction.HitLDy = Convert.ToInt32(LHitDYNumber.Value);
+            CurrentAction.HitRDy = CurrentAction.HitLDy;
             UpdateUI();
         }
 
@@ -276,6 +286,7 @@ namespace RPG.Editor
         private void RAtkDYNumber_ValueChanged(object sender, EventArgs e)
         {
             CurrentAction.AtkRDy = Convert.ToInt32(RAtkDYNumber.Value);
+            CurrentAction.AtkLDy = CurrentAction.AtkRDy;
             UpdateUI();
         }
 
@@ -288,6 +299,7 @@ namespace RPG.Editor
         private void LAtkDYNumber_ValueChanged(object sender, EventArgs e)
         {
             CurrentAction.AtkLDy = Convert.ToInt32(LAtkDYNumber.Value);
+            CurrentAction.AtkRDy = CurrentAction.AtkLDy;
             UpdateUI();
         }
         #endregion
@@ -402,6 +414,41 @@ namespace RPG.Editor
         private void rightToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Direction = 0;
+        }
+
+        private void CharacterEditorWindow_Load(object sender, EventArgs e)
+        {
+            foreach (SpriteAction.States state in (SpriteAction.States[])Enum.GetValues(typeof(SpriteAction.States)))
+            {
+                var add = AddMenu.DropDownItems.Add(state.ToString());
+                var del = RemoveMenu.DropDownItems.Add(state.ToString());
+
+                add.Click += new EventHandler(add_Click);
+                del.Click += new EventHandler(del_Click);
+            }
+        }
+
+        void del_Click(object sender, EventArgs e)
+        {
+            var menu = sender as ToolStripMenuItem;
+            var action = CharacterActions.Actions.FirstOrDefault(a => a.Name.ToString() == menu.Text);
+            if (action != null && action != CurrentAction)
+            {
+                CharacterActions.Actions.Remove(action);
+                UpdateUI();
+            }
+        }
+
+        void add_Click(object sender, EventArgs e)
+        {
+            var menu = sender as ToolStripMenuItem;
+            var action = CharacterActions.Actions.FirstOrDefault(a => a.Name.ToString() == menu.Text);
+            if (action == null)
+            {
+                CurrentAction = new SpriteAction() { Name = (SpriteAction.States)Enum.Parse(typeof(SpriteAction.States), menu.Text) };
+                CharacterActions.Actions.Add(CurrentAction);
+                UpdateUI();
+            }
         }
     }
 }
