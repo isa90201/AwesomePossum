@@ -13,7 +13,7 @@ namespace RPG
             WALKING
         }
 
-        private const int UPPER_BOUND = 100;            //random number generator
+        private const int UPPER_BOUND = 1000;            //random number generator
 
         private int DifficultyNumber;
         private Random RandomNumber;
@@ -41,7 +41,8 @@ namespace RPG
 
         public bool IsAttacking()
         {
-            return RandomNumber.Next(UPPER_BOUND) < DifficultyNumber;
+            return false;
+            //return RandomNumber.Next(UPPER_BOUND) < DifficultyNumber;
         }
 
         public bool IsMoving()

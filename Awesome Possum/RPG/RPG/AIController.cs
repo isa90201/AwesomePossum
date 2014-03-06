@@ -10,7 +10,6 @@ namespace RPG
         private enum Direction { NONE, UP, DOWN, LEFT, RIGHT };
         private Direction HorizontalDirection;
         private Direction VerticalDirection;
-        private bool Attacking;
         private EnemyAI Eai;
 
         public Character Self { get; set; }
@@ -47,14 +46,6 @@ namespace RPG
             }
         }
 
-        private void Attack(Hitbox aiPlayer, Hitbox humanPlayer)
-        {
-            if (Eai.IsAttacking())
-            {
-                Attacking = aiPlayer.Overlap(humanPlayer);
-            }
-        }
-
         public bool IsMovingUp()
         {
             return VerticalDirection == Direction.UP;
@@ -77,7 +68,7 @@ namespace RPG
 
         public bool IsAttacking()
         {
-            return Attacking;
+            return Eai.IsAttacking();
         }
 
         public bool IsJumping()
