@@ -255,36 +255,39 @@ namespace RPG
         {
             State = SpriteAction.States.IDLE;
 
-            if (Controller.IsMovingUp())
+            if (!IsPerformingAction())
             {
-                Y -= Speed;
-                State = SpriteAction.States.WALKING;
-            }
-            else if (Controller.IsMovingDown())
-            {
-                Y += Speed;
-                State = SpriteAction.States.WALKING;
-            }
+                if (Controller.IsMovingUp())
+                {
+                    Y -= Speed;
+                    State = SpriteAction.States.WALKING;
+                }
+                else if (Controller.IsMovingDown())
+                {
+                    Y += Speed;
+                    State = SpriteAction.States.WALKING;
+                }
 
-            if (Controller.IsMovingLeft())
-            {
-                X -= Speed;
-                Direction = Directions.Left;
-                State = SpriteAction.States.WALKING;
-            }
-            else if (Controller.IsMovingRight())
-            {
-                X += Speed;
-                Direction = Directions.Right;
-                State = SpriteAction.States.WALKING;
-            }
+                if (Controller.IsMovingLeft())
+                {
+                    X -= Speed;
+                    Direction = Directions.Left;
+                    State = SpriteAction.States.WALKING;
+                }
+                else if (Controller.IsMovingRight())
+                {
+                    X += Speed;
+                    Direction = Directions.Right;
+                    State = SpriteAction.States.WALKING;
+                }
 
-            if (Controller.IsAttacking() && !IsPerformingAction())
-            {
-                var sprite = Sprites.Actions.FirstOrDefault(s => s.Name == SpriteAction.States.ATTACKING);
+                if (Controller.IsAttacking())
+                {
+                    ActionAction = Sprites.Actions.FirstOrDefault(s => s.Name == SpriteAction.States.ATTACKING);
 
-                if (sprite != null)
-                    ActionSprite = sprite.GetAnimatedSprite(Direction);
+                    if (ActionAction != null)
+                        ActionSprite = ActionAction.GetAnimatedSprite(Direction);
+                }
             }
         }
 
@@ -292,8 +295,12 @@ namespace RPG
         public Directions Direction { get; set; }
         private Directions PrevDirection;
 
+        private SpriteAction ActionAction;
         private AnimatedSprite ActionSprite;
+
+        private SpriteAction CurrentAction;
         private AnimatedSprite CurrentSprite;
+
         public AnimatedSprite GetAnimatedSprite()
         {
             if (IsPerformingAction())
@@ -303,12 +310,12 @@ namespace RPG
                 return ActionSprite;
             }
 
-            var sprite = Sprites.Actions.FirstOrDefault(s => s.Name == State);
+            CurrentAction = Sprites.Actions.FirstOrDefault(s => s.Name == State);
 
-            if (sprite != null)
+            if (CurrentAction != null)
             {
                 if (CurrentSprite == null || PrevState != State || PrevDirection != Direction)
-                    CurrentSprite = sprite.GetAnimatedSprite(Direction);
+                    CurrentSprite = CurrentAction.GetAnimatedSprite(Direction);
 
                 PrevDirection = Direction;
                 PrevState = State;
@@ -320,7 +327,10 @@ namespace RPG
                 CurrentSprite.Y = Y;
             }
 
-            return CurrentSprite;
+            if (CurrentAction != null)
+                return CurrentSprite;
+
+            return null;
         }
 
         public Vector2 GetVector2D()
@@ -330,7 +340,45 @@ namespace RPG
 
         private bool IsPerformingAction()
         {
-            return ActionSprite != null && !ActionSprite.HasLoopedOnce;
+            return ActionAction != null && ActionSprite != null && !ActionSprite.HasLoopedOnce;
+        }
+
+        public Hitbox GetAttackBox()
+        {
+            if (IsPerformingAction())
+                return ActionAction.GetAttackBox(X, Y, Direction);
+
+            return null;
+        }
+
+        public Hitbox GetHitbox()
+        {
+            if (IsPerformingAction())
+                return ActionAction.GetHitbox(X, Y, Direction);
+            else if (CurrentAction != null)
+                return CurrentAction.GetHitbox(X, Y, Direction);
+
+            return null;
+        }
+
+        public bool IsHit(Hitbox attackBox)
+        {
+            var hitbox = GetHitbox();
+
+            if (Hitbox.IsNullOrEmpty(hitbox) || Hitbox.IsNullOrEmpty(attackBox))
+                return false;
+
+            return attackBox.Overlap(hitbox);
+        }
+
+        public void TakeDamage(Character c)
+        {
+            ActionAction = Sprites.Actions.FirstOrDefault(w => w.Name == SpriteAction.States.HURT);
+
+            if (ActionAction != null)
+            {
+                ActionSprite = ActionAction.GetAnimatedSprite(Direction);
+            }
         }
     }
 }

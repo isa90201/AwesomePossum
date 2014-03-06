@@ -21,5 +21,10 @@ namespace RPG
         {
             return (x1 > x2 && x1 < x2 + w2) || (x1 + w1 > x2 && x1 + w1 < x2 + w2);
         }
+
+        public static bool IsNullOrEmpty(Hitbox ret)
+        {
+            return ret == null || ret.W == 0 || ret.H == 0;
+        }
     }
 }

@@ -239,6 +239,21 @@ namespace RPG
             else if (WorldOffsetX > CurrentLevel.BackgroundImage.Width - screenRectangle.Width)
                 WorldOffsetX = CurrentLevel.BackgroundImage.Width - screenRectangle.Width;
 
+            foreach (var c in Characters)
+            {
+                var attackBox = c.GetAttackBox();
+                
+                if (!Hitbox.IsNullOrEmpty(attackBox))
+                {
+                    var hit = Characters.Where(o => c != o && o.IsHit(attackBox));
+
+                    foreach (var hitc in hit)
+                    {
+                        hitc.TakeDamage(c);
+                    }
+                }
+            }
+
             base.Update(gameTime);
         }
 
