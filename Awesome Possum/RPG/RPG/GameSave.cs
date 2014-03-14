@@ -7,8 +7,8 @@ namespace RPG
 {
     public class GameSave
     {
-        private const string CHARACTER_FILEPATH = "C:\\Users\\Isaias\\Desktop\\Character.xml";
-        private const string LEVEL_FILEPATH = "C:\\Users\\Isaias\\Desktop\\Level.xml";
+        private const string CHARACTER_FILEPATH = "C:\\Res\\Gamesave\\Character.xml";
+        private const string LEVEL_FILEPATH = "C:\\Res\\Gamesave\\Level.xml";
 
         public GameSave()
         {

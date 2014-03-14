@@ -1,4 +1,4 @@
-//#define DEBUG_GAME //Uncomment this to debug game.
+#define DEBUG_GAME //Uncomment this to debug game.
 
 using System;
 using System.Collections.Generic;
@@ -12,6 +12,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using System.Threading;
 using System.IO;
+using System.Text;
 
 namespace RPG
 {
@@ -29,8 +30,9 @@ namespace RPG
         int screenWidth, screenHeight, sourceWidth, sourceHeight;
         int WorldOffsetX;
         int MaxWorldOffsetX, MaxCx, WalkToleranceG;
-        public SpriteCollection IPOOSpriteSheet { get; set; }
         public SpriteCollection RHOSpriteSheet { get; set; }
+        public SpriteCollection IPOOSpriteSheet { get; set; }
+        public SpriteCollection OPOOSpriteSheet { get; set; }
 
         //SOUND stuff
         Song backgroundMusic;
@@ -45,6 +47,11 @@ namespace RPG
         GameSave gameSave;
         Character UserCharacter;
         List<Character> Characters;
+
+        //Level Stuff
+        //string World1_Path, World2_Path, World3_Path;
+        int WorldNumber, LevelNumber;
+        StringBuilder[] World_Paths;
 
         //-------------------------------------------------------------
 
@@ -73,9 +80,9 @@ namespace RPG
             graphics.PreferredBackBufferHeight = 800; // PREFERRED HEIGHT = 800
 
 #if DEBUG_GAME
-            graphics.IsFullScreen = false;  //CHANGE THIS
+            graphics.IsFullScreen = false;
 #else
-            graphics.IsFullScreen = true;  //CHANGE THIS
+            graphics.IsFullScreen = true;
 #endif
 
             graphics.ApplyChanges();
@@ -98,7 +105,7 @@ namespace RPG
                 Y = 50,
                 Speed = 5
             };
-            MaxCx = CurrentLevel.BackgroundImage.Width - UserCharacter.Hitbox.W; //
+            MaxCx = CurrentLevel.BackgroundImage.Width - UserCharacter.Hitbox.W;
 
             Characters.Add(UserCharacter);
             UserCharacter.Sprites = RHOSpriteSheet;
@@ -122,6 +129,8 @@ namespace RPG
                 Controllers.Add(ai);
                 Characters.Add(c);
             }
+
+            Characters.Last().Sprites = OPOOSpriteSheet; //Last bad guy is OPOO
         }
 
         //-------------------------------------------------------------
@@ -132,6 +141,11 @@ namespace RPG
         /// </summary>
         protected override void LoadContent()
         {
+            //World & Level stuff
+            World_Paths = new StringBuilder[] { new StringBuilder("C:\\Res\\Worlds\\World1.xml"), new StringBuilder("C:\\Res\\Worlds\\World2.xml"), new StringBuilder("C:\\Res\\Worlds\\World3.xml") };
+            WorldNumber = 0;
+            LevelNumber = 0;
+
             //Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch_BG = new SpriteBatch(GraphicsDevice);
             spriteBatch_H = new SpriteBatch(GraphicsDevice);
@@ -139,12 +153,16 @@ namespace RPG
             spriteBacth_SBG = new SpriteBatch(GraphicsDevice);
             device = graphics.GraphicsDevice;
 
-            IPOOSpriteSheet = SpriteCollection.Load(@"C:\Res\IPOO.xml");
-            RHOSpriteSheet = SpriteCollection.Load(@"C:\Res\RHO.xml");
+            IPOOSpriteSheet = SpriteCollection.Load(@"C:\Res\Sprites\IPOO.xml");
+            OPOOSpriteSheet = SpriteCollection.Load(@"C:\Res\Sprites\OPOO.xml");
+            RHOSpriteSheet = SpriteCollection.Load(@"C:\Res\Sprites\RHO.xml");
 
+            //LOAD Sprite sheet actions
             foreach (var ss in IPOOSpriteSheet.Actions)
                 ss.Load(device);
             foreach (var ss in RHOSpriteSheet.Actions)
+                ss.Load(device);
+            foreach (var ss in OPOOSpriteSheet.Actions)
                 ss.Load(device);
 
             //Background Image and Screen Properties
@@ -155,9 +173,17 @@ namespace RPG
             screenRectangle = new Rectangle(0, 0, screenWidth, screenHeight); //Screen Dimensions
             sourceRectangle = new Rectangle(0, 0, sourceWidth, sourceHeight); //BG dimesnions
 
-            //Image textures
-            CurrentWorld = World.Load(@"C:\Res\TwerkCity.xml");
-            CurrentLevel = CurrentWorld.Levels.First();
+            //World and Level textures: use strings below to switch to another world.
+            string World1_Path = "C:\\Res\\Worlds\\World1.xml";
+            string World2_Path = "C:\\Res\\Worlds\\World2.xml";
+            string World3_Path = "C:\\Res\\Worlds\\World3.xml";
+
+            //use strings above to change worlds.
+            CurrentWorld = World.Load(World_Paths[WorldNumber].ToString());
+
+            CurrentLevel = CurrentWorld.Levels.ElementAt(LevelNumber);
+            //CurrentLevel = CurrentWorld.Levels.First();  ORIGINAL LINE
+
             backgroundTexture = CurrentLevel.BackgroundImage.GetTexture2D(device);
 
             MaxWorldOffsetX = CurrentLevel.BackgroundImage.Width - screenRectangle.Width;
@@ -205,6 +231,12 @@ namespace RPG
                 this.Exit();
             }
 
+            //Change Levels
+            if (UserController.CurrentState.IsKeyDown(Keys.Space)) //DEBUG
+            {
+                GoToNextLevel();
+            }
+
             //UPDATE character position(s)
             foreach (var c in Characters)
             {
@@ -242,7 +274,7 @@ namespace RPG
             foreach (var c in Characters)
             {
                 var attackBox = c.GetAttackBox();
-                
+
                 if (!Hitbox.IsNullOrEmpty(attackBox))
                 {
                     var hit = Characters.Where(o => c != o && o.IsHit(attackBox));
@@ -291,6 +323,56 @@ namespace RPG
 
         //-------------------------------------------------------------
 
+        private void GoToNextLevel()
+        {
+            ++LevelNumber;
+
+            if (LevelNumber >= 3)
+            {
+                LevelNumber = 0;
+                GoToNextWorld();
+            }
+            else
+            {
+                CurrentLevel = CurrentWorld.Levels.ElementAt(LevelNumber);
+                backgroundTexture = CurrentLevel.BackgroundImage.GetTexture2D(device);
+                backgroundMusic = CurrentLevel.Music.GetSong();
+                MediaPlayer.Stop();
+                MediaPlayer.Play(backgroundMusic);
+            }
+        }
+
+        //-------------------------------------------------------------
+
+        private void GoToNextWorld()
+        {
+            ++WorldNumber;
+
+            if (WorldNumber < 3)
+            {
+                string path = World_Paths[WorldNumber].ToString();
+                CurrentWorld = World.Load(path);
+                CurrentLevel = CurrentWorld.Levels.ElementAt(LevelNumber);
+                backgroundMusic = CurrentLevel.Music.GetSong();
+                backgroundTexture = CurrentLevel.BackgroundImage.GetTexture2D(device);
+                MediaPlayer.Stop();
+                MediaPlayer.Play(backgroundMusic);
+            }
+        }
+
+        //-------------------------------------------------------------
+
+        private void Die(Character c)
+        {
+            // TODO
+            /*
+             * 1) Show DYING animation.
+             * 2) Remove character from list. (Will no longer be drawn).
+             */
+        }
+
+        //-------------------------------------------------------------
+
         private Vector2 GetSpawnLocation()  //SPAWN logic
         {
             Random RandomNumber = new Random();
@@ -298,5 +380,16 @@ namespace RPG
         }
 
         //-------------------------------------------------------------
+
+        private void SpawnCharacter()
+        {
+            // TODO
+            /*
+             * 1) Get Spawn Location.
+             * 2) Create new Character.
+             * 3) Add to Characters List. (Will be drawn to screen now.)
+             */
+        }
+
     }
 }
