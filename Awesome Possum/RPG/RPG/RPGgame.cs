@@ -49,6 +49,7 @@ namespace RPG
         Character UserCharacter;
         List<Character> Characters;
         List<Character> Enemies;
+        Spawner EnemySpanwer;
 
         //Level Stuff
         //string World1_Path, World2_Path, World3_Path;
@@ -100,6 +101,17 @@ namespace RPG
 
             //CREATE human character
             Characters = new List<Character>();
+
+            EnemySpanwer = new Spawner()
+            {
+                Difficulty = 2,
+                Sprites = new List<SpriteCollection>() {
+                    IPOOSpriteSheet,
+                    OPOOSpriteSheet,
+                    //APOOSpriteSheet
+                  }
+            };
+
             Enemies = new List<Character>();
             UserCharacter = new Character("RHO", 10, 15)
             {
@@ -114,28 +126,16 @@ namespace RPG
             UserCharacter.Sprites = RHOSpriteSheet;
 
             //Create AI controllers and respective characters
-            for (int i = 1; i <= 5; ++i)
+            for (int i = 1; i <= 12; ++i)
             {
-                var ai = new AIController(new EnemyAI(i * 20));
-                var c = new Character("IPOO", 10 * i, 5 * i)
-                {
-                    Controller = ai,
-                    X = i * 200,
-                    Y = i * 50,
-                    Speed = 2
-                };
-
-                ai.Self = c;
-                ai.Enemy = UserCharacter;
-                c.Sprites = IPOOSpriteSheet;
+                var c = EnemySpanwer.GetEnemy(CurrentLevel.BackgroundImage.Width, CurrentLevel.BackgroundImage.Height / 2);
+                var ai = c.Controller as AIController;
 
                 Controllers.Add(ai);
                 Characters.Add(c);
                 Enemies.Add(c);
+                ai.Enemy = UserCharacter;
             }
-
-            Characters.Last().Sprites = OPOOSpriteSheet; //Last bad guy is OPOO
-            Characters.ElementAt(4).Sprites = APOOSpriteSheet;
         }
 
         //-------------------------------------------------------------
