@@ -101,7 +101,7 @@ namespace RPG
             //CREATE human character
             Characters = new List<Character>();
             Enemies = new List<Character>();
-            UserCharacter = new Character("RHO", 10, 15, 20)
+            UserCharacter = new Character("RHO", 10, 15)
             {
                 Controller = UserController,
                 X = 400,
@@ -117,7 +117,7 @@ namespace RPG
             for (int i = 1; i <= 5; ++i)
             {
                 var ai = new AIController(new EnemyAI(i * 20));
-                var c = new Character("IPOO", 10 * i, 5 * i, 3 * i)
+                var c = new Character("IPOO", 10 * i, 5 * i)
                 {
                     Controller = ai,
                     X = i * 200,
@@ -302,6 +302,7 @@ namespace RPG
             }
 
             Characters.RemoveAll(e => !e.IsAlive);
+            Enemies.RemoveAll(e => !e.IsAlive);
 
             base.Update(gameTime);
         }
@@ -382,13 +383,6 @@ namespace RPG
 
         //-------------------------------------------------------------
 
-        private void Die(Character c)
-        {
-            
-        }
-
-        //-------------------------------------------------------------
-
         private Vector2 GetSpawnLocation()  //SPAWN logic
         {
             Random RandomNumber = new Random();
@@ -399,6 +393,7 @@ namespace RPG
 
         private void SpawnCharacter()
         {
+
             // TODO
             /*
              * 1) Get Spawn Location.

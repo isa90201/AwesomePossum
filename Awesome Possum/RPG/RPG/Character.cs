@@ -22,8 +22,6 @@ namespace RPG
         private const int MAX_HP = 100;
         private const int MIN_ATTACK = 1;
         private const int MAX_ATTACK = 100;
-        private const int MIN_DEFENSE = 0;
-        private const int MAX_DEFENSE = 100;
         private const int MIN_EXPERIENCE = 0;
         private const int MAX_EXPERIENCE = 100;
         private const int MIN_LEVEL = 1;
@@ -191,35 +189,14 @@ namespace RPG
             }
         }
 
-        private int _Defense;
-        public int Defense
-        {
-            get
-            {
-                if (Armor != null)
-                    return _Defense + Armor.Defense;
-                return _Defense;
-            }
-            set
-            {
-                if (value < MIN_DEFENSE)
-                    _Defense = MIN_DEFENSE;
-                else if (value > MAX_DEFENSE)
-                    _Defense = MAX_DEFENSE;
-                else
-                    _Defense = value;
-            }
-        }
-
         public bool IsAlive { get; set; }
 
-        public Character(string name, int totalHP, int attack, int defense)
+        public Character(string name, int totalHP, int attack)
         {
             Name = name;
             TotalHP = totalHP;
             CurrentHP = TotalHP;
             Attack = attack;
-            Defense = defense;
             Experience = MIN_EXPERIENCE;
             Level = MIN_LEVEL;
 
@@ -244,7 +221,6 @@ namespace RPG
         {
             Level++;
             Attack++;
-            Defense++;
             TotalHP++;
             CurrentHP = TotalHP;
         }
