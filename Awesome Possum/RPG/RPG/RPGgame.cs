@@ -113,7 +113,7 @@ namespace RPG
             };
 
             Enemies = new List<Character>();
-            UserCharacter = new Character("RHO", 10, 15)
+            UserCharacter = new Character("RHO", 100000, 15)
             {
                 Controller = UserController,
                 X = 400,

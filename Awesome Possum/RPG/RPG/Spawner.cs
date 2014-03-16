@@ -22,7 +22,7 @@ namespace RPG
             var spriteSheet = Sprites[i];
 
             var ai = new AIController(new EnemyAI(rand.Next(Difficulty * 20, Difficulty * 30)));
-            var c = new Character("Enemy", 50 * Difficulty, 10 * Difficulty)
+            var c = new Character("Enemy", 50 * Difficulty, 2 * Difficulty)
             {
                 Controller = ai,
                 X = rand.Next(levelWidth),

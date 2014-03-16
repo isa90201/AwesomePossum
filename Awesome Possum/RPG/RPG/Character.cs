@@ -19,7 +19,7 @@ namespace RPG
         }
 
         private const int MIN_HP = 1;
-        private const int MAX_HP = 100;
+        private const int MAX_HP = 10000;
         private const int MIN_ATTACK = 1;
         private const int MAX_ATTACK = 100;
         private const int MIN_EXPERIENCE = 0;

@@ -24,7 +24,11 @@ namespace RPG
         private int MinWaitTime;
         private int MaxWaitTime;
 
+        private int MinAttackTime;
+        private int MaxAttackTime;
+
         private int WaitTime;
+        private int AttackWaitTime;
         private States State;
 
         public EnemyAI(int ai_difficultyNumber)  //Assigned difficulty
@@ -37,12 +41,20 @@ namespace RPG
 
             MaxWaitTime = ai_difficultyNumber * -25 + 3000;
             MinWaitTime = ai_difficultyNumber * -10 + 1000;
+
+            MinAttackTime = ai_difficultyNumber * -5 + 1000;
+            MaxAttackTime = ai_difficultyNumber * -40 + 5000;
         }
 
         public bool IsAttacking()
         {
+            if (AttackWaitTime < Environment.TickCount)
+            {
+                AttackWaitTime = Environment.TickCount + RandomNumber.Next(MinAttackTime, MaxAttackTime);
+                return true;
+            }
+
             return false;
-            //return RandomNumber.Next(UPPER_BOUND) < DifficultyNumber;
         }
 
         public bool IsMoving()
