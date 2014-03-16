@@ -20,7 +20,8 @@ namespace RPG
         {
             get
             {
-                yield return User;
+                if (User.IsAlive)
+                    yield return User;
 
                 foreach (var e in Enemies)
                 {
@@ -33,8 +34,12 @@ namespace RPG
         {
             get
             {
-                foreach (var c in All)
-                    yield return c.Controller;
+                yield return User.Controller;
+
+                foreach (var e in Enemies)
+                {
+                    yield return e.Controller;
+                }
             }
         }
 

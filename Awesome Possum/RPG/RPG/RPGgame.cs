@@ -107,7 +107,7 @@ namespace RPG
                   }
             };
 
-            Characters.User = new Character("RHO", 100000, 15)
+            Characters.User = new Character("RHO", 100, 15)
             {
                 Controller = UserController,
                 Speed = 5,
@@ -187,6 +187,10 @@ namespace RPG
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            // change level if every enemy is dead
+            if (!EnemySpanwer.CanSpawn() && Characters.Enemies.Count == 0)
+                GoToNextLevel();
+
             // add missing characters
             while (EnemySpanwer.CanSpawn() && Characters.Enemies.Count < CurrentLevel.BadGuysOnScreen)
             {
