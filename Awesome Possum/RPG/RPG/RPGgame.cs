@@ -288,6 +288,7 @@ namespace RPG
                 }
             }
 
+            //So that enemies don't hurt each other
             var playerAttackbox = UserCharacter.GetAttackBox();
 
             if (!Hitbox.IsNullOrEmpty(playerAttackbox))
@@ -299,6 +300,8 @@ namespace RPG
                     hitc.TakeDamage(UserCharacter);
                 }
             }
+
+            Characters.RemoveAll(e => !e.IsAlive);
 
             base.Update(gameTime);
         }
@@ -381,11 +384,7 @@ namespace RPG
 
         private void Die(Character c)
         {
-            // TODO
-            /*
-             * 1) Show DYING animation.
-             * 2) Remove character from list. (Will no longer be drawn).
-             */
+            
         }
 
         //-------------------------------------------------------------

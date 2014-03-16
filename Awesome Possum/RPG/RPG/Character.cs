@@ -211,10 +211,7 @@ namespace RPG
             }
         }
 
-        public bool IsAlive()
-        {
-            return CurrentHP >= MIN_HP;
-        }
+        public bool IsAlive { get; set; }
 
         public Character(string name, int totalHP, int attack, int defense)
         {
@@ -240,6 +237,7 @@ namespace RPG
             Armor = Armor.NULL;
             Hitbox = new Hitbox();
             State = SpriteAction.States.IDLE;
+            IsAlive = true;
         }
 
         private void LevelUp()
@@ -340,7 +338,14 @@ namespace RPG
 
         private bool IsPerformingAction()
         {
-            return ActionAction != null && ActionSprite != null && !ActionSprite.HasLoopedOnce;
+            var ret = ActionAction != null && ActionSprite != null && !ActionSprite.HasLoopedOnce;
+
+            if (!ret && CurrentHP <= 0)
+            {
+                IsAlive = false;
+            }
+
+            return ret;
         }
 
         public Hitbox GetAttackBox()
@@ -373,11 +378,25 @@ namespace RPG
 
         public void TakeDamage(Character c)
         {
-            ActionAction = Sprites.Actions.FirstOrDefault(w => w.Name == SpriteAction.States.HURT);
+            CurrentHP -= c.Attack;
 
-            if (ActionAction != null)
+            if (CurrentHP > 0)
             {
-                ActionSprite = ActionAction.GetAnimatedSprite(Direction);
+                ActionAction = Sprites.Actions.FirstOrDefault(w => w.Name == SpriteAction.States.HURT);
+
+                if (ActionAction != null)
+                {
+                    ActionSprite = ActionAction.GetAnimatedSprite(Direction);
+                }
+            }
+            else
+            {
+                ActionAction = Sprites.Actions.FirstOrDefault(w => w.Name == SpriteAction.States.DYING);
+
+                if (ActionAction != null)
+                {
+                    ActionSprite = ActionAction.GetAnimatedSprite(Direction);
+                }
             }
         }
     }
