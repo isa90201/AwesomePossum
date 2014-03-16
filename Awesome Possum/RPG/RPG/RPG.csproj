@@ -115,6 +115,7 @@
     <Compile Include="Background.cs" />
     <Compile Include="Character.cs" />
     <Compile Include="Armor.cs" />
+    <Compile Include="CharacterManager.cs" />
     <Compile Include="Editor\CharacterEditorWindow.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -78,6 +78,7 @@ namespace RPG.Editor
 
                 TotalBadGuyCounter.Enabled = true;
                 TotalBadGuyCounter.Value = CurrentLevel.TotalNumberOfBadGuys;
+                BadGuysOnScreenCounter.Value = CurrentLevel.BadGuysOnScreen;
             }
         }
 

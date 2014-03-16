@@ -29,7 +29,7 @@ namespace RPG
         Rectangle screenRectangle, sourceRectangle;
         int screenWidth, screenHeight, sourceWidth, sourceHeight;
         int WorldOffsetX;
-        int MaxWorldOffsetX, MaxCx, WalkToleranceG;
+        int WalkToleranceG;
         public SpriteCollection RHOSpriteSheet { get; set; }
         public SpriteCollection IPOOSpriteSheet { get; set; }
         public SpriteCollection OPOOSpriteSheet { get; set; }
@@ -40,16 +40,14 @@ namespace RPG
 
         //INPUT stuff
         HumanController UserController;
-        List<IController> Controllers;
 
         //GAME stuff
         World CurrentWorld;
         Level CurrentLevel;
         GameSave gameSave;
-        Character UserCharacter;
-        List<Character> Characters;
-        List<Character> Enemies;
         Spawner EnemySpanwer;
+
+        CharacterManager Characters;
 
         //Level Stuff
         //string World1_Path, World2_Path, World3_Path;
@@ -93,14 +91,11 @@ namespace RPG
 
             UserController = new HumanController();
 
-            Controllers = new List<IController>();
-            Controllers.Add(UserController);
-
             //GAMESAVE Test Objects;
             gameSave = new GameSave();
 
             //CREATE human character
-            Characters = new List<Character>();
+            Characters = new CharacterManager();
 
             EnemySpanwer = new Spawner()
             {
@@ -112,30 +107,14 @@ namespace RPG
                   }
             };
 
-            Enemies = new List<Character>();
-            UserCharacter = new Character("RHO", 100000, 15)
+            Characters.User = new Character("RHO", 100000, 15)
             {
                 Controller = UserController,
-                X = 400,
-                Y = 50,
-                Speed = 5
+                Speed = 5,
+                Sprites = RHOSpriteSheet
             };
-            MaxCx = CurrentLevel.BackgroundImage.Width - UserCharacter.Hitbox.W;
 
-            Characters.Add(UserCharacter);
-            UserCharacter.Sprites = RHOSpriteSheet;
-
-            //Create AI controllers and respective characters
-            for (int i = 1; i <= 12; ++i)
-            {
-                var c = EnemySpanwer.GetEnemy(CurrentLevel.BackgroundImage.Width, CurrentLevel.BackgroundImage.Height / 2);
-                var ai = c.Controller as AIController;
-
-                Controllers.Add(ai);
-                Characters.Add(c);
-                Enemies.Add(c);
-                ai.Enemy = UserCharacter;
-            }
+            ChangeLevel(CurrentWorld.Levels.ElementAt(LevelNumber));
         }
 
         //-------------------------------------------------------------
@@ -184,20 +163,8 @@ namespace RPG
             //use strings above to change worlds.
             CurrentWorld = World.Load(World_Paths[WorldNumber].ToString());
 
-            CurrentLevel = CurrentWorld.Levels.ElementAt(LevelNumber);
-            //CurrentLevel = CurrentWorld.Levels.First();  ORIGINAL LINE
-
-            backgroundTexture = CurrentLevel.BackgroundImage.GetTexture2D(device);
-
-            MaxWorldOffsetX = CurrentLevel.BackgroundImage.Width - screenRectangle.Width;
-
             WalkToleranceG = screenRectangle.Width / 4;
 
-            //Music Player
-            backgroundMusic = CurrentLevel.Music.GetSong();
-            MediaPlayer.Play(backgroundMusic);
-
-            // TODO: use this.Content to load your game content here
         }
 
         //-------------------------------------------------------------
@@ -220,8 +187,15 @@ namespace RPG
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            // add missing characters
+            while (EnemySpanwer.CanSpawn() && Characters.Enemies.Count < CurrentLevel.BadGuysOnScreen)
+            {
+                var c = EnemySpanwer.GetEnemy(CurrentLevel.BackgroundImage.Width, CurrentLevel.BackgroundImage.Height / 2, Characters.User);
+                Characters.AddEnemy(c);
+            }
+
             //UPDATE controller input(s)
-            foreach (var c in Controllers)
+            foreach (var c in Characters.Controllers)
             {
                 c.Update();
             }
@@ -229,8 +203,9 @@ namespace RPG
             // Allows the game to exit
             if (UserController.CurrentState.IsKeyDown(Keys.Escape))
             {
-                gameSave.SaveCharacter(UserCharacter);
-                gameSave.SaveLevel(CurrentLevel);
+                // TODO: save?
+                //gameSave.SaveCharacter(Characters.User);
+                //gameSave.SaveLevel(CurrentLevel);
                 this.Exit();
             }
 
@@ -241,7 +216,7 @@ namespace RPG
             }
 
             //UPDATE character position(s)
-            foreach (var c in Characters)
+            foreach (var c in Characters.All)
             {
                 c.Move();
 
@@ -263,10 +238,10 @@ namespace RPG
             //UPDATE Scrolling stuff
 
             //Character movement
-            if (UserCharacter.X < (WorldOffsetX + WalkToleranceG))
-                WorldOffsetX = UserCharacter.X - WalkToleranceG;
-            else if (UserCharacter.X > (WorldOffsetX + 3 * WalkToleranceG))
-                WorldOffsetX = UserCharacter.X - (3 * WalkToleranceG);
+            if (Characters.User.X < (WorldOffsetX + WalkToleranceG))
+                WorldOffsetX = Characters.User.X - WalkToleranceG;
+            else if (Characters.User.X > (WorldOffsetX + 3 * WalkToleranceG))
+                WorldOffsetX = Characters.User.X - (3 * WalkToleranceG);
 
             //Background Bounds
             if (WorldOffsetX < 0)
@@ -275,34 +250,33 @@ namespace RPG
                 WorldOffsetX = CurrentLevel.BackgroundImage.Width - screenRectangle.Width;
 
             //Attack stuff
-            foreach (var c in Enemies)
+            foreach (var c in Characters.Enemies)
             {
                 var enemyAttackBox = c.GetAttackBox();
 
                 if (!Hitbox.IsNullOrEmpty(enemyAttackBox))
                 {
-                    if (UserCharacter.IsHit(enemyAttackBox))
+                    if (Characters.User.IsHit(enemyAttackBox))
                     {
-                        UserCharacter.TakeDamage(c);
+                        Characters.User.TakeDamage(c);
                     }
                 }
             }
 
             //So that enemies don't hurt each other
-            var playerAttackbox = UserCharacter.GetAttackBox();
+            var playerAttackbox = Characters.User.GetAttackBox();
 
             if (!Hitbox.IsNullOrEmpty(playerAttackbox))
             {
-                var hit = Enemies.Where(o => o.IsHit(playerAttackbox));
+                var hit = Characters.Enemies.Where(o => o.IsHit(playerAttackbox));
 
                 foreach (var hitc in hit)
                 {
-                    hitc.TakeDamage(UserCharacter);
+                    hitc.TakeDamage(Characters.User);
                 }
             }
 
-            Characters.RemoveAll(e => !e.IsAlive);
-            Enemies.RemoveAll(e => !e.IsAlive);
+            Characters.RemoveDeadEnemies();
 
             base.Update(gameTime);
         }
@@ -318,7 +292,7 @@ namespace RPG
             //DrawScenery();
             DrawScrollingBackground();
 
-            foreach (var c in Characters.OrderBy(x => x.Y))
+            foreach (var c in Characters.All.OrderBy(x => x.Y))
             {
                 var sprite = c.GetAnimatedSprite();
                 if (sprite != null)
@@ -349,35 +323,43 @@ namespace RPG
             {
                 if (LevelNumber >= 3)
                 {
-                    LevelNumber = 0;
                     GoToNextWorld();
                 }
                 else
                 {
-                    CurrentLevel = CurrentWorld.Levels.ElementAt(LevelNumber);
-                    backgroundTexture = CurrentLevel.BackgroundImage.GetTexture2D(device);
-                    backgroundMusic = CurrentLevel.Music.GetSong();
-                    MediaPlayer.Stop();
-                    MediaPlayer.Play(backgroundMusic);
+                    ChangeLevel(CurrentWorld.Levels.ElementAt(LevelNumber));
                 }
             }
+        }
+
+        private void ChangeLevel(Level newLevel)
+        {
+            CurrentLevel = newLevel;
+            backgroundTexture = CurrentLevel.BackgroundImage.GetTexture2D(device);
+            backgroundMusic = CurrentLevel.Music.GetSong();
+            MediaPlayer.Stop();
+            MediaPlayer.Play(backgroundMusic);
+
+            Characters.ClearEnemies();
+            EnemySpanwer.SpawnCount = CurrentLevel.TotalNumberOfBadGuys;
+
+            Characters.User.X = 400;
+            Characters.User.Y = 400;
         }
 
         //-------------------------------------------------------------
 
         private void GoToNextWorld()
         {
+            LevelNumber = 0;
             ++WorldNumber;
 
             if (WorldNumber < 3)
             {
                 string path = World_Paths[WorldNumber].ToString();
                 CurrentWorld = World.Load(path);
-                CurrentLevel = CurrentWorld.Levels.ElementAt(LevelNumber);
-                backgroundMusic = CurrentLevel.Music.GetSong();
-                backgroundTexture = CurrentLevel.BackgroundImage.GetTexture2D(device);
-                MediaPlayer.Stop();
-                MediaPlayer.Play(backgroundMusic);
+
+                ChangeLevel(CurrentWorld.Levels.ElementAt(LevelNumber));
             }
         }
 

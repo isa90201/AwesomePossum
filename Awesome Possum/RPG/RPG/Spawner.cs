@@ -9,6 +9,7 @@ namespace RPG
     {
         public int Difficulty { get; set; }
         public List<SpriteCollection> Sprites { get; set; }
+        public int SpawnCount { get; set; }
         private Random rand;
 
         public Spawner()
@@ -16,24 +17,35 @@ namespace RPG
             rand = new Random();
         }
 
-        public Character GetEnemy(int levelWidth, int levelHeight)
+        public bool CanSpawn()
         {
-            var i = rand.Next(Sprites.Count);
-            var spriteSheet = Sprites[i];
-
-            var ai = new AIController(new EnemyAI(rand.Next(Difficulty * 20, Difficulty * 30)));
-            var c = new Character("Enemy", 50 * Difficulty, 2 * Difficulty)
+            return SpawnCount > 0;
+        }
+        public Character GetEnemy(int levelWidth, int levelHeight, Character target)
+        {
+            if (CanSpawn())
             {
-                Controller = ai,
-                X = rand.Next(levelWidth),
-                Y = rand.Next(levelHeight),
-                Speed = rand.Next(1, 5)
-            };
+                --SpawnCount;
+                var i = rand.Next(Sprites.Count);
+                var spriteSheet = Sprites[i];
 
-            ai.Self = c;
-            c.Sprites = spriteSheet;
+                var ai = new AIController(new EnemyAI(rand.Next(Difficulty * 20, Difficulty * 30)));
+                var c = new Character("Enemy", 50 * Difficulty, 2 * Difficulty)
+                {
+                    Controller = ai,
+                    X = rand.Next(levelWidth),
+                    Y = rand.Next(levelHeight),
+                    Speed = rand.Next(1, 5)
+                };
 
-            return c;
+                ai.Self = c;
+                ai.Enemy = target;
+
+                c.Sprites = spriteSheet;
+
+                return c;
+            }
+            return null;
         }
     }
 }
