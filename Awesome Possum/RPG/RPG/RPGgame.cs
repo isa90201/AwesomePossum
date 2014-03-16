@@ -33,6 +33,7 @@ namespace RPG
         public SpriteCollection RHOSpriteSheet { get; set; }
         public SpriteCollection IPOOSpriteSheet { get; set; }
         public SpriteCollection OPOOSpriteSheet { get; set; }
+        public SpriteCollection APOOSpriteSheet { get; set; }
 
         //SOUND stuff
         Song backgroundMusic;
@@ -47,6 +48,7 @@ namespace RPG
         GameSave gameSave;
         Character UserCharacter;
         List<Character> Characters;
+        List<Character> Enemies;
 
         //Level Stuff
         //string World1_Path, World2_Path, World3_Path;
@@ -98,6 +100,7 @@ namespace RPG
 
             //CREATE human character
             Characters = new List<Character>();
+            Enemies = new List<Character>();
             UserCharacter = new Character("RHO", 10, 15, 20)
             {
                 Controller = UserController,
@@ -128,9 +131,11 @@ namespace RPG
 
                 Controllers.Add(ai);
                 Characters.Add(c);
+                Enemies.Add(c);
             }
 
             Characters.Last().Sprites = OPOOSpriteSheet; //Last bad guy is OPOO
+            Characters.ElementAt(4).Sprites = APOOSpriteSheet;
         }
 
         //-------------------------------------------------------------
@@ -155,6 +160,7 @@ namespace RPG
 
             IPOOSpriteSheet = SpriteCollection.Load(@"C:\Res\Sprites\IPOO.xml");
             OPOOSpriteSheet = SpriteCollection.Load(@"C:\Res\Sprites\OPOO.xml");
+            APOOSpriteSheet = SpriteCollection.Load(@"C:\Res\Sprites\APOO.xml");
             RHOSpriteSheet = SpriteCollection.Load(@"C:\Res\Sprites\RHO.xml");
 
             //LOAD Sprite sheet actions
@@ -164,6 +170,8 @@ namespace RPG
                 ss.Load(device);
             foreach (var ss in OPOOSpriteSheet.Actions)
                 ss.Load(device);
+            foreach (var ss in APOOSpriteSheet.Actions)
+                ss.Load(device);
 
             //Background Image and Screen Properties
             screenWidth = graphics.PreferredBackBufferWidth = 1280;
@@ -172,11 +180,6 @@ namespace RPG
             sourceHeight = 800;
             screenRectangle = new Rectangle(0, 0, screenWidth, screenHeight); //Screen Dimensions
             sourceRectangle = new Rectangle(0, 0, sourceWidth, sourceHeight); //BG dimesnions
-
-            //World and Level textures: use strings below to switch to another world.
-            string World1_Path = "C:\\Res\\Worlds\\World1.xml";
-            string World2_Path = "C:\\Res\\Worlds\\World2.xml";
-            string World3_Path = "C:\\Res\\Worlds\\World3.xml";
 
             //use strings above to change worlds.
             CurrentWorld = World.Load(World_Paths[WorldNumber].ToString());
@@ -271,18 +274,29 @@ namespace RPG
             else if (WorldOffsetX > CurrentLevel.BackgroundImage.Width - screenRectangle.Width)
                 WorldOffsetX = CurrentLevel.BackgroundImage.Width - screenRectangle.Width;
 
-            foreach (var c in Characters)
+            //Attack stuff
+            foreach (var c in Enemies)
             {
-                var attackBox = c.GetAttackBox();
+                var enemyAttackBox = c.GetAttackBox();
 
-                if (!Hitbox.IsNullOrEmpty(attackBox))
+                if (!Hitbox.IsNullOrEmpty(enemyAttackBox))
                 {
-                    var hit = Characters.Where(o => c != o && o.IsHit(attackBox));
-
-                    foreach (var hitc in hit)
+                    if (UserCharacter.IsHit(enemyAttackBox))
                     {
-                        hitc.TakeDamage(c);
+                        UserCharacter.TakeDamage(c);
                     }
+                }
+            }
+
+            var playerAttackbox = UserCharacter.GetAttackBox();
+
+            if (!Hitbox.IsNullOrEmpty(playerAttackbox))
+            {
+                var hit = Enemies.Where(o => o.IsHit(playerAttackbox));
+
+                foreach (var hitc in hit)
+                {
+                    hitc.TakeDamage(UserCharacter);
                 }
             }
 
@@ -327,18 +341,21 @@ namespace RPG
         {
             ++LevelNumber;
 
-            if (LevelNumber >= 3)
+            if (WorldNumber < 3)
             {
-                LevelNumber = 0;
-                GoToNextWorld();
-            }
-            else
-            {
-                CurrentLevel = CurrentWorld.Levels.ElementAt(LevelNumber);
-                backgroundTexture = CurrentLevel.BackgroundImage.GetTexture2D(device);
-                backgroundMusic = CurrentLevel.Music.GetSong();
-                MediaPlayer.Stop();
-                MediaPlayer.Play(backgroundMusic);
+                if (LevelNumber >= 3)
+                {
+                    LevelNumber = 0;
+                    GoToNextWorld();
+                }
+                else
+                {
+                    CurrentLevel = CurrentWorld.Levels.ElementAt(LevelNumber);
+                    backgroundTexture = CurrentLevel.BackgroundImage.GetTexture2D(device);
+                    backgroundMusic = CurrentLevel.Music.GetSong();
+                    MediaPlayer.Stop();
+                    MediaPlayer.Play(backgroundMusic);
+                }
             }
         }
 
