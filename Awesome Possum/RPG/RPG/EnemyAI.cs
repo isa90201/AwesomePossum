@@ -31,10 +31,10 @@ namespace RPG
         private int AttackWaitTime;
         private States State;
 
-        public EnemyAI(int ai_difficultyNumber)  //Assigned difficulty
+        public EnemyAI(int ai_difficultyNumber, Random r)  //Assigned difficulty
         {
             DifficultyNumber = ai_difficultyNumber;
-            RandomNumber = new Random();
+            RandomNumber = r;
 
             MaxWalkTime = ai_difficultyNumber * 40 + 1000;
             MinWalkTime = ai_difficultyNumber * 27 + 250;
@@ -59,7 +59,7 @@ namespace RPG
 
         public bool IsMoving()
         {
-            if (WaitTime < Environment.TickCount)
+             if (WaitTime < Environment.TickCount)
             {
                 if (State == States.IDLE)
                 {

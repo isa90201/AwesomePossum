@@ -56,6 +56,7 @@ namespace RPG
         string[] World_Paths;
         World MainMenu, GameOverMenu;
         int LatestWorldNumber, LatestLevelNumber;
+        Random rand;
 
         //-------------------------------------------------------------
 
@@ -116,6 +117,8 @@ namespace RPG
                 Speed = 6,
                 Sprites = RHOSpriteSheet
             };
+
+            rand = new Random();
 
             GoToMainMenu();
         }
@@ -235,6 +238,11 @@ namespace RPG
             if (UserController.CurrentState.IsKeyDown(Keys.N) && CurrentWorld == MainMenu) //DEBUG
             {
                 GoToFirstWorld();
+            }
+
+            if (UserController.CurrentState.IsKeyDown(Keys.Space)) //DEBUG
+            {
+                GoToNextLevel();
             }
 
             if (CurrentWorld == GameOverMenu)
@@ -367,6 +375,14 @@ namespace RPG
                 {
                     ChangeLevel(CurrentWorld.Levels.ElementAt(LevelNumber));
                 }
+
+                if (LevelNumber == 2)
+                {
+                    Random r = new Random();
+
+                    for (int i = 0; i <= LatestWorldNumber; ++i)
+                        AddBoss(i);
+                }
             }
         }
 
@@ -377,6 +393,7 @@ namespace RPG
             backgroundMusic = CurrentLevel.Music.GetSong();
             MediaPlayer.Stop();
             MediaPlayer.Play(backgroundMusic);
+            MediaPlayer.IsRepeating = true;
 
             Characters.ClearEnemies();
             EnemySpanwer.SpawnCount = CurrentLevel.TotalNumberOfBadGuys;
@@ -446,6 +463,18 @@ namespace RPG
         {
             Characters.User.IsAlive = true;
             Characters.User.CurrentHP = 100;
+        }
+
+        private void AddBoss(int i)
+        {
+            if (i == 0)
+                Characters.AddEnemy(Spawner.StaticSpawn(APOOBlueSpriteSheet, 50, 25, 10, 1280, 800, 1, Characters.User, rand));
+
+            if (i == 1)
+                Characters.AddEnemy(Spawner.StaticSpawn(APOOYellowSpriteSheet, 50, 50, 10, 1280, 400, 3, Characters.User, rand));
+
+            if (i == 2)
+                Characters.AddEnemy(Spawner.StaticSpawn(APOORedSpriteSheet, 50, 75, 10, 1280, 200, 5, Characters.User, rand));
         }
 
     }
