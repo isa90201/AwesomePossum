@@ -14,6 +14,8 @@ namespace RPG
 
         public MusicItem Music { get; set; }
 
+        public int Horizon { get; set; }
+
         public int TotalNumberOfBadGuys { get; set; }
         public int BadGuysOnScreen { get; set; }
 

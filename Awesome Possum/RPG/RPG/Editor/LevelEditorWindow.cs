@@ -79,6 +79,9 @@ namespace RPG.Editor
                 TotalBadGuyCounter.Enabled = true;
                 TotalBadGuyCounter.Value = CurrentLevel.TotalNumberOfBadGuys;
                 BadGuysOnScreenCounter.Value = CurrentLevel.BadGuysOnScreen;
+                HorizonHeight.Value = CurrentLevel.Horizon;
+
+                HorizonHeight.Enabled = true;
             }
         }
 
@@ -195,6 +198,12 @@ namespace RPG.Editor
         private void BadGuysOnScreenCounter_ValueChanged(object sender, EventArgs e)
         {
             CurrentLevel.BadGuysOnScreen = Convert.ToInt32(BadGuysOnScreenCounter.Value);
+            UpdateUI(CurrentWorld, CurrentLevel);
+        }
+
+        private void Horizon_ValueChanged(object sender, EventArgs e)
+        {
+            CurrentLevel.Horizon = Convert.ToInt32(HorizonHeight.Value);
             UpdateUI(CurrentWorld, CurrentLevel);
         }
     }

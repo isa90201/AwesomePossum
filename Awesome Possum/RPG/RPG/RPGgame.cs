@@ -272,8 +272,8 @@ namespace RPG
 
                 if (c.Y > CurrentLevel.BackgroundImage.Height)
                     c.Y = CurrentLevel.BackgroundImage.Height;
-                if (c.Y < CurrentLevel.BackgroundImage.Height / 2)
-                    c.Y = CurrentLevel.BackgroundImage.Height / 2;
+                if (c.Y < CurrentLevel.BackgroundImage.Height - CurrentLevel.Horizon)
+                    c.Y = CurrentLevel.BackgroundImage.Height - CurrentLevel.Horizon;
 
                 var sprite = c.GetAnimatedSprite();
                 if (sprite != null)

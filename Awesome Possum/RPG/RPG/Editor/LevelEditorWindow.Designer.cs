@@ -46,9 +46,12 @@
             this.BadGuysOnScreen_Label = new System.Windows.Forms.Label();
             this.BadGuysOnScreenCounter = new System.Windows.Forms.NumericUpDown();
             this.DragItems_Label = new System.Windows.Forms.Label();
+            this.HorizonHeight = new System.Windows.Forms.NumericUpDown();
+            this.HorizonLabel = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.TotalBadGuyCounter)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.BadGuysOnScreenCounter)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.HorizonHeight)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -214,12 +217,37 @@
             this.DragItems_Label.TabIndex = 12;
             this.DragItems_Label.Text = "Drag PNG and MP3 into window.";
             // 
-            // MainEditorWindow
+            // HorizonHeight
+            // 
+            this.HorizonHeight.Enabled = false;
+            this.HorizonHeight.Location = new System.Drawing.Point(163, 286);
+            this.HorizonHeight.Maximum = new decimal(new int[] {
+            800,
+            0,
+            0,
+            0});
+            this.HorizonHeight.Name = "HorizonHeight";
+            this.HorizonHeight.Size = new System.Drawing.Size(120, 20);
+            this.HorizonHeight.TabIndex = 13;
+            this.HorizonHeight.ValueChanged += new System.EventHandler(this.Horizon_ValueChanged);
+            // 
+            // HorizonLabel
+            // 
+            this.HorizonLabel.AutoSize = true;
+            this.HorizonLabel.Location = new System.Drawing.Point(32, 288);
+            this.HorizonLabel.Name = "HorizonLabel";
+            this.HorizonLabel.Size = new System.Drawing.Size(77, 13);
+            this.HorizonLabel.TabIndex = 14;
+            this.HorizonLabel.Text = "Horizon Height";
+            // 
+            // LevelEditorWindow
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(373, 286);
+            this.ClientSize = new System.Drawing.Size(373, 360);
+            this.Controls.Add(this.HorizonLabel);
+            this.Controls.Add(this.HorizonHeight);
             this.Controls.Add(this.DragItems_Label);
             this.Controls.Add(this.BadGuysOnScreenCounter);
             this.Controls.Add(this.BadGuysOnScreen_Label);
@@ -229,7 +257,7 @@
             this.Controls.Add(this.TotalBadGuyCounter);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
-            this.Name = "MainEditorWindow";
+            this.Name = "LevelEditorWindow";
             this.Text = "No World Loaded";
             this.DragDrop += new System.Windows.Forms.DragEventHandler(this.MainEditorWindow_DragDrop);
             this.DragEnter += new System.Windows.Forms.DragEventHandler(this.MainEditorWindow_DragEnter);
@@ -237,6 +265,7 @@
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.TotalBadGuyCounter)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.BadGuysOnScreenCounter)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.HorizonHeight)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -262,5 +291,7 @@
         private System.Windows.Forms.Label BadGuysOnScreen_Label;
         private System.Windows.Forms.NumericUpDown BadGuysOnScreenCounter;
         private System.Windows.Forms.Label DragItems_Label;
+        private System.Windows.Forms.NumericUpDown HorizonHeight;
+        private System.Windows.Forms.Label HorizonLabel;
     }
 }
