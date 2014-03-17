@@ -33,7 +33,9 @@ namespace RPG
         public SpriteCollection RHOSpriteSheet { get; set; }
         public SpriteCollection IPOOSpriteSheet { get; set; }
         public SpriteCollection OPOOSpriteSheet { get; set; }
-        public SpriteCollection APOOSpriteSheet { get; set; }
+        public SpriteCollection APOOBlueSpriteSheet { get; set; }
+        public SpriteCollection APOOYellowSpriteSheet { get; set; }
+        public SpriteCollection APOORedSpriteSheet { get; set; }
 
         //SOUND stuff
         Song backgroundMusic;
@@ -50,9 +52,10 @@ namespace RPG
         CharacterManager Characters;
 
         //Level Stuff
-        //string World1_Path, World2_Path, World3_Path;
         int WorldNumber, LevelNumber;
-        StringBuilder[] World_Paths;
+        string[] World_Paths;
+        World MainMenu, GameOverMenu;
+        int LatestWorldNumber, LatestLevelNumber;
 
         //-------------------------------------------------------------
 
@@ -110,11 +113,11 @@ namespace RPG
             Characters.User = new Character("RHO", 100, 15)
             {
                 Controller = UserController,
-                Speed = 5,
+                Speed = 6,
                 Sprites = RHOSpriteSheet
             };
 
-            ChangeLevel(CurrentWorld.Levels.ElementAt(LevelNumber));
+            GoToMainMenu();
         }
 
         //-------------------------------------------------------------
@@ -126,9 +129,12 @@ namespace RPG
         protected override void LoadContent()
         {
             //World & Level stuff
-            World_Paths = new StringBuilder[] { new StringBuilder("C:\\Res\\Worlds\\World1.xml"), new StringBuilder("C:\\Res\\Worlds\\World2.xml"), new StringBuilder("C:\\Res\\Worlds\\World3.xml") };
+            World_Paths = new string[] { @"C:\Res\Worlds\World1.xml", @"C:\Res\Worlds\World2.xml", @"C:\Res\Worlds\World3.xml" };
+            var t = new string[] { };
             WorldNumber = 0;
             LevelNumber = 0;
+            LatestLevelNumber = LevelNumber;
+            LatestWorldNumber = WorldNumber;
 
             //Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch_BG = new SpriteBatch(GraphicsDevice);
@@ -139,7 +145,9 @@ namespace RPG
 
             IPOOSpriteSheet = SpriteCollection.Load(@"C:\Res\Sprites\IPOO.xml");
             OPOOSpriteSheet = SpriteCollection.Load(@"C:\Res\Sprites\OPOO.xml");
-            APOOSpriteSheet = SpriteCollection.Load(@"C:\Res\Sprites\APOO.xml");
+            APOORedSpriteSheet = SpriteCollection.Load(@"C:\Res\Sprites\APOO.xml");
+            APOOYellowSpriteSheet = SpriteCollection.Load(@"C:\Res\Sprites\APOO3.xml");
+            APOOBlueSpriteSheet = SpriteCollection.Load(@"C:\Res\Sprites\APOO2.xml");
             RHOSpriteSheet = SpriteCollection.Load(@"C:\Res\Sprites\RHO.xml");
 
             //LOAD Sprite sheet actions
@@ -149,22 +157,22 @@ namespace RPG
                 ss.Load(device);
             foreach (var ss in OPOOSpriteSheet.Actions)
                 ss.Load(device);
-            foreach (var ss in APOOSpriteSheet.Actions)
+            foreach (var ss in APOORedSpriteSheet.Actions)
+                ss.Load(device);
+            foreach (var ss in APOOYellowSpriteSheet.Actions)
+                ss.Load(device);
+            foreach (var ss in APOOBlueSpriteSheet.Actions)
                 ss.Load(device);
 
             //Background Image and Screen Properties
             screenWidth = graphics.PreferredBackBufferWidth = 1280;
             screenHeight = graphics.PreferredBackBufferHeight = 800;
-            sourceWidth = 6400;
-            sourceHeight = 800;
             screenRectangle = new Rectangle(0, 0, screenWidth, screenHeight); //Screen Dimensions
-            sourceRectangle = new Rectangle(0, 0, sourceWidth, sourceHeight); //BG dimesnions
-
-            //use strings above to change worlds.
-            CurrentWorld = World.Load(World_Paths[WorldNumber].ToString());
 
             WalkToleranceG = screenRectangle.Width / 4;
 
+            MainMenu = World.Load(@"C:\Res\Worlds\Menu.xml");
+            GameOverMenu = World.Load(@"C:\Res\Worlds\GameOver.xml");
         }
 
         //-------------------------------------------------------------
@@ -187,16 +195,26 @@ namespace RPG
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            // change level if every enemy is dead
-            if (!EnemySpanwer.CanSpawn() && Characters.Enemies.Count == 0)
-                GoToNextLevel();
-
-            // add missing characters
-            while (EnemySpanwer.CanSpawn() && Characters.Enemies.Count < CurrentLevel.BadGuysOnScreen)
+            if (CurrentWorld != MainMenu && CurrentWorld != GameOverMenu)
             {
-                var c = EnemySpanwer.GetEnemy(CurrentLevel.BackgroundImage.Width, CurrentLevel.BackgroundImage.Height / 2, Characters.User);
-                Characters.AddEnemy(c);
+                if (!Characters.User.IsAlive)
+                {
+                    ChangeWorld(GameOverMenu);
+                    return;
+                }
+
+                // change level if every enemy is dead
+                if (!EnemySpanwer.CanSpawn() && Characters.Enemies.Count == 0)
+                    GoToNextLevel();
+
+                // add missing characters
+                while (EnemySpanwer.CanSpawn() && Characters.Enemies.Count < CurrentLevel.BadGuysOnScreen)
+                {
+                    var c = EnemySpanwer.GetEnemy(CurrentLevel.BackgroundImage.Width, CurrentLevel.BackgroundImage.Height / 2, Characters.User);
+                    Characters.AddEnemy(c);
+                }
             }
+
 
             //UPDATE controller input(s)
             foreach (var c in Characters.Controllers)
@@ -214,9 +232,24 @@ namespace RPG
             }
 
             //Change Levels
-            if (UserController.CurrentState.IsKeyDown(Keys.Space)) //DEBUG
+            if (UserController.CurrentState.IsKeyDown(Keys.N) && CurrentWorld == MainMenu) //DEBUG
             {
-                GoToNextLevel();
+                GoToFirstWorld();
+            }
+
+            if (CurrentWorld == GameOverMenu)
+            {
+                if (UserController.CurrentState.IsKeyDown(Keys.C))
+                {
+                    RestartLevel();
+                    return;
+                }
+
+                if (UserController.CurrentState.IsKeyDown(Keys.Q))
+                {
+                    GoToMainMenu();
+                    return;
+                }
             }
 
             //UPDATE character position(s)
@@ -322,6 +355,7 @@ namespace RPG
         private void GoToNextLevel()
         {
             ++LevelNumber;
+            LatestLevelNumber = LevelNumber;
 
             if (WorldNumber < 3)
             {
@@ -349,25 +383,56 @@ namespace RPG
 
             Characters.User.X = 400;
             Characters.User.Y = 400;
+
+            sourceWidth = CurrentLevel.BackgroundImage.Width;
+            sourceHeight = CurrentLevel.BackgroundImage.Height;
+            sourceRectangle = new Rectangle(0, 0, sourceWidth, sourceHeight); //BG dimesnions
+
+            WorldOffsetX = 0;
         }
 
         //-------------------------------------------------------------
+
+        private void GoToFirstWorld()
+        {
+            WorldNumber = 0;
+            LatestWorldNumber = WorldNumber;
+            ChangeWorld(World.Load(World_Paths[WorldNumber]));
+        }
+
+        private void GoToMainMenu()
+        {
+            ReviveUser();
+            ChangeWorld(MainMenu);
+        }
 
         private void GoToNextWorld()
         {
-            LevelNumber = 0;
             ++WorldNumber;
+            LatestWorldNumber = WorldNumber;
 
             if (WorldNumber < 3)
             {
-                string path = World_Paths[WorldNumber].ToString();
-                CurrentWorld = World.Load(path);
-
-                ChangeLevel(CurrentWorld.Levels.ElementAt(LevelNumber));
+                string path = World_Paths[WorldNumber];
+                ChangeWorld(World.Load(path));
             }
         }
 
+        private void ChangeWorld(World w)
+        {
+            LevelNumber = 0;
+            CurrentWorld = w;
+            ChangeLevel(CurrentWorld.Levels[LevelNumber]);
+        }
+
         //-------------------------------------------------------------
+
+        private void RestartLevel()
+        {
+            ReviveUser();
+            ChangeWorld(World.Load(World_Paths[LatestWorldNumber]));
+            ChangeLevel(CurrentWorld.Levels[LatestLevelNumber]);
+        }
 
         private Vector2 GetSpawnLocation()  //SPAWN logic
         {
@@ -377,15 +442,10 @@ namespace RPG
 
         //-------------------------------------------------------------
 
-        private void SpawnCharacter()
+        private void ReviveUser()
         {
-
-            // TODO
-            /*
-             * 1) Get Spawn Location.
-             * 2) Create new Character.
-             * 3) Add to Characters List. (Will be drawn to screen now.)
-             */
+            Characters.User.IsAlive = true;
+            Characters.User.CurrentHP = 100;
         }
 
     }
