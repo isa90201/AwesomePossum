@@ -80,17 +80,17 @@ namespace RPG
         public Hitbox GetAttackBox(int x, int y, Character.Directions direction)
         {
             if (direction == Character.Directions.Left)
-                return new Hitbox() { X = x - AtkLDx, Y = y + AtkLDy, W = AtkWidth, H = AtkHeight };
+                return new Hitbox() { X = x - AtkLDx, Y = y - AtkLDy, W = AtkWidth, H = AtkHeight };
             else
-                return new Hitbox() { X = x - AtkRDx, Y = y + AtkRDy, W = AtkWidth, H = AtkHeight };
+                return new Hitbox() { X = x - AtkRDx, Y = y - AtkRDy, W = AtkWidth, H = AtkHeight };
         }
 
         public Hitbox GetHitbox(int x, int y, Character.Directions direction)
         {
             if (direction == Character.Directions.Left)
-                return new Hitbox() { X = x - HitLDx, Y = y + HitLDy, W = HitWidth, H = HitHeight };
+                return new Hitbox() { X = x - HitLDx, Y = y - HitLDy, W = HitWidth, H = HitHeight };
             else
-                return new Hitbox() { X = x - HitRDx, Y = y + HitRDy, W = HitWidth, H = HitHeight };
+                return new Hitbox() { X = x - HitRDx, Y = y - HitRDy, W = HitWidth, H = HitHeight };
         }
     }
 }

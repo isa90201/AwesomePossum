@@ -14,5 +14,6 @@ namespace RPG
         bool IsAttacking();
         bool IsJumping();
         void Update();
+        bool IsSwitchingWeapon();
     }
 }

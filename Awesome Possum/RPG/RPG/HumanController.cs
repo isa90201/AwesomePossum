@@ -10,6 +10,10 @@ namespace RPG
     public class HumanController : IController
     {
         public KeyboardState CurrentState;
+        private bool HasSwitched;
+
+        private bool HitSwitch;
+        public bool DebugHitbox { get; set; }
 
         Keys Up = Keys.Up,
             Down = Keys.Down,
@@ -17,7 +21,7 @@ namespace RPG
             Right = Keys.Right,
             Attack = Keys.A,
             Jump = Keys.S,
-            Pause = Keys.Space,
+            SwitchWeapon = Keys.Space,
             Confirm = Keys.Enter,
             Cancel = Keys.Delete;
 
@@ -29,6 +33,18 @@ namespace RPG
         public void Update()
         {
             CurrentState = Keyboard.GetState();
+
+            if (CurrentState.IsKeyDown(Keys.F1))
+            {
+                if (!HitSwitch)
+                    DebugHitbox = !DebugHitbox;
+
+                HitSwitch = true;
+            }
+            else
+            {
+                HitSwitch = false;
+            }
         }
 
         public bool UpIsPressed()
@@ -61,9 +77,19 @@ namespace RPG
             return CurrentState.IsKeyDown(Jump);
         }
 
-        public bool PauseIsPressed()
+        public bool SwitchWeaponIsPressed()
         {
-            return CurrentState.IsKeyDown(Pause);
+            if (CurrentState.IsKeyDown(SwitchWeapon))
+            {
+                var ret = !HasSwitched;
+                HasSwitched = true;
+                return ret;
+            }
+            else
+            {
+                HasSwitched = false;
+                return false;
+            }
         }
 
         public bool ConfirmIsPressed()
@@ -104,6 +130,11 @@ namespace RPG
         public bool IsJumping()
         {
             return JumpIsPressed();
+        }
+
+        public bool IsSwitchingWeapon()
+        {
+            return SwitchWeaponIsPressed();
         }
     }
 }

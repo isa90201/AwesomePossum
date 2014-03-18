@@ -75,5 +75,10 @@ namespace RPG
         {
             return false;
         }
+
+        public bool IsSwitchingWeapon()
+        {
+            return false;
+        }
     }
 }

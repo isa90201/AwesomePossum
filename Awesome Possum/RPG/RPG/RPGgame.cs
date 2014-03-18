@@ -31,6 +31,7 @@ namespace RPG
         int WorldOffsetX;
         int WalkToleranceG;
         public SpriteCollection RHOSpriteSheet { get; set; }
+        public SpriteCollection RHOMaceSpriteSheet { get; set; }
         public SpriteCollection IPOOSpriteSheet { get; set; }
         public SpriteCollection OPOOSpriteSheet { get; set; }
         public SpriteCollection APOOBlueSpriteSheet { get; set; }
@@ -53,9 +54,9 @@ namespace RPG
 
         //Level Stuff
         int WorldNumber, LevelNumber;
+        int LatestWorldNumber, LatestLevelNumber;
         string[] World_Paths;
         World MainMenu, GameOverMenu;
-        int LatestWorldNumber, LatestLevelNumber;
         Random rand;
 
         //-------------------------------------------------------------
@@ -106,15 +107,14 @@ namespace RPG
                 Difficulty = 2,
                 Sprites = new List<SpriteCollection>() {
                     IPOOSpriteSheet,
-                    OPOOSpriteSheet,
-                    //APOOSpriteSheet
+                    OPOOSpriteSheet
                   }
             };
 
-            Characters.User = new Character("RHO", 100, 15)
+            Characters.User = new Character("RHO", 200, 15)
             {
                 Controller = UserController,
-                Speed = 6,
+                Speed = 10,
                 Sprites = RHOSpriteSheet
             };
 
@@ -152,11 +152,14 @@ namespace RPG
             APOOYellowSpriteSheet = SpriteCollection.Load(@"C:\Res\Sprites\APOO3.xml");
             APOOBlueSpriteSheet = SpriteCollection.Load(@"C:\Res\Sprites\APOO2.xml");
             RHOSpriteSheet = SpriteCollection.Load(@"C:\Res\Sprites\RHO.xml");
+            RHOMaceSpriteSheet = SpriteCollection.Load(@"C:\Res\Sprites\RHO2.xml");
 
             //LOAD Sprite sheet actions
             foreach (var ss in IPOOSpriteSheet.Actions)
                 ss.Load(device);
             foreach (var ss in RHOSpriteSheet.Actions)
+                ss.Load(device);
+            foreach (var ss in RHOMaceSpriteSheet.Actions)
                 ss.Load(device);
             foreach (var ss in OPOOSpriteSheet.Actions)
                 ss.Load(device);
@@ -228,9 +231,6 @@ namespace RPG
             // Allows the game to exit
             if (UserController.CurrentState.IsKeyDown(Keys.Escape))
             {
-                // TODO: save?
-                //gameSave.SaveCharacter(Characters.User);
-                //gameSave.SaveLevel(CurrentLevel);
                 this.Exit();
             }
 
@@ -240,7 +240,7 @@ namespace RPG
                 GoToFirstWorld();
             }
 
-            if (UserController.CurrentState.IsKeyDown(Keys.Space)) //DEBUG
+            if (UserController.CurrentState.IsKeyDown(Keys.F2)) //DEBUG
             {
                 GoToNextLevel();
             }
@@ -258,6 +258,16 @@ namespace RPG
                     GoToMainMenu();
                     return;
                 }
+            }
+
+            //Switch Weapon
+            if (Characters.User.Controller.IsSwitchingWeapon())
+            {
+                Characters.User.ClearCurrentSprite();
+                if (Characters.User.Sprites == RHOSpriteSheet)
+                    Characters.User.Sprites = RHOMaceSpriteSheet;
+                else
+                    Characters.User.Sprites = RHOSpriteSheet;
             }
 
             //UPDATE character position(s)
@@ -344,9 +354,36 @@ namespace RPG
                 {
                     sprite.Draw(spriteBatch_H, WorldOffsetX);
                 }
+
+                if (UserController.DebugHitbox)
+                {
+                    var hit = c.GetHitbox();
+                    var atk = c.GetAttackBox();
+
+                    DrawBox(hit, Color.Blue);
+                    DrawBox(atk, Color.Red);
+                }
             }
 
             base.Draw(gameTime);
+        }
+
+        private void DrawBox(Hitbox box, Color boxColor)
+        {
+            if (Hitbox.IsNullOrEmpty(box))
+                return;
+
+            spriteBatch_BG.Begin();
+            Texture2D rect = new Texture2D(graphics.GraphicsDevice, box.W, box.H);
+
+            Color[] data = new Color[box.W * box.H];
+            for (int i = 0; i < data.Length; ++i) data[i] = boxColor;
+            rect.SetData(data);
+
+            Vector2 coor = new Vector2(box.X - WorldOffsetX, box.Y);
+            spriteBatch_BG.Draw(rect, coor, boxColor);
+
+            spriteBatch_BG.End();
         }
 
         //-------------------------------------------------------------
@@ -468,13 +505,13 @@ namespace RPG
         private void AddBoss(int i)
         {
             if (i == 0)
-                Characters.AddEnemy(Spawner.StaticSpawn(APOOBlueSpriteSheet, 50, 25, 10, 1280, 800, 1, Characters.User, rand));
+                Characters.AddEnemy(Spawner.StaticSpawn(APOOBlueSpriteSheet, 10, 200, 5, 1280, 800, 1, Characters.User, rand));
 
             if (i == 1)
-                Characters.AddEnemy(Spawner.StaticSpawn(APOOYellowSpriteSheet, 50, 50, 10, 1280, 400, 3, Characters.User, rand));
+                Characters.AddEnemy(Spawner.StaticSpawn(APOOYellowSpriteSheet, 25, 300, 10, 1280, 400, 2, Characters.User, rand));
 
             if (i == 2)
-                Characters.AddEnemy(Spawner.StaticSpawn(APOORedSpriteSheet, 50, 75, 10, 1280, 200, 5, Characters.User, rand));
+                Characters.AddEnemy(Spawner.StaticSpawn(APOORedSpriteSheet, 75, 500, 15, 1280, 200, 3, Characters.User, rand));
         }
 
     }

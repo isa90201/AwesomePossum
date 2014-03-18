@@ -17,9 +17,15 @@ namespace RPG
             return OverlapSide(X, W, other.X, other.W) && OverlapSide(Y, H, other.Y, other.H);
         }
 
-        private bool OverlapSide(int x1, int w1, int x2, int w2)
+        private bool OverlapSide(int x1_1, int w1, int x2_1, int w2)
         {
-            return (x1 > x2 && x1 < x2 + w2) || (x1 + w1 > x2 && x1 + w1 < x2 + w2);
+            var x1_2 = x1_1 + w1;
+            var x2_2 = x2_1 + w2;
+
+            var notOVerlap = (x1_1 < x2_1 && x1_1 < x2_2 && x1_2 < x2_1 && x1_2 < x2_2) ||
+                             (x1_1 > x2_1 && x1_1 > x2_2 && x1_2 > x2_1 && x1_2 > x2_2);
+
+            return !notOVerlap;
         }
 
         public static bool IsNullOrEmpty(Hitbox ret)

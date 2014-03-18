@@ -375,5 +375,10 @@ namespace RPG
                 }
             }
         }
+
+        public void ClearCurrentSprite()
+        {
+            CurrentSprite = null;
+        }
     }
 }
