@@ -30,6 +30,7 @@ namespace RPG
         public int X { get; set; }
         public int Y { get; set; }
         public int Speed { get; set; }
+        public bool IsOnScreen { get; set; }
 
         public Weapon Weapon { get; set; }
         public Armor Armor { get; set; }
@@ -263,8 +264,7 @@ namespace RPG
                     {
                         ActionSprite = ActionAction.GetAnimatedSprite(Direction);
 
-                        if (ActionAction.ActionSoundEffect != null)
-
+                        if (ActionAction.ActionSoundEffect != null && IsOnScreen)
                             ActionAction.ActionSoundEffect.Play();
                     }
                 }
@@ -369,6 +369,9 @@ namespace RPG
                 if (ActionAction != null)
                 {
                     ActionSprite = ActionAction.GetAnimatedSprite(Direction);
+
+                    if (ActionAction.ActionSoundEffect != null && IsOnScreen)
+                        ActionAction.ActionSoundEffect.Play();
                 }
             }
             else
@@ -378,6 +381,9 @@ namespace RPG
                 if (ActionAction != null)
                 {
                     ActionSprite = ActionAction.GetAnimatedSprite(Direction);
+
+                    if (ActionAction.ActionSoundEffect != null && IsOnScreen)
+                        ActionAction.ActionSoundEffect.Play();
                 }
             }
         }

@@ -1,4 +1,4 @@
-#define DEBUG_GAME //Uncomment this to debug game.
+//#define DEBUG_GAME //Uncomment this to debug game.
 
 using System;
 using System.Collections.Generic;
@@ -114,6 +114,7 @@ namespace RPG
             Characters.User = new Character("RHO", 200, 15)
             {
                 Controller = UserController,
+                IsOnScreen = true,
                 Speed = 10,
                 Sprites = RHOSpriteSheet
             };
@@ -221,6 +222,9 @@ namespace RPG
                 }
             }
 
+            var screen = new Hitbox() { X = WorldOffsetX, Y = 0, W = screenWidth, H = screenHeight };
+            foreach (var e in Characters.Enemies)
+                e.IsOnScreen = screen.Overlap(e.GetHitbox());
 
             //UPDATE controller input(s)
             foreach (var c in Characters.Controllers)

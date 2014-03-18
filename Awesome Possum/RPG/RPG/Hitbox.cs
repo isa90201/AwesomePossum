@@ -14,6 +14,9 @@ namespace RPG
 
         public bool Overlap(Hitbox other)
         {
+            if (Hitbox.IsNullOrEmpty(other))
+                return false;
+
             return OverlapSide(X, W, other.X, other.W) && OverlapSide(Y, H, other.Y, other.H);
         }
 
