@@ -32,7 +32,8 @@ namespace RPG.Editor
                 var files = (string[])e.Data.GetData(DataFormats.FileDrop);
 
                 if (files.Any(f =>
-                    f.EndsWith(".png", StringComparison.OrdinalIgnoreCase)
+                    f.EndsWith(".png", StringComparison.OrdinalIgnoreCase) ||
+                    f.EndsWith(".wav", StringComparison.OrdinalIgnoreCase)
                     ))
                 {
                     e.Effect = DragDropEffects.Copy;
@@ -50,6 +51,8 @@ namespace RPG.Editor
                 var files = (string[])e.Data.GetData(DataFormats.FileDrop);
 
                 var pngs = files.Where(f => f.EndsWith(".png", StringComparison.OrdinalIgnoreCase));
+
+                var wavs = files.Where(f => f.EndsWith(".wav", StringComparison.OrdinalIgnoreCase));
 
                 foreach (var png in pngs)
                 {
@@ -74,6 +77,11 @@ namespace RPG.Editor
                     CurrentAction.HitWidth = img.Width / CurrentAction.NumFrames;
                     CurrentAction.HitHeight = img.Height / 2;
                 }
+
+                foreach (var wav in wavs)
+                {
+                    CurrentAction.EffectPath = wav;
+                }
             }
 
             UpdateUI();
@@ -91,6 +99,7 @@ namespace RPG.Editor
                 SpriteTimer.Enabled = false;
                 AddMenu.Enabled = false;
                 RemoveMenu.Enabled = false;
+                SoundLabel.Visible = false;
 
                 ActionLabel.Text = "No Action";
             }
@@ -101,6 +110,9 @@ namespace RPG.Editor
                 SaveMenu.Enabled = true;
                 AddMenu.Enabled = true;
                 RemoveMenu.Enabled = true;
+
+                SoundLabel.Visible = !string.IsNullOrEmpty(CurrentAction.EffectPath);
+                SoundLabel.Text = Path.GetFileName(CurrentAction.EffectPath);
 
                 SpriteTimer.Enabled = false;
                 if (CurrentAction.FrameDelay > 0)

@@ -18,10 +18,6 @@ namespace RPG
             col.Actions.Add(new SpriteAction() { Name = SpriteAction.States.WALKING });
             col.Actions.Add(new SpriteAction() { Name = SpriteAction.States.HURT });
 
-            //col.Actions.Add(new SpriteAction() { Name = "Invincible" });
-            //col.Actions.Add(new SpriteAction() { Name = "Attack" });
-            //col.Actions.Add(new SpriteAction() { Name = "Die" });
-
             return col;
         }
 
@@ -59,6 +55,7 @@ namespace RPG
             foreach (var action in Actions)
             {
                 action.FilePath = action.FilePath.MakeAbsolute(folder, action.Id);
+                action.EffectPath = action.EffectPath.MakeAbsolute(folder, action.Id);
             }
         }
 
@@ -70,6 +67,7 @@ namespace RPG
             {
                 action.Id = i++;
                 action.FilePath = action.FilePath.MakeRelative(folder, "Sprite", action.Id);
+                action.EffectPath = action.EffectPath.MakeRelative(folder, "Sprite", action.Id);
             }
         }
 

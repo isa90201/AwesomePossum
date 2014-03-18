@@ -16,11 +16,17 @@ namespace RPG
 
         public static string MakeRelative(this string relPath, string relFolder, string subFolder, int i)
         {
+            if (string.IsNullOrEmpty(relPath) || string.IsNullOrEmpty(relFolder) || string.IsNullOrEmpty(subFolder))
+                return "";
+
             return MakeRelative(relPath, relFolder, string.Format("{0}\\{1}", i, subFolder));
         }
 
         private static string MakeAbsolute(this string relPath, string relFolder)
         {
+            if (string.IsNullOrEmpty(relPath) || string.IsNullOrEmpty(relFolder))
+                return "";
+
             return Path.Combine(relFolder, relPath);
         }
 

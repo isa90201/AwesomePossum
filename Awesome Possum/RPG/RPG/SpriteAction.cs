@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using System.IO;
 using System.Xml.Serialization;
+using Microsoft.Xna.Framework.Audio;
 
 namespace RPG
 {
@@ -23,11 +24,15 @@ namespace RPG
         public int Id { get; set; }
         public States Name { get; set; }
         public string FilePath { get; set; }
+        public string EffectPath { get; set; }
         public int NumFrames { get; set; }
         public int FrameDelay { get; set; }
 
         [XmlIgnoreAttribute]
         public Texture2D SpriteTexture { get; set; }
+
+        [XmlIgnoreAttribute]
+        public SoundEffect ActionSoundEffect { get; set; }
 
         public int HitWidth { get; set; }
         public int HitHeight { get; set; }
@@ -75,6 +80,9 @@ namespace RPG
         public void Load(GraphicsDevice gd)
         {
             SpriteTexture = Texture2D.FromStream(gd, File.OpenRead(FilePath));
+
+            if (!string.IsNullOrEmpty(EffectPath))
+                ActionSoundEffect = SoundEffect.FromStream(File.OpenRead(EffectPath));
         }
 
         public Hitbox GetAttackBox(int x, int y, Character.Directions direction)
@@ -92,5 +100,7 @@ namespace RPG
             else
                 return new Hitbox() { X = x - HitRDx, Y = y - HitRDy, W = HitWidth, H = HitHeight };
         }
+
+
     }
 }

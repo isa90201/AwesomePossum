@@ -260,7 +260,13 @@ namespace RPG
                     ActionAction = Sprites.Actions.FirstOrDefault(s => s.Name == SpriteAction.States.ATTACKING);
 
                     if (ActionAction != null)
+                    {
                         ActionSprite = ActionAction.GetAnimatedSprite(Direction);
+
+                        if (ActionAction.ActionSoundEffect != null)
+
+                            ActionAction.ActionSoundEffect.Play();
+                    }
                 }
             }
         }

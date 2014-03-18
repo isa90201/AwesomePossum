@@ -75,14 +75,15 @@
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SaveMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.actionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.AddMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.RemoveMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.leftToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rightToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SpritePictureBox = new System.Windows.Forms.PictureBox();
             this.OpenDialog = new System.Windows.Forms.OpenFileDialog();
             this.SaveDialog = new System.Windows.Forms.SaveFileDialog();
             this.SpriteTimer = new System.Windows.Forms.Timer(this.components);
-            this.AddMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.RemoveMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.SoundLabel = new System.Windows.Forms.Label();
             this.ActionLabel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AtkHeightNumber)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.AtkWidthNumber)).BeginInit();
@@ -110,6 +111,7 @@
             // 
             // ActionLabel
             // 
+            this.ActionLabel.Controls.Add(this.SoundLabel);
             this.ActionLabel.Controls.Add(this.label6);
             this.ActionLabel.Controls.Add(this.AtkHeightNumber);
             this.ActionLabel.Controls.Add(this.label7);
@@ -544,6 +546,20 @@
             this.actionsToolStripMenuItem.Size = new System.Drawing.Size(75, 20);
             this.actionsToolStripMenuItem.Text = "Action List";
             // 
+            // AddMenu
+            // 
+            this.AddMenu.Enabled = false;
+            this.AddMenu.Name = "AddMenu";
+            this.AddMenu.Size = new System.Drawing.Size(79, 20);
+            this.AddMenu.Text = "Add Action";
+            // 
+            // RemoveMenu
+            // 
+            this.RemoveMenu.Enabled = false;
+            this.RemoveMenu.Name = "RemoveMenu";
+            this.RemoveMenu.Size = new System.Drawing.Size(100, 20);
+            this.RemoveMenu.Text = "Remove Action";
+            // 
             // leftToolStripMenuItem
             // 
             this.leftToolStripMenuItem.Name = "leftToolStripMenuItem";
@@ -582,19 +598,15 @@
             this.SpriteTimer.Enabled = true;
             this.SpriteTimer.Tick += new System.EventHandler(this.SpriteTimer_Tick);
             // 
-            // AddMenu
+            // SoundLabel
             // 
-            this.AddMenu.Enabled = false;
-            this.AddMenu.Name = "AddMenu";
-            this.AddMenu.Size = new System.Drawing.Size(79, 20);
-            this.AddMenu.Text = "Add Action";
-            // 
-            // RemoveMenu
-            // 
-            this.RemoveMenu.Enabled = false;
-            this.RemoveMenu.Name = "RemoveMenu";
-            this.RemoveMenu.Size = new System.Drawing.Size(100, 20);
-            this.RemoveMenu.Text = "Remove Action";
+            this.SoundLabel.AutoSize = true;
+            this.SoundLabel.Location = new System.Drawing.Point(21, 447);
+            this.SoundLabel.Name = "SoundLabel";
+            this.SoundLabel.Size = new System.Drawing.Size(69, 13);
+            this.SoundLabel.TabIndex = 25;
+            this.SoundLabel.Text = "Sound Effect";
+            this.SoundLabel.Visible = false;
             // 
             // CharacterEditorWindow
             // 
@@ -699,5 +711,6 @@
         private System.Windows.Forms.NumericUpDown RAtkDXNumber;
         private System.Windows.Forms.ToolStripMenuItem AddMenu;
         private System.Windows.Forms.ToolStripMenuItem RemoveMenu;
+        private System.Windows.Forms.Label SoundLabel;
     }
 }
