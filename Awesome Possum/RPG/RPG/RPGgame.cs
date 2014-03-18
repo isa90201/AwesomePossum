@@ -216,7 +216,7 @@ namespace RPG
                 // add missing characters
                 while (EnemySpanwer.CanSpawn() && Characters.Enemies.Count < CurrentLevel.BadGuysOnScreen)
                 {
-                    var c = EnemySpanwer.GetEnemy(CurrentLevel.BackgroundImage.Width, CurrentLevel.BackgroundImage.Height / 2, Characters.User);
+                    var c = EnemySpanwer.GetEnemy(EnemyX(), EnemyY(), Characters.User);
                     Characters.AddEnemy(c);
                 }
             }
@@ -334,6 +334,16 @@ namespace RPG
             Characters.RemoveDeadEnemies();
 
             base.Update(gameTime);
+        }
+
+        private int EnemyY()
+        {
+            return rand.Next(CurrentLevel.BackgroundImage.Height - CurrentLevel.Horizon, CurrentLevel.BackgroundImage.Height);
+        }
+
+        private int EnemyX()
+        {
+            return Spawner.GetLocation(rand, CurrentLevel.BackgroundImage.Width, WorldOffsetX, screenWidth);
         }
 
         //-------------------------------------------------------------
@@ -505,13 +515,13 @@ namespace RPG
         private void AddBoss(int i)
         {
             if (i == 0)
-                Characters.AddEnemy(Spawner.StaticSpawn(APOOBlueSpriteSheet, 10, 200, 5, 1280, 800, 1, Characters.User, rand));
+                Characters.AddEnemy(Spawner.StaticSpawn(APOOBlueSpriteSheet, 10, 200, 5, EnemyX(), EnemyY(), 1, Characters.User, rand));
 
             if (i == 1)
-                Characters.AddEnemy(Spawner.StaticSpawn(APOOYellowSpriteSheet, 25, 300, 10, 1280, 400, 2, Characters.User, rand));
+                Characters.AddEnemy(Spawner.StaticSpawn(APOOYellowSpriteSheet, 25, 300, 10, EnemyX(), EnemyY(), 2, Characters.User, rand));
 
             if (i == 2)
-                Characters.AddEnemy(Spawner.StaticSpawn(APOORedSpriteSheet, 75, 500, 15, 1280, 200, 3, Characters.User, rand));
+                Characters.AddEnemy(Spawner.StaticSpawn(APOORedSpriteSheet, 75, 500, 15, EnemyX(), EnemyY(), 3, Characters.User, rand));
         }
 
     }

@@ -21,7 +21,7 @@ namespace RPG
         {
             return SpawnCount > 0;
         }
-        public Character GetEnemy(int levelWidth, int levelHeight, Character target)
+        public Character GetEnemy(int x, int y, Character target)
         {
             if (CanSpawn())
             {
@@ -29,7 +29,7 @@ namespace RPG
                 var i = rand.Next(Sprites.Count);
                 var spriteSheet = Sprites[i];
 
-                return StaticSpawn(spriteSheet, rand.Next(Difficulty * 20, Difficulty * 30), 50 * Difficulty, 2 * Difficulty, rand.Next(levelWidth), rand.Next(levelHeight), rand.Next(1, 4), target, rand);
+                return StaticSpawn(spriteSheet, rand.Next(Difficulty * 20, Difficulty * 30), 50 * Difficulty, 2 * Difficulty, x, y, rand.Next(1, 4), target, rand);
             }
             return null;
         }
@@ -51,6 +51,16 @@ namespace RPG
             c.Sprites = spriteSheet;
 
             return c;
+        }
+
+        public static int GetLocation(Random r, int totalWidth, int screenStart, int screenWidth)
+        {
+            var loc = r.Next(0, totalWidth - screenWidth);
+
+            if (loc < screenStart)
+                return loc;
+
+            return loc + screenWidth;
         }
     }
 }
